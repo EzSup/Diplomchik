@@ -5,14 +5,19 @@ using Restaurant.Core.Repositories.Interfaces;
 
 namespace Restaurant.Core.Repositories;
 
-public class TablesRepository : ITablesRepository
+public class TablesRepository : RepositoryWithSave, ITablesRepository
 {
     private readonly RestaurantDbContext _dbContext;
 
-    public TablesRepository(RestaurantDbContext dbContext)
+    public TablesRepository(RestaurantDbContext dbContext) : base(dbContext)
     {
-        _dbContext = dbContext;
+        
     }
+
+    //public TablesRepository(RestaurantDbContext dbContext)
+    //{
+    //    _dbContext = dbContext;
+    //}
 
     public async Task<ICollection<Table>> GetAll()
     {
@@ -21,7 +26,7 @@ public class TablesRepository : ITablesRepository
 
     public async Task<Table?> Get(int id)
     {
-        return await _dbContext.Tables.FirstOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Tables.SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> Create(TableForCreateDto dto)
@@ -42,7 +47,7 @@ public class TablesRepository : ITablesRepository
 
     public async Task<bool> Update(Table obj)
     {
-        Table table = await Get(obj.Id);
+        Table? table = await Get(obj.Id);
         if (table is null)
         {
             throw new NullReferenceException("Стіл не знайдений");
@@ -61,12 +66,7 @@ public class TablesRepository : ITablesRepository
             throw new InvalidOperationException("Такий стіл не знайдений.");
         }
 
-        _dbContext.Remove(obj);
+        _dbContext.Tables.Remove(obj);
         return await Save();
-    }
-
-    private async Task<bool> Save()
-    {
-        return await _dbContext.SaveChangesAsync() > 0;
     }
 }
