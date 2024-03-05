@@ -9,7 +9,7 @@ public class Bill
     public decimal PaidAmount { get; set; }
     public DateTime OrderDateAndTime { get; set; }
     public int TipsPercents { get; set; }
-    
+    public int? TableId { get; set; }
     public int? CustomerId { get; set; }
     public Table? Table { get; set; }
     public Customer? Customer { get; set; }

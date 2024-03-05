@@ -82,10 +82,7 @@ public class RestaurantDbContext : DbContext
             entity.HasKey(l => l.Id);
             entity.Property(l => l.PriceForHour)
                 .IsRequired();
-            entity.HasOne(l => l.Bill)
-                .WithOne(b => b.Table)
-                .HasForeignKey<Models.Table>(b => b.BillId)
-                .OnDelete(DeleteBehavior.Cascade);
+            
         });
 
         modelBuilder.Entity<Bill>(entity =>
@@ -98,6 +95,10 @@ public class RestaurantDbContext : DbContext
             entity.HasOne(b => b.Customer)
                 .WithMany(c => c.Bills)
                 .HasForeignKey(b => b.CustomerId)
+                .OnDelete(DeleteBehavior.NoAction);
+            entity.HasOne(b => b.Table)
+                .WithMany(t => t.Bills)
+                .HasForeignKey(b => b.TableId)
                 .OnDelete(DeleteBehavior.NoAction);
         });
 
