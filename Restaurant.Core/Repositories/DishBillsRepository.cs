@@ -10,7 +10,7 @@ public class DishBillsRepository : RepositoryWithSave, IDishBillsRepository
     private readonly RestaurantDbContext _dbContext;
 
     public DishBillsRepository(RestaurantDbContext dbContext) : base(dbContext)
-    { }
+    { _dbContext = dbContext; }
     
     public async Task<ICollection<DishBill>> GetAll()
     {

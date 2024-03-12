@@ -11,7 +11,7 @@ public class TablesRepository : RepositoryWithSave, ITablesRepository
 
     public TablesRepository(RestaurantDbContext dbContext) : base(dbContext)
     {
-        
+        _dbContext = dbContext;
     }
 
     //public TablesRepository(RestaurantDbContext dbContext)

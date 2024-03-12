@@ -10,7 +10,7 @@ public class ReviewsRepository : RepositoryWithSave, IReviewsRepository
     private readonly RestaurantDbContext _dbContext;
 
     public ReviewsRepository(RestaurantDbContext dbContext) : base(dbContext)
-    { }
+    { _dbContext = dbContext; }
     
     public async Task<ICollection<Review>> GetAll()
     {

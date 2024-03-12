@@ -10,7 +10,7 @@ public class CuisinesRepository : RepositoryWithSave , ICuisinesRepository
     private readonly RestaurantDbContext _dbContext;
 
     public CuisinesRepository(RestaurantDbContext dbContext) : base(dbContext)
-    { }
+    { _dbContext = dbContext; }
     
     public async Task<ICollection<Cuisine>> GetAll()
     {

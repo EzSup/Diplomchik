@@ -10,7 +10,7 @@ public class CustomersRepository : RepositoryWithSave, ICustomersRepository
     private RestaurantDbContext _dbContext;
 
     public CustomersRepository(RestaurantDbContext dbContext) : base(dbContext)
-    { }
+    { _dbContext = dbContext; }
     
     public async Task<ICollection<Customer>> GetAll()
     {
