@@ -14,11 +14,6 @@ public class TablesRepository : RepositoryWithSave, ITablesRepository
         _dbContext = dbContext;
     }
 
-    //public TablesRepository(RestaurantDbContext dbContext)
-    //{
-    //    _dbContext = dbContext;
-    //}
-
     public async Task<ICollection<Table>> GetAll()
     {
         return await _dbContext.Tables.OrderBy(x => x.Id).ToListAsync();
@@ -45,7 +40,7 @@ public class TablesRepository : RepositoryWithSave, ITablesRepository
         return 0;
     }
 
-    public async Task<bool> Update(Table obj)
+    public async Task<bool> Update(TableDto obj)
     {
         Table? table = await Get(obj.Id);
         if (table is null)

@@ -14,12 +14,16 @@ public class DiscountsRepository : RepositoryWithSave, IDiscountsRepository
     
     public async Task<ICollection<Discount>> GetAll()
     {
-        return await _dbContext.Discounts.OrderBy(x => x.Id).ToListAsync();
+        return await _dbContext.Discounts.Include(d => d.Categories)
+            .Include(d => d.Cuisine)
+            .Include(d => d.Dishes).OrderBy(x => x.Id).ToListAsync();
     }
 
     public async Task<Discount?> Get(int id)
     {
-        return await _dbContext.Discounts.SingleOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Discounts.Include(d => d.Categories)
+            .Include(d => d.Cuisine)
+            .Include(d => d.Dishes).SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> Create(DiscountForCreateDto dto)
@@ -38,7 +42,7 @@ public class DiscountsRepository : RepositoryWithSave, IDiscountsRepository
         return 0;
     }
 
-    public async Task<bool> Update(Discount obj)
+    public async Task<bool> Update(DiscountDto obj)
     {
         Discount? discount = await Get(obj.Id);
         if (discount is null)

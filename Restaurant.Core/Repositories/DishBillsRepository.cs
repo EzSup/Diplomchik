@@ -19,7 +19,8 @@ public class DishBillsRepository : RepositoryWithSave, IDishBillsRepository
 
     public async Task<DishBill?> Get(int id)
     {
-        return await _dbContext.DishBills.SingleOrDefaultAsync(x => x.BillId == id);
+        return await _dbContext.DishBills.Include(d => d.Dish)
+            .Include(d => d.Bill).SingleOrDefaultAsync(x => x.BillId == id);
     }
 
     public async Task<int> Create(DishBillForCreateDto dto)
@@ -40,7 +41,7 @@ public class DishBillsRepository : RepositoryWithSave, IDishBillsRepository
         return 0;
     }
 
-    public async Task<bool> Update(DishBill obj)
+    public async Task<bool> Update(DishBillDto obj)
     {
         DishBill? dishBill = await Get(obj.BillId);
         if (dishBill is null)

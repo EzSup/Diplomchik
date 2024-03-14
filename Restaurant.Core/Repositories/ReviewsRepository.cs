@@ -14,12 +14,15 @@ public class ReviewsRepository : RepositoryWithSave, IReviewsRepository
     
     public async Task<ICollection<Review>> GetAll()
     {
-        return await _dbContext.Reviews.OrderBy(x => x.Title).ToListAsync();
+        return await _dbContext.Reviews.Include(r => r.Author)
+            .Include(r => r.Dish)
+            .OrderBy(x => x.Title).ToListAsync();
     }
 
     public async Task<Review?> Get(int id)
     {
-        return await _dbContext.Reviews.SingleOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Reviews.Include(r => r.Author)
+            .Include(r => r.Dish).SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> Create(ReviewForCreateDto dto)
@@ -29,8 +32,8 @@ public class ReviewsRepository : RepositoryWithSave, IReviewsRepository
             Title = dto.Title,
             Content = dto.Content,
             Rate = dto.Rate,
-            AuthorId = dto.AuthorId,
-            DishId = dto.DishId
+            AuthorId = dto.AuthorId is null || dto.AuthorId < 1 ? null : dto.AuthorId,
+            DishId = dto.DishId is null || dto.DishId < 1 ? null : dto.DishId,
         };
         _dbContext.Reviews.Add(obj);
         
@@ -42,7 +45,7 @@ public class ReviewsRepository : RepositoryWithSave, IReviewsRepository
         return 0;
     }
 
-    public async Task<bool> Update(Review obj)
+    public async Task<bool> Update(ReviewDto obj)
     {
         Review? review = await Get(obj.Id);
         if (review is null)
@@ -53,8 +56,8 @@ public class ReviewsRepository : RepositoryWithSave, IReviewsRepository
         review.Title = obj.Title;
         review.Content = obj.Content ?? review.Content;
         review.Rate = obj.Rate ?? review.Rate;
-        review.AuthorId = obj.AuthorId ?? review.AuthorId;
-        review.DishId = obj.DishId ?? review.DishId;
+        review.AuthorId = obj.AuthorId is null || obj.AuthorId < 1 ? null : obj.AuthorId;
+        review.DishId = obj.DishId is null || obj.DishId < 1 ? null : obj.DishId;
 
         return await Save();
     }

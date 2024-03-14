@@ -1,4 +1,6 @@
-﻿namespace Restaurant.Core.Dtos;
+﻿using Restaurant.Core.Dtos.DependingDtos;
+
+namespace Restaurant.Core.Dtos;
 
 public class DishDto
 {
@@ -13,4 +15,8 @@ public class DishDto
     public int? DiscountId { get; set; }
     public int? CategoryId { get; set; }
     public int? CuisineId { get; set; }
+    
+    public DiscountNoRelatedDto? Discount { get; set; }
+    public CategoryNoRelatedDto? Category { get; set; }
+    public CuisineNoRelatedDto? Cuisine { get; set; }
 }

@@ -14,12 +14,14 @@ public class CustomersRepository : RepositoryWithSave, ICustomersRepository
     
     public async Task<ICollection<Customer>> GetAll()
     {
-        return await _dbContext.Customers.OrderBy(x => x.Name).ToListAsync();
+        return await _dbContext.Customers.Include(c => c.Bills)
+            .Include(c => c.Reviews).OrderBy(x => x.Name).ToListAsync();
     }
 
     public async Task<Customer?> Get(int id)
     {
-        return await _dbContext.Customers.SingleOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Customers.Include(c => c.Bills)
+            .Include(c => c.Reviews).SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> Create(CustomerForCreateDto dto)
@@ -42,7 +44,7 @@ public class CustomersRepository : RepositoryWithSave, ICustomersRepository
         return 0;
     }
 
-    public async Task<bool> Update(Customer obj)
+    public async Task<bool> Update(CustomerDto obj)
     {
         Customer? customer = await Get(obj.Id);
         if (customer is null)

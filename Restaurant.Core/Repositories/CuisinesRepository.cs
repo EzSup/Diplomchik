@@ -14,12 +14,14 @@ public class CuisinesRepository : RepositoryWithSave , ICuisinesRepository
     
     public async Task<ICollection<Cuisine>> GetAll()
     {
-        return await _dbContext.Cuisines.OrderBy(x => x.Name).ToListAsync();
+        return await _dbContext.Cuisines.Include(c => c.Discount)
+            .Include(c => c.Dishes).OrderBy(x => x.Name).ToListAsync();
     }
 
     public async Task<Cuisine?> Get(int id)
     {
-        return await _dbContext.Cuisines.SingleOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Cuisines.Include(c => c.Discount)
+            .Include(c => c.Dishes).SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> Create(CuisineForCreateDto dto)
@@ -27,7 +29,7 @@ public class CuisinesRepository : RepositoryWithSave , ICuisinesRepository
         var obj = new Cuisine()
         {
             Name = dto.Name,
-            DiscountId = dto.DiscountId
+            DiscountId = dto.DiscountId is null || dto.DiscountId < 1 ? null : dto.DiscountId
         };
         _dbContext.Cuisines.Add(obj);
         
@@ -39,7 +41,7 @@ public class CuisinesRepository : RepositoryWithSave , ICuisinesRepository
         return 0;
     }
 
-    public async Task<bool> Update(Cuisine obj)
+    public async Task<bool> Update(CuisineDto obj)
     {
         Cuisine? cuisine = await Get(obj.Id);
         if (cuisine is null)
@@ -48,7 +50,7 @@ public class CuisinesRepository : RepositoryWithSave , ICuisinesRepository
         }
 
         cuisine.Name = obj.Name ?? cuisine.Name;
-        cuisine.DiscountId = obj.DiscountId;
+        cuisine.DiscountId = obj.DiscountId is null || obj.DiscountId < 1 ? null : obj.DiscountId;
 
         return await Save();
     }

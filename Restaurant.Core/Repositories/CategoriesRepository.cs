@@ -14,12 +14,14 @@ public class CategoriesRepository : RepositoryWithSave, ICategoriesRepository
     
     public async Task<ICollection<Category>> GetAll()
     {
-        return await _dbContext.Categories.OrderBy(x => x.Name).ToListAsync();
+        return await _dbContext.Categories.Include(c => c.Discount)
+            .Include(c => c.Dishes).OrderBy(x => x.Name).ToListAsync();
     }
 
     public async Task<Category?> Get(int id)
     {
-        return await _dbContext.Categories.SingleOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Categories.Include(c => c.Discount)
+            .Include(c => c.Dishes).SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> Create(CategoryForCreateDto dto)
@@ -27,7 +29,7 @@ public class CategoriesRepository : RepositoryWithSave, ICategoriesRepository
         var obj = new Category()
         {
             Name = dto.Name,
-            DiscountId = dto.DiscountId
+            DiscountId = dto.DiscountId is null || dto.DiscountId < 1 ? null : dto.DiscountId
         };
         _dbContext.Categories.Add(obj);
         
@@ -39,7 +41,7 @@ public class CategoriesRepository : RepositoryWithSave, ICategoriesRepository
         return 0;
     }
 
-    public async Task<bool> Update(Category obj)
+    public async Task<bool> Update(CategoryDto obj)
     {
         Category? category = await Get(obj.Id);
         if (category is null)
@@ -48,7 +50,7 @@ public class CategoriesRepository : RepositoryWithSave, ICategoriesRepository
         }
 
         category.Name = obj.Name ?? category.Name;
-        category.DiscountId = obj.DiscountId;
+        category.DiscountId = obj.DiscountId is null || obj.DiscountId < 1 ? null : obj.DiscountId;
 
         return await Save();
     }

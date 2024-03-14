@@ -16,12 +16,18 @@ public class DishesRepository : RepositoryWithSave, IDishesRepository
     
     public async Task<ICollection<Dish>> GetAll()
     {
-        return await _dbContext.Dishes.OrderBy(x => x.Name).ToListAsync();
+        return await _dbContext.Dishes.Include(d => d.Discount)
+            .Include(d => d.Cuisine)
+            .Include(d => d.Category)
+            .OrderBy(x => x.Name).ToListAsync();
     }
 
     public async Task<Dish?> Get(int id)
     {
-        return await _dbContext.Dishes.SingleOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Dishes.Include(d => d.Discount)
+            .Include(d => d.Cuisine)
+            .Include(d => d.Category)
+            .SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> Create(DishForCreateDto dto)
@@ -48,7 +54,7 @@ public class DishesRepository : RepositoryWithSave, IDishesRepository
         return 0;
     }
 
-    public async Task<bool> Update(Dish obj)
+    public async Task<bool> Update(DishDto obj)
     {
         Dish? dish = await Get(obj.Id);
         if (dish is null)

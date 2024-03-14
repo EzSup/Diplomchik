@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Restaurant.Core.Dtos;
@@ -7,25 +7,22 @@ using Restaurant.Core.Services.Interfaces;
 
 namespace Restaurant.API.Controllers
 {
-
     [Route("api/[controller]")]
     [ApiController]
     public class DishesController : Controller
     {
         private readonly IDishesService _dishesService;
-        private readonly IMapper _mapper;
 
-        public DishesController(IDishesService dishesService, IMapper mapper)
+        public DishesController(IDishesService dishesService)
         {
             _dishesService = dishesService;
-            _mapper = mapper;
         }
 
         [HttpGet("[action]")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Dish>))]
         public async Task<IActionResult> GetAllDishes()
         {
-            var dishes = await _dishesService.GetAll();
+            var dishes = (await _dishesService.GetAll()).Adapt<List<DishDto>>();
 
             if (!ModelState.IsValid)
             {
@@ -39,7 +36,7 @@ namespace Restaurant.API.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Dish>))]
         public async Task<IActionResult> GetAvailableDishes()
         {
-            var dishes = await _dishesService.GetAvailable();
+            var dishes = (await _dishesService.GetAvailable()).Adapt<List<DishDto>>();
 
             if (!ModelState.IsValid)
             {
@@ -53,7 +50,7 @@ namespace Restaurant.API.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Dish>))]
         public async Task<IActionResult> GetDishesOnSale()
         {
-            var dishes = await _dishesService.GetDishesOnSale();
+            var dishes = (await _dishesService.GetDishesOnSale()).Adapt<List<DishDto>>();
 
             if (!ModelState.IsValid)
             {
@@ -64,13 +61,13 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet("{Id}")]
-        [ProducesResponseType(200, Type = typeof(Dish))]
+        [ProducesResponseType(200, Type = typeof(DishDto))]
         [ProducesResponseType(400)]
         public async Task<IActionResult> Get(int Id)
         {
             var dish = await _dishesService.Get(Id);
 
-            if(dish is null)
+            if (dish is null)
             {
                 return NotFound();
             }
@@ -80,7 +77,28 @@ namespace Restaurant.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            return Ok(dish);
+            return Ok(dish.Adapt<DishDto>());
+        }
+
+        [HttpGet("[action]{Id}")]
+        [ProducesResponseType(200, Type = typeof(int))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public async Task<IActionResult> GetResultingPrice(int Id)
+        {
+            try
+            {
+                var price = await _dishesService.GetDishResultingPrice(Id);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                return Ok(price);
+            }
+            catch (ArgumentNullException ex) {
+                return NotFound(ex.Message);
+            }
         }
 
         [HttpPost]
@@ -89,7 +107,6 @@ namespace Restaurant.API.Controllers
         [ProducesResponseType(400)]
         public async Task<IActionResult> Create([FromBody] DishForCreateDto dishCreate)
         {
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -116,7 +133,7 @@ namespace Restaurant.API.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public async Task<IActionResult> Update([FromBody] Dish updatedDish)
+        public async Task<IActionResult> Update([FromBody] DishDto updatedDish)
         {
             if (updatedDish is null)
             {
@@ -172,11 +189,13 @@ namespace Restaurant.API.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             try
             {
                 if (!(await _dishesService.Delete(Id)))
                 {
-                    ModelState.AddModelError("", "Something went wrong deleting dish. Possibly there are financial operations of this type.");
+                    ModelState.AddModelError("",
+                        "Something went wrong deleting dish. Possibly there are financial operations of this type.");
                     return BadRequest(ModelState);
                 }
             }
@@ -184,6 +203,7 @@ namespace Restaurant.API.Controllers
             {
                 return NotFound();
             }
+
             return NoContent();
         }
     }

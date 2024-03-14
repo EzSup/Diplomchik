@@ -7,6 +7,6 @@ public interface ITablesRepository
     Task<ICollection<Table>> GetAll();
     Task<Table?> Get(int id);
     Task<int> Create(TableForCreateDto dto);
-    Task<bool> Update(Table dto);
+    Task<bool> Update(TableDto dto);
     Task<bool> Delete(int id);
 }

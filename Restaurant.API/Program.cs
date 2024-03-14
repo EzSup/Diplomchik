@@ -5,6 +5,7 @@ using Restaurant.Core.Repositories;
 using Restaurant.Core.Repositories.Interfaces;
 using Restaurant.Core.Services;
 using Restaurant.Core.Services.Interfaces;
+using Mapster;
 
 namespace Restaurant.API
 {
@@ -17,8 +18,10 @@ namespace Restaurant.API
             builder.Services.AddControllers();
             builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+            
+            
 
-            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
             builder.Services.AddScoped<ICuisinesRepository, CuisinesRepository>();
             builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();

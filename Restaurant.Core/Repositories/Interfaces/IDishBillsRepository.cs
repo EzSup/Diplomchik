@@ -8,6 +8,6 @@ public interface IDishBillsRepository
     Task<ICollection<DishBill>> GetAll();
     Task<DishBill?> Get(int id);
     Task<int> Create(DishBillForCreateDto dto);
-    Task<bool> Update(DishBill dto);
+    Task<bool> Update(DishBillDto dto);
     Task<bool> Delete(int id);
 }
