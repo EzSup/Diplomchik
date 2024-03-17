@@ -1,0 +1,245 @@
+﻿body{
+    overflow-x: hidden;
+}
+
+.Header {
+    width: 100vw;
+    height: 950px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.Header .Content {
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+}
+
+.Header .Content h1 {
+    font-family: 'Aleo';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 60px;
+    line-height: 72px;
+    text-align: center;
+    color: #A7A293;
+    margin-top: 1.5em;
+    margin-bottom: 3em;
+}
+
+.Header .Content h2 {
+    font-family: 'Aleo';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 60px;
+    text-align: center;
+    color: #878477;
+    margin-bottom: 3em;
+}
+
+.Header .Content button {
+    width: 350px;
+    height: 60px;
+    background: #1E1E1E;
+    box-shadow: 0px 0px 8.1px rgba(0, 0, 0, 0.3);
+    border-radius: 45px;
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #FFF8E0;
+    justify-content: center;
+    border: 0;
+}
+
+.Header .Bg{
+    position:absolute;
+    z-index: 0;
+    top: 0;
+}
+
+.Header .Bg img {
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.Header .Bg .Content {
+    width: 100vw;
+    height: 100vh;
+    background: rgba(30, 30, 30, 0.8);
+}
+
+.Main-Content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0px;
+    row-gap: 0px;
+    width: 100vw;
+}
+
+.Main-Content .Title {
+    width: 100%;
+    max-height: 150px;
+    padding: 4px 0;
+    background: linear-gradient(90deg, rgba(36, 33, 33, 0) 0%, #878477 10%, #878477 90%, rgba(36, 33, 33, 0) 100%);
+    display: flex;
+}
+
+.Title .content {
+    background: #242121;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10em;
+}
+
+.Title h1 {
+    font-family: 'Aleo';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 60px;
+    line-height: 72px;
+    display: flex;
+    align-items: center;
+    color: #FFF8E0;
+}
+
+.Content-wrap {
+    display: flex;
+    width: 100%;
+    /*justify-content: center;*/
+}
+
+.wrap-col{
+    width: 100%;
+    height: 800px;
+    padding: 2em 0 0;
+}
+
+.mid-col {
+    border-width: 0px 4px;
+    border-style: solid;
+    border-color: #878477;
+}
+
+.wrap-col-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
+    flex-wrap: wrap;
+}
+
+.wrap-col-content img {
+    width: 400px;
+    height: 400px;
+}
+
+.wrap-col-content h1 {
+    font-family: 'Aleo';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 60px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.1em;
+    color: #FFF8E0;
+    margin: 0.5em 0;
+}
+
+.wrap-col-content h2{
+    font-family: 'Merriweather Sans';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 40px;
+    line-height: 50px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #A7A293;
+}
+
+.wrap-col-content p {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+    display: flex;
+    align-items: center;
+    color: #878477;
+    width: 60%;
+}
+
+.wrap-row {
+    width: 100%;
+    height: 750px;
+    display: flex;
+}
+
+.wrap-row-content {
+    height: 100%;
+    padding: 2em;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    align-content: center;
+}
+
+.wrap-row-content h2 {
+    font-family: 'Aleo';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 60px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: 0.1em;
+    color: #FFF8E0;
+    margin-bottom: 2em;
+}
+.wrap-row-content p {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 61px;
+    display: flex;
+    align-items: center;
+    color: #A7A293;
+}
+
+.wrap-row-content img {
+    width: 650px;
+    height: 650px;
+}
+
+.pl7{padding-left: 7em;}
+
+.pr7{padding-right: 7em;}
+
+.flex-col {
+    flex-direction: column;
+}
+.gradient-line {
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, rgba(36, 33, 33, 0) 0%, #878477 10%, #878477 90%, rgba(36, 33, 33, 0) 100%);
+    display: flex;
+}
