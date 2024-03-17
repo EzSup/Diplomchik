@@ -1,5 +1,24 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
+@font-face{
+    font-family: "Inter";
+    src: url('../fonts/Inter/Inter-Regular.ttf')
+}
+@font-face {
+    font-family: "Merriweather Sans";
+    src: url('../fonts/MerriweatherSans/MerriweatherSans-Light.ttf')    
+}
+
+@font-face {
+    font-family: "Aleo";
+    src: url('../fonts/Aleo/Aleo-Regular.ttf');
+}
+
+@font-face {
+    font-family: "AleoBold";
+    src: url('../fonts/Aleo/Aleo-Bold.ttf')
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
