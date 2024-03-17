@@ -32,8 +32,9 @@ namespace Restaurant.API
             builder.Services.AddScoped<ITablesRepository, TablesRepository>();
 
             builder.Services.AddScoped<IDishesService, DishesService>();
-                
-                
+            builder.Services.AddScoped<ITablesService, TablesService>();
+
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<RestaurantDbContext>(options =>

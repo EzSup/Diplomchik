@@ -19,7 +19,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet("[action]")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Dish>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<DishDto>))]
         public async Task<IActionResult> GetAllDishes()
         {
             var dishes = (await _dishesService.GetAll()).Adapt<List<DishDto>>();

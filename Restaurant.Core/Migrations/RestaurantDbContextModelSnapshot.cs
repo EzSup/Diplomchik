@@ -39,12 +39,17 @@ namespace Restaurant.Core.Migrations
                     b.Property<decimal>("PaidAmount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("TableId")
+                        .HasColumnType("int");
+
                     b.Property<int>("TipsPercents")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
+
+                    b.HasIndex("TableId");
 
                     b.ToTable("Bills");
                 });
@@ -219,14 +224,13 @@ namespace Restaurant.Core.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("DishId")
                         .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<double>("Rate")
+                    b.Property<double?>("Rate")
                         .HasColumnType("float");
 
                     b.Property<string>("Title")
@@ -250,17 +254,13 @@ namespace Restaurant.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("BillId")
-                        .IsRequired()
-                        .HasColumnType("int");
+                    b.Property<bool>("Free")
+                        .HasColumnType("bit");
 
                     b.Property<decimal>("PriceForHour")
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BillId")
-                        .IsUnique();
 
                     b.ToTable("Tables");
                 });
@@ -272,7 +272,14 @@ namespace Restaurant.Core.Migrations
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.NoAction);
 
+                    b.HasOne("Restaurant.Core.Models.Table", "Table")
+                        .WithMany("Bills")
+                        .HasForeignKey("TableId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.Navigation("Customer");
+
+                    b.Navigation("Table");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Category", b =>
@@ -357,22 +364,9 @@ namespace Restaurant.Core.Migrations
                     b.Navigation("Dish");
                 });
 
-            modelBuilder.Entity("Restaurant.Core.Models.Table", b =>
-                {
-                    b.HasOne("Restaurant.Core.Models.Bill", "Bill")
-                        .WithOne("Table")
-                        .HasForeignKey("Restaurant.Core.Models.Table", "BillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bill");
-                });
-
             modelBuilder.Entity("Restaurant.Core.Models.Bill", b =>
                 {
                     b.Navigation("DishBills");
-
-                    b.Navigation("Table");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Category", b =>
@@ -406,6 +400,11 @@ namespace Restaurant.Core.Migrations
                     b.Navigation("DishBills");
 
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("Restaurant.Core.Models.Table", b =>
+                {
+                    b.Navigation("Bills");
                 });
 #pragma warning restore 612, 618
         }

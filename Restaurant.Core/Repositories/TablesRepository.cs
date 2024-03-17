@@ -28,7 +28,8 @@ public class TablesRepository : RepositoryWithSave, ITablesRepository
     {
         var obj = new Table
         {
-            PriceForHour = dto.PriceForHour
+            PriceForHour = dto.PriceForHour,
+            Free = true
         };
         _dbContext.Tables.Add(obj);
         
@@ -49,6 +50,7 @@ public class TablesRepository : RepositoryWithSave, ITablesRepository
         }
 
         table.PriceForHour = obj.PriceForHour;
+        table.Free = obj.Free;
 
         return await Save();
     }
