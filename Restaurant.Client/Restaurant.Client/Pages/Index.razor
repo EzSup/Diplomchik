@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject IStringLocalizer<Resource> Localizer
 
 <PageTitle>Index</PageTitle>
 <body>
@@ -7,7 +8,7 @@
 		<h1>Lorem ipsum dolor sit amet, consectetur adipiscing elit</h1>
 		<h2>tempor incididunt ut labore et dolore magna aliqua.</h2>
 		<button>
-			забронювати стіл
+			@Localizer["ReserveATable"]
 		</button>
 	</div>
 	<div class="Bg">

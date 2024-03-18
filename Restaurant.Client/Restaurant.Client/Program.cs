@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Restaurant.Core;
 using Restaurant.Core.Repositories;
 using Restaurant.Core.Repositories.Interfaces;
 using Restaurant.Core.Services;
 using Restaurant.Core.Services.Interfaces;
+using System.Globalization;
 
 namespace Restaurant.Client
 {
@@ -14,6 +16,9 @@ namespace Restaurant.Client
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            ConfigureLocalization(builder.Services);
+            builder.Services.AddControllers();
 
             // Add services to the container.
             builder.Services.AddRazorPages();
@@ -38,6 +43,8 @@ namespace Restaurant.Client
 
             var app = builder.Build();
 
+            app.UseRequestLocalization();
+
             using (var scope = app.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<RestaurantDbContext>();
@@ -56,12 +63,31 @@ namespace Restaurant.Client
 
             app.UseStaticFiles();
 
+            app.MapControllers();
+
             app.UseRouting();
 
             app.MapBlazorHub();
             app.MapFallbackToPage("/_Host");
 
             app.Run();
+        }
+
+        public static void ConfigureLocalization(IServiceCollection services)
+        {
+            var supportedCultures = new List<CultureInfo>()
+            {
+                new CultureInfo("uk-UA"), new CultureInfo("en-US")
+            };
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                options.DefaultRequestCulture = new RequestCulture(culture: supportedCultures[0].Name, uiCulture: supportedCultures[0].Name);
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
+
+            services.AddLocalization();
         }
     }
 }

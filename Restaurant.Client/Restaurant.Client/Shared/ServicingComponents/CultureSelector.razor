@@ -1,0 +1,49 @@
+﻿@inject IStringLocalizer<Resource> localizer
+@inject NavigationManager NavigationManager
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.Extensions.Options
+@using Microsoft.AspNetCore.Builder
+@inject IOptions<RequestLocalizationOptions> LocalizationOptions
+
+<div>
+    @foreach (var culture in _cultures)
+    {
+        <button @onclick="() => SetCulture(new CultureInfo(culture.Value))" >@culture.Value</button>
+    }    
+</div>
+
+@code {
+    private List<SelectListItem> _cultures;
+
+    private void SetCulture(CultureInfo culture)
+    {
+        _culture = culture;
+    }
+
+    private CultureInfo _culture
+    {
+        get
+        {
+            return CultureInfo.CurrentCulture;
+        }
+        set
+        {
+            if(CultureInfo.CurrentCulture != value)
+            {
+                var uri = new Uri(NavigationManager.Uri).GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
+                var cultureEscaped = Uri.EscapeDataString(value.Name);
+                var uriEscaped = Uri.EscapeDataString(uri);
+
+                NavigationManager.NavigateTo($"Culture/Set?culture={cultureEscaped}&redirectUri={uriEscaped}", forceLoad: true);
+            }
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        _culture = CultureInfo.CurrentCulture;
+        _cultures = LocalizationOptions.Value.SupportedUICultures
+            .Select(x => new SelectListItem{Value = x.Name, Text = x.Name.Substring(3)})
+            .ToList();
+    }
+}
