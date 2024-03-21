@@ -9,7 +9,7 @@
     @foreach (var culture in _cultures)
     {
         <button @onclick="() => SetCulture(new CultureInfo(culture.Value))" >@culture.Value</button>
-    }    
+    }
 </div>
 
 @code {
