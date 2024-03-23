@@ -6,26 +6,21 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Restaurant.Core.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Customers",
+                name: "Carts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNum = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhotoLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.PrimaryKey("PK_Carts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,6 +48,29 @@ namespace Restaurant.Core.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tables", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PhoneNum = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhotoLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CartId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Customers_Carts_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Carts",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -100,15 +118,22 @@ namespace Restaurant.Core.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaidAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     OrderDateAndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TipsPercents = table.Column<int>(type: "int", nullable: false),
                     TableId = table.Column<int>(type: "int", nullable: true),
-                    CustomerId = table.Column<int>(type: "int", nullable: true)
+                    CustomerId = table.Column<int>(type: "int", nullable: true),
+                    CartId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Bills", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Bills_Carts_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Carts",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Bills_Customers_CustomerId",
                         column: x => x.CustomerId,
@@ -161,24 +186,24 @@ namespace Restaurant.Core.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DishBills",
+                name: "DishCarts",
                 columns: table => new
                 {
                     DishId = table.Column<int>(type: "int", nullable: false),
-                    BillId = table.Column<int>(type: "int", nullable: false),
-                    DishesCount = table.Column<int>(type: "int", nullable: false)
+                    CartId = table.Column<int>(type: "int", nullable: false),
+                    Count = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DishBills", x => new { x.DishId, x.BillId });
+                    table.PrimaryKey("PK_DishCarts", x => new { x.DishId, x.CartId });
                     table.ForeignKey(
-                        name: "FK_DishBills_Bills_BillId",
-                        column: x => x.BillId,
-                        principalTable: "Bills",
+                        name: "FK_DishCarts_Carts_CartId",
+                        column: x => x.CartId,
+                        principalTable: "Carts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_DishBills_Dishes_DishId",
+                        name: "FK_DishCarts_Dishes_DishId",
                         column: x => x.DishId,
                         principalTable: "Dishes",
                         principalColumn: "Id");
@@ -214,6 +239,13 @@ namespace Restaurant.Core.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bills_CartId",
+                table: "Bills",
+                column: "CartId",
+                unique: true,
+                filter: "[CartId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Bills_CustomerId",
                 table: "Bills",
                 column: "CustomerId");
@@ -236,9 +268,16 @@ namespace Restaurant.Core.Migrations
                 filter: "[DiscountId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DishBills_BillId",
-                table: "DishBills",
-                column: "BillId");
+                name: "IX_Customers_CartId",
+                table: "Customers",
+                column: "CartId",
+                unique: true,
+                filter: "[CartId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DishCarts_CartId",
+                table: "DishCarts",
+                column: "CartId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Dishes_CategoryId",
@@ -270,22 +309,25 @@ namespace Restaurant.Core.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "DishBills");
+                name: "Bills");
+
+            migrationBuilder.DropTable(
+                name: "DishCarts");
 
             migrationBuilder.DropTable(
                 name: "Reviews");
 
             migrationBuilder.DropTable(
-                name: "Bills");
-
-            migrationBuilder.DropTable(
-                name: "Dishes");
+                name: "Tables");
 
             migrationBuilder.DropTable(
                 name: "Customers");
 
             migrationBuilder.DropTable(
-                name: "Tables");
+                name: "Dishes");
+
+            migrationBuilder.DropTable(
+                name: "Carts");
 
             migrationBuilder.DropTable(
                 name: "Categories");

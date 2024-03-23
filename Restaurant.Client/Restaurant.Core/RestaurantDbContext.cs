@@ -17,8 +17,10 @@ public class RestaurantDbContext : DbContext
     public DbSet<Models.Table> Tables { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<Dish> Dishes { get; set; }
-    public DbSet<DishBill> DishBills { get; set; }
+    //public DbSet<DishBill> DishBills { get; set; }
     public DbSet<Bill> Bills { get; set; }
+    public DbSet<Cart> Carts { get; set; }
+    public DbSet<DishCart> DishCarts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -100,6 +102,10 @@ public class RestaurantDbContext : DbContext
                 .WithMany(t => t.Bills)
                 .HasForeignKey(b => b.TableId)
                 .OnDelete(DeleteBehavior.NoAction);
+            entity.HasOne(b => b.Cart)
+                .WithOne(c => c.Bill)
+                .HasForeignKey<Bill>(b => b.CartId)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<Review>(entity =>
@@ -123,22 +129,48 @@ public class RestaurantDbContext : DbContext
                 .IsRequired();
             entity.Property(c => c.Password)
                 .IsRequired();
+
+            entity.HasOne(c => c.Cart)
+            .WithOne(c => c.Customer)
+            .HasForeignKey<Customer>(c => c.CartId)
+            .OnDelete(DeleteBehavior.NoAction);
             
         });
 
-        modelBuilder.Entity<DishBill>(entity =>
-        {
-            entity.HasKey(db => new { db.DishId, db.BillId });
+        //modelBuilder.Entity<DishBill>(entity =>
+        //{
+        //    entity.HasKey(db => new { db.DishId, db.BillId });
 
-            entity.HasOne(db => db.Bill)
-                .WithMany(b => b.DishBills)
-                .HasForeignKey(db => db.BillId)
-                .OnDelete(DeleteBehavior.Cascade);
-            entity.HasOne(db => db.Dish)
-                .WithMany(d => d.DishBills)
-                .HasForeignKey(db => db.DishId)
-                .OnDelete(DeleteBehavior.NoAction);
+        //    entity.HasOne(db => db.Bill)
+        //        .WithMany(b => b.DishBills)
+        //        .HasForeignKey(db => db.BillId)
+        //        .OnDelete(DeleteBehavior.Cascade);
+        //    entity.HasOne(db => db.Dish)
+        //        .WithMany(d => d.DishBills)
+        //        .HasForeignKey(db => db.DishId)
+        //        .OnDelete(DeleteBehavior.NoAction);
+        //});
+
+        modelBuilder.Entity<Cart>(entity =>
+        {
+            entity.HasKey(c => c.Id);
         });
+
+        modelBuilder.Entity<DishCart>(entity =>
+        {
+            entity.HasKey(dc => new { dc.DishId, dc.CartId });
+
+            entity.HasOne(dc => dc.Cart)
+            .WithMany(c => c.DishCarts)
+            .HasForeignKey(dc => dc.CartId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne(dc => dc.Dish)
+            .WithMany(d => d.DishCarts)
+            .HasForeignKey(dc => dc.DishId)
+            .OnDelete(DeleteBehavior.NoAction);
+        });
+
 
     }
 }

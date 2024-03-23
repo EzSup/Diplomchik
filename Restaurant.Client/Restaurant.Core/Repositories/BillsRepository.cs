@@ -18,7 +18,7 @@ public class BillsRepository : RepositoryWithSave, IBillsRepository
     {
         return await _dbContext.Bills.Include(b=>b.Table)
             .Include(b => b.Customer)
-            .Include(b => b.DishBills)
+            .Include(b => b.Cart)
             .OrderBy(x => x.Id).ToListAsync();
     }
 
@@ -27,35 +27,57 @@ public class BillsRepository : RepositoryWithSave, IBillsRepository
         return await _dbContext.Bills.SingleOrDefaultAsync(x => x.Id == id);
     }
     
-    private ICollection<DishBill> MapDishBills(int billId, IDictionary<string, int> dishbills)
-    {
-        List<DishBill> dishBillsOFThisBill = new();
-        foreach (var dishbill in dishbills)
-        {
-            DishBill newDishBill = new()
-            {
-                BillId = billId,
-                DishId = Convert.ToInt32(dishbill.Key),
-                DishesCount = dishbill.Value
-            };
-            _dbContext.DishBills.Add(newDishBill);
-            dishBillsOFThisBill.Add(newDishBill);
-        }
-        return dishBillsOFThisBill;
-    }
+    //private ICollection<DishBill> MapDishBills(int billId, IDictionary<string, int> dishbills)
+    //{
+    //    List<DishBill> dishBillsOFThisBill = new();
+    //    foreach (var dishbill in dishbills)
+    //    {
+    //        DishBill newDishBill = new()
+    //        {
+    //            BillId = billId,
+    //            DishId = Convert.ToInt32(dishbill.Key),
+    //            DishesCount = dishbill.Value
+    //        };
+    //        _dbContext.DishBills.Add(newDishBill);
+    //        dishBillsOFThisBill.Add(newDishBill);
+    //    }
+    //    return dishBillsOFThisBill;
+    //}
 
     public async Task<int> Create(BillForCreateDto dto)
     {
+        var customer = _dbContext.Customers.Include(x => x.Cart).SingleOrDefault(x => x.Id == dto.CustomerId) ?? null;
+        var cart = customer?.Cart ?? null;
+        if (customer is null || cart is null)
+        {
+            throw new ArgumentNullException("Чек не має замовника");
+        }
+
         var obj = new Bill()
         {
             OrderDateAndTime = DateTime.Now,
             PaidAmount = dto.PaidAmount,
             TipsPercents = dto.TipsPercents,
             TableId = dto.TableId is null || dto.TableId < 1 ? null : dto.TableId,
-            CustomerId = dto.CustomerId is null || dto.CustomerId < 1 ? null : dto.CustomerId
+            CustomerId = dto.CustomerId,
+            Cart = cart,
+            Price = cart.CalculatePrice()
         };
+
+        if(obj.PaidAmount < obj.Price + obj.Price*0.01m*obj.TipsPercents) 
+        {
+            throw new ArgumentException("Заплачена сума менша за ціну + чайові");
+        }
+        if(obj.Table != null && !_dbContext.Tables.SingleOrDefault(x => x.Id == obj.TableId)!.Free)
+        {
+            throw new ArgumentException("Стіл зайнятий!");
+        }
+
+        customer.CartId = null;
+
         _dbContext.Bills.Add(obj);
-        obj.DishBills = MapDishBills(obj.Id, dto.DishesAndCount);
+
+        //obj.DishBills = MapDishBills(obj.Id, dto.DishesAndCount);
         if (await Save())
         {
             return obj.Id;
@@ -75,8 +97,17 @@ public class BillsRepository : RepositoryWithSave, IBillsRepository
         bill.OrderDateAndTime = obj.OrderDateAndTime;
         bill.PaidAmount = obj.PaidAmount;
         bill.TipsPercents = obj.TipsPercents;
-        bill.TableId = obj.TableId is null || obj.TableId < 1 ? null : obj.TableId;
-        bill.CustomerId = obj.CustomerId is null || obj.CustomerId < 1 ? null : obj.CustomerId;
+        bill.TableId = obj.TableId;
+        bill.Cart = obj.Cart;
+
+        if (bill.Customer is null || bill.Cart is null)
+        {
+            throw new ArgumentNullException("Чек не має замовника");
+        }
+        if (obj.PaidAmount < obj.Price + obj.Price * 0.01m * obj.TipsPercents)
+        {
+            throw new ArgumentException("Заплачена сума менша за ціну + чайові");
+        }
 
         return await Save();
     }

@@ -2,7 +2,7 @@
 
 namespace Restaurant.Core.Services.Interfaces;
 
-public interface ICategoriesService : ICustomersRepository
+public interface ICategoriesService : ICategoriesRepository
 {
     
 }

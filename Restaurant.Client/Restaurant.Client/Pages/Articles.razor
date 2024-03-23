@@ -1,0 +1,22 @@
+﻿@page "/Articles"
+
+
+@using TinyMCE.Blazor
+
+<h3>Articles</h3>
+<br />
+<br />
+<br />
+<br />
+<br />
+<Editor Conf="editorConf" ApiKey="8zphuyb6qu417r6obeo20vs5guns8lzh7lbie76w1k8g7z19" @bind-Value="value" />
+
+<p  style="color: white;"> @value </p>
+@((MarkupString)value)
+@code {
+    string value;
+
+    private Dictionary<string, object> editorConf = new Dictionary<string, object>{
+      {"plugins", "a11ychecker advcode advtemplate advlist advtable anchor autocorrect autosave editimage image link linkchecker lists media mediaembed pageembed powerpaste searchreplace table template tinymcespellchecker typography visualblocks wordcount"},
+    };
+}

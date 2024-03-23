@@ -12,8 +12,8 @@ using Restaurant.Core;
 namespace Restaurant.Core.Migrations
 {
     [DbContext(typeof(RestaurantDbContext))]
-    [Migration("20240321100635_Initial")]
-    partial class Initial
+    [Migration("20240323175610_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,6 +33,9 @@ namespace Restaurant.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CartId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("CustomerId")
                         .HasColumnType("int");
 
@@ -40,6 +43,9 @@ namespace Restaurant.Core.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("PaidAmount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("TableId")
@@ -50,11 +56,28 @@ namespace Restaurant.Core.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CartId")
+                        .IsUnique()
+                        .HasFilter("[CartId] IS NOT NULL");
+
                     b.HasIndex("CustomerId");
 
                     b.HasIndex("TableId");
 
                     b.ToTable("Bills");
+                });
+
+            modelBuilder.Entity("Restaurant.Core.Models.Cart", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Category", b =>
@@ -111,6 +134,9 @@ namespace Restaurant.Core.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("CartId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -129,6 +155,10 @@ namespace Restaurant.Core.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CartId")
+                        .IsUnique()
+                        .HasFilter("[CartId] IS NOT NULL");
 
                     b.ToTable("Customers");
                 });
@@ -196,22 +226,22 @@ namespace Restaurant.Core.Migrations
                     b.ToTable("Dishes");
                 });
 
-            modelBuilder.Entity("Restaurant.Core.Models.DishBill", b =>
+            modelBuilder.Entity("Restaurant.Core.Models.DishCart", b =>
                 {
                     b.Property<int>("DishId")
                         .HasColumnType("int");
 
-                    b.Property<int>("BillId")
+                    b.Property<int>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<int>("DishesCount")
+                    b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.HasKey("DishId", "BillId");
+                    b.HasKey("DishId", "CartId");
 
-                    b.HasIndex("BillId");
+                    b.HasIndex("CartId");
 
-                    b.ToTable("DishBills");
+                    b.ToTable("DishCarts");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Review", b =>
@@ -270,6 +300,11 @@ namespace Restaurant.Core.Migrations
 
             modelBuilder.Entity("Restaurant.Core.Models.Bill", b =>
                 {
+                    b.HasOne("Restaurant.Core.Models.Cart", "Cart")
+                        .WithOne("Bill")
+                        .HasForeignKey("Restaurant.Core.Models.Bill", "CartId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("Restaurant.Core.Models.Customer", "Customer")
                         .WithMany("Bills")
                         .HasForeignKey("CustomerId")
@@ -279,6 +314,8 @@ namespace Restaurant.Core.Migrations
                         .WithMany("Bills")
                         .HasForeignKey("TableId")
                         .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Cart");
 
                     b.Navigation("Customer");
 
@@ -305,6 +342,16 @@ namespace Restaurant.Core.Migrations
                     b.Navigation("Discount");
                 });
 
+            modelBuilder.Entity("Restaurant.Core.Models.Customer", b =>
+                {
+                    b.HasOne("Restaurant.Core.Models.Cart", "Cart")
+                        .WithOne("Customer")
+                        .HasForeignKey("Restaurant.Core.Models.Customer", "CartId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Cart");
+                });
+
             modelBuilder.Entity("Restaurant.Core.Models.Dish", b =>
                 {
                     b.HasOne("Restaurant.Core.Models.Category", "Category")
@@ -329,21 +376,21 @@ namespace Restaurant.Core.Migrations
                     b.Navigation("Discount");
                 });
 
-            modelBuilder.Entity("Restaurant.Core.Models.DishBill", b =>
+            modelBuilder.Entity("Restaurant.Core.Models.DishCart", b =>
                 {
-                    b.HasOne("Restaurant.Core.Models.Bill", "Bill")
-                        .WithMany("DishBills")
-                        .HasForeignKey("BillId")
+                    b.HasOne("Restaurant.Core.Models.Cart", "Cart")
+                        .WithMany("DishCarts")
+                        .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Restaurant.Core.Models.Dish", "Dish")
-                        .WithMany("DishBills")
+                        .WithMany("DishCarts")
                         .HasForeignKey("DishId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Bill");
+                    b.Navigation("Cart");
 
                     b.Navigation("Dish");
                 });
@@ -367,9 +414,13 @@ namespace Restaurant.Core.Migrations
                     b.Navigation("Dish");
                 });
 
-            modelBuilder.Entity("Restaurant.Core.Models.Bill", b =>
+            modelBuilder.Entity("Restaurant.Core.Models.Cart", b =>
                 {
-                    b.Navigation("DishBills");
+                    b.Navigation("Bill");
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("DishCarts");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Category", b =>
@@ -400,7 +451,7 @@ namespace Restaurant.Core.Migrations
 
             modelBuilder.Entity("Restaurant.Core.Models.Dish", b =>
                 {
-                    b.Navigation("DishBills");
+                    b.Navigation("DishCarts");
 
                     b.Navigation("Reviews");
                 });

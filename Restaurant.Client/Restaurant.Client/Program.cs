@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Restaurant.Client.Services;
 using Restaurant.Core;
 using Restaurant.Core.Repositories;
 using Restaurant.Core.Repositories.Interfaces;
@@ -23,18 +25,24 @@ namespace Restaurant.Client
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
+            builder.Services.AddAuthorizationCore();
+
+            builder.Services.AddScoped<CurrentCustomer>();
+            builder.Services.AddScoped<AuthenticationStateProvider>(sp =>
+                sp.GetRequiredService<CurrentCustomer>());
 
             builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
             builder.Services.AddScoped<ICuisinesRepository, CuisinesRepository>();
             builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
             builder.Services.AddScoped<IDiscountsRepository, DiscountsRepository>();
-            builder.Services.AddScoped<IDishBillsRepository, DishBillsRepository>();
+           // builder.Services.AddScoped<IDishBillsRepository, DishBillsRepository>();
             builder.Services.AddScoped<IDishesRepository, DishesRepository>();
             builder.Services.AddScoped<IReviewsRepository, ReviewsRepository>();
             builder.Services.AddScoped<ITablesRepository, TablesRepository>();
 
             builder.Services.AddScoped<IDishesService, DishesService>();
             builder.Services.AddScoped<ITablesService, TablesService>();
+            builder.Services.AddScoped<ICustomersService, CustomersService>();
 
             builder.Services.AddDbContext<RestaurantDbContext>(options =>
             {

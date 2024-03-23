@@ -20,5 +20,6 @@ public class Dish
     public Discount? Discount { get; set; }
     public Category? Category { get; set; }
     public ICollection<Review> Reviews { get; set; }
-    public ICollection<DishBill> DishBills { get; set; }
+    //public ICollection<DishBill> DishBills { get; set; }
+    public ICollection<DishCart>? DishCarts { get; set; }
 }
