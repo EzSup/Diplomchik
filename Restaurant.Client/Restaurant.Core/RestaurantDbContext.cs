@@ -21,6 +21,7 @@ public class RestaurantDbContext : DbContext
     public DbSet<Bill> Bills { get; set; }
     public DbSet<Cart> Carts { get; set; }
     public DbSet<DishCart> DishCarts { get; set; }
+    public DbSet<Blog> Blogs { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -169,6 +170,11 @@ public class RestaurantDbContext : DbContext
             .WithMany(d => d.DishCarts)
             .HasForeignKey(dc => dc.DishId)
             .OnDelete(DeleteBehavior.NoAction);
+        });
+
+        modelBuilder.Entity<Blog>(entity =>
+        {
+            entity.HasKey(e => e.Id);
         });
 
 
