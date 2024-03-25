@@ -4,11 +4,28 @@
 @using Microsoft.Extensions.Options
 @using Microsoft.AspNetCore.Builder
 @inject IOptions<RequestLocalizationOptions> LocalizationOptions
+<style>
+    .LangSwitch button {
+        border: 0;
+        background-color: rgba(0,0,0,0);
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 20px;
+        line-height: 24px;
+        color: #A7A293;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
 
+    .LangSwitch button:hover{
+            color: #FFF8E0;
+    }
+</style>
 <div>
     @foreach (var culture in _cultures)
     {
-        <button @onclick="() => SetCulture(new CultureInfo(culture.Value))" >@culture.Value</button>
+        <button class="button" @onclick="() => SetCulture(new CultureInfo(culture.Value))">@culture.Value</button>
     }
 </div>
 
