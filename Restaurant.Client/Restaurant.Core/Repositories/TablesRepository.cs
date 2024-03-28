@@ -41,7 +41,7 @@ public class TablesRepository : RepositoryWithSave, ITablesRepository
         return 0;
     }
 
-    public async Task<bool> Update(TableDto obj)
+    public async Task<bool> Update(Table obj)
     {
         Table? table = await Get(obj.Id);
         if (table is null)

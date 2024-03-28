@@ -31,6 +31,7 @@ namespace Restaurant.Client
             builder.Services.AddScoped<AuthenticationStateProvider>(sp =>
                 sp.GetRequiredService<CurrentCustomer>());
 
+            builder.Services.AddScoped<IBillsRepository, BillsRepository>();
             builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
             builder.Services.AddScoped<ICuisinesRepository, CuisinesRepository>();
             builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();

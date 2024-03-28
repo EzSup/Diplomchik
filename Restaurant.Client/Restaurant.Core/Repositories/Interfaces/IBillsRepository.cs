@@ -3,11 +3,6 @@ using Restaurant.Core.Models;
 
 namespace Restaurant.Core.Repositories.Interfaces;
 
-public interface IBillsRepository
+public interface IBillsRepository : ICRUDRepo<Bill, BillForCreateDto>
 {
-    Task<ICollection<Bill>> GetAll();
-    Task<Bill?> Get(int id);
-    Task<int> Create(BillForCreateDto dto);
-    Task<bool> Update(Bill dto);
-    Task<bool> Delete(int id);
 }

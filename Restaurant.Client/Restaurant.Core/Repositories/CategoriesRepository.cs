@@ -41,7 +41,7 @@ public class CategoriesRepository : RepositoryWithSave, ICategoriesRepository
         return 0;
     }
 
-    public async Task<bool> Update(CategoryDto obj)
+    public async Task<bool> Update(Category obj)
     {
         Category? category = await Get(obj.Id);
         if (category is null)

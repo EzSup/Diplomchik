@@ -1,7 +1,6 @@
 ﻿namespace Restaurant.Core.Dtos;
 
-public class DiscountDto
+public class DiscountDto : DiscountForCreateDto
 {
     public int Id { get; set; }
-    public double PecentsAmount { get; set; }
 }

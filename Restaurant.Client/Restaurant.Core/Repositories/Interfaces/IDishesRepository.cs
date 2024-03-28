@@ -3,11 +3,6 @@ using Restaurant.Core.Models;
 
 namespace Restaurant.Core.Repositories.Interfaces;
 
-public interface IDishesRepository
+public interface IDishesRepository : ICRUDRepo<Dish, DishForCreateDto>
 {
-    Task<ICollection<Dish>> GetAll();
-    Task<Dish?> Get(int id);
-    Task<int> Create(DishForCreateDto dto);
-    Task<bool> Update(DishDto dto);
-    Task<bool> Delete(int id);
 }

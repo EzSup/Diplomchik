@@ -1,8 +1,5 @@
 ﻿namespace Restaurant.Core.Dtos;
 
-public class DishBillDto
+public class DishBillDto : DishBillForCreateDto
 {
-    public int DishId { get; set; }
-    public int BillId { get; set; }
-    public int DishesCount { get; set; }
 }

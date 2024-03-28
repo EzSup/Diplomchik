@@ -45,7 +45,7 @@ public class ReviewsRepository : RepositoryWithSave, IReviewsRepository
         return 0;
     }
 
-    public async Task<bool> Update(ReviewDto obj)
+    public async Task<bool> Update(Review obj)
     {
         Review? review = await Get(obj.Id);
         if (review is null)

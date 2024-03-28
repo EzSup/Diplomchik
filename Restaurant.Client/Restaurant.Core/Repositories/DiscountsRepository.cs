@@ -42,7 +42,7 @@ public class DiscountsRepository : RepositoryWithSave, IDiscountsRepository
         return 0;
     }
 
-    public async Task<bool> Update(DiscountDto obj)
+    public async Task<bool> Update(Discount obj)
     {
         Discount? discount = await Get(obj.Id);
         if (discount is null)

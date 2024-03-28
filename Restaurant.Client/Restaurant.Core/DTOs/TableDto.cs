@@ -1,8 +1,7 @@
 ﻿namespace Restaurant.Core.Dtos;
 
-public class TableDto
+public class TableDto : TableForCreateDto
 {
     public int Id { get; set; }
-    public decimal PriceForHour { get; set; }
     public bool Free { get; set; }
 }

@@ -54,7 +54,7 @@ public class DishesRepository : RepositoryWithSave, IDishesRepository
         return 0;
     }
 
-    public async Task<bool> Update(DishDto obj)
+    public async Task<bool> Update(Dish obj)
     {
         Dish? dish = await Get(obj.Id);
         if (dish is null)

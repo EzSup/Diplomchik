@@ -3,11 +3,6 @@ using Restaurant.Core.Models;
 
 namespace Restaurant.Core.Repositories.Interfaces;
 
-public interface ICategoriesRepository
+public interface ICategoriesRepository : ICRUDRepo<Category, CategoryForCreateDto>
 {
-    Task<ICollection<Category>> GetAll();
-    Task<Category?> Get(int id);
-    Task<int> Create(CategoryForCreateDto dto);
-    Task<bool> Update(CategoryDto dto);
-    Task<bool> Delete(int id);
 }

@@ -41,7 +41,7 @@ public class CuisinesRepository : RepositoryWithSave , ICuisinesRepository
         return 0;
     }
 
-    public async Task<bool> Update(CuisineDto obj)
+    public async Task<bool> Update(Cuisine obj)
     {
         Cuisine? cuisine = await Get(obj.Id);
         if (cuisine is null)

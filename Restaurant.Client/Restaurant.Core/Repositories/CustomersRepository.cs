@@ -44,7 +44,7 @@ public class CustomersRepository : RepositoryWithSave, ICustomersRepository
         return 0;
     }
 
-    public async Task<bool> Update(CustomerDto obj)
+    public async Task<bool> Update(Customer obj)
     {
         Customer? customer = await Get(obj.Id);
         if (customer is null)
