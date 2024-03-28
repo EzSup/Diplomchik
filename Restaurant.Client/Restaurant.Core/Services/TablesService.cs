@@ -22,19 +22,18 @@ namespace Restaurant.Core.Services
 
         public async Task<ICollection<Models.Table>> GetAll() => await _tablesRepository.GetAll();
         public async Task<Models.Table?> Get(int id) => await _tablesRepository.Get(id);
-        public async Task<bool> Update(TableDto dto) => await _tablesRepository.Update(dto);
+        public async Task<bool> Update(Models.Table dto) => await _tablesRepository.Update(dto);
         public async Task<int> Create(TableForCreateDto dto) => await _tablesRepository.Create(dto);
         public async Task<bool> Delete(int id) => await _tablesRepository.Delete(id);
         public async Task SwitchFree(int id, bool free)
         {
             var table = await Get(id);
-            var tableDto = table.Adapt<TableDto>();
             if (free == table?.Free)
             {
                 return;
             }
-            tableDto.Free = free;
-            await Update(tableDto);
+            table.Free = free;
+            await Update(table);
         }
     }
 }

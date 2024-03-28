@@ -52,7 +52,7 @@ namespace Restaurant.Client.Services
             if (Security.PasswordNeedsRehash(obj.Password))
             {
                 obj.Password = Security.HashPassword(dto.Password);
-                await _service.Update(obj.Adapt<CustomerDto>());                
+                await _service.Update(obj);                
             }
 
             Info = new(obj.Id, obj.Name);

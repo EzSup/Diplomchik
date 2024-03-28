@@ -19,7 +19,7 @@ public class DishesService : IDishesService
 
     public async Task<ICollection<Dish>?> GetAll() => await _dishesRepository.GetAll();
     public async Task<Dish?> Get(int id) => await _dishesRepository.Get(id)?? throw new ArgumentNullException("Такої страви не існує");
-    public async Task<bool> Update(DishDto obj) => await _dishesRepository.Update(obj);
+    public async Task<bool> Update(Dish obj) => await _dishesRepository.Update(obj);
     public async Task<bool> Delete(int id) => await _dishesRepository.Delete(id);
     public async Task<int> Create(DishForCreateDto dto) => await _dishesRepository.Create(dto);
     public async Task<ICollection<Dish>> GetAvailable() => (await GetAll()).Where(x => x.Available == true).ToList();
@@ -50,7 +50,7 @@ public class DishesService : IDishesService
             throw new InvalidOperationException("Помилка при додаванні знижки");
         }        
         dish.Discount = await _discountsRepository.Get(discountId);
-        await _dishesRepository.Update(dish.Adapt<DishDto>());
+        await _dishesRepository.Update(dish);
         return discountId;
     }
     

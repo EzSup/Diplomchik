@@ -11,7 +11,6 @@ namespace Restaurant.Core.Models
     {
         public int Id { get; set; }
         //public IDictionary<Dish, int> dishes { get; set; } = new Dictionary<Dish, int>();
-        
         public Customer? Customer { get; set; }
         public Bill? Bill { get; set; }
         public ICollection<DishCart> DishCarts { get; set; }

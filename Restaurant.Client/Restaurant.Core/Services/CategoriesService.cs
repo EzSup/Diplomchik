@@ -21,7 +21,7 @@ namespace Restaurant.Core.Services
 
         public async Task<ICollection<Category>> GetAll() => await _repository.GetAll();
         public async Task<Category?> Get(int id) => await _repository.Get(id);
-        public async Task<bool> Update(CategoryDto dto) => await _repository.Update(dto);
+        public async Task<bool> Update(Category dto) => await _repository.Update(dto);
         public async Task<int> Create(CategoryForCreateDto dto) => await _repository.Create(dto);
         public async Task<bool> Delete(int id) => await _repository.Delete(id);
 

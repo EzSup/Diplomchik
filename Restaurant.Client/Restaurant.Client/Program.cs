@@ -40,10 +40,12 @@ namespace Restaurant.Client
             builder.Services.AddScoped<IDishesRepository, DishesRepository>();
             builder.Services.AddScoped<IReviewsRepository, ReviewsRepository>();
             builder.Services.AddScoped<ITablesRepository, TablesRepository>();
+            builder.Services.AddScoped<IBlogsRepository, BlogsRepository>();
 
             builder.Services.AddScoped<IDishesService, DishesService>();
             builder.Services.AddScoped<ITablesService, TablesService>();
             builder.Services.AddScoped<ICustomersService, CustomersService>();
+            builder.Services.AddScoped<IBlogsService, BlogsService>();
 
             builder.Services.AddDbContext<RestaurantDbContext>(options =>
             {
