@@ -24,6 +24,12 @@ public class CustomersRepository : RepositoryWithSave, ICustomersRepository
             .Include(c => c.Reviews).AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
     }
 
+    public async Task<Customer?> Get(string email)
+    {
+        return await _dbContext.Customers.Include(c => c.Bills)
+            .Include(c => c.Reviews).AsNoTracking().SingleOrDefaultAsync(x => x.Email == email);
+    }
+
     public async Task<int> Create(CustomerForCreateDto dto)
     {
         var obj = new Customer
