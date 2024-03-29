@@ -15,13 +15,13 @@ public class CategoriesRepository : RepositoryWithSave, ICategoriesRepository
     public async Task<ICollection<Category>> GetAll()
     {
         return await _dbContext.Categories.Include(c => c.Discount)
-            .Include(c => c.Dishes).OrderBy(x => x.Name).ToListAsync();
+            .Include(c => c.Dishes).AsNoTracking().OrderBy(x => x.Name).ToListAsync();
     }
 
     public async Task<Category?> Get(int id)
     {
         return await _dbContext.Categories.Include(c => c.Discount)
-            .Include(c => c.Dishes).SingleOrDefaultAsync(x => x.Id == id);
+            .Include(c => c.Dishes).AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> Create(CategoryForCreateDto dto)
@@ -43,27 +43,18 @@ public class CategoriesRepository : RepositoryWithSave, ICategoriesRepository
 
     public async Task<bool> Update(Category obj)
     {
-        Category? category = await Get(obj.Id);
-        if (category is null)
-        {
-            throw new NullReferenceException("Категорія не знайдена");
-        }
-
-        category.Name = obj.Name ?? category.Name;
-        category.DiscountId = obj.DiscountId is null || obj.DiscountId < 1 ? null : obj.DiscountId;
+        await _dbContext.Categories.Where(x => x.Id == obj.Id)
+            .ExecuteUpdateAsync(c => c
+            .SetProperty(c => c.Name, c => obj.Name)
+            .SetProperty(c => c.DiscountId, c => obj.DiscountId));
 
         return await Save();
     }
 
     public async Task<bool> Delete(int id)
     {
-        var obj = await Get(id);
-        if (obj is null)
-        {
-            throw new InvalidOperationException("Така категорія не знайдена.");
-        }
-
-        _dbContext.Categories.Remove(obj);
+        await _dbContext.Categories.Where(x => x.Id == id)
+            .ExecuteDeleteAsync();
         return await Save();
     }
 }

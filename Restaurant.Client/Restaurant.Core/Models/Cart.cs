@@ -21,7 +21,7 @@ namespace Restaurant.Core.Models
             decimal price = 0;
             foreach (var d in DishCarts)
             {
-                price += d.Dish.Price * d.Count;
+                price += (d?.Dish?.Price ?? 0) * d.Count;
             }
             return price;
         }

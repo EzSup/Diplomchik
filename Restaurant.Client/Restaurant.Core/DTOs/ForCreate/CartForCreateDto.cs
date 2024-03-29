@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Restaurant.Core.DTOs.ForCreate
 {
-    internal class CartForCreateDto
+    public class CartForCreateDto
     {
     }
 }

@@ -21,12 +21,12 @@ namespace Restaurant.Core.Repositories
 
         public async Task<ICollection<Blog>> GetAll()
         {
-            return await _dbContext.Blogs.OrderBy(x => x.Created).ToListAsync();
+            return await _dbContext.Blogs.AsNoTracking().OrderBy(x => x.Created).ToListAsync();
         }
 
         public async Task<Blog?> Get(int id)
         {
-            return await _dbContext.Blogs.SingleOrDefaultAsync(x => x.Id == id);
+            return await _dbContext.Blogs.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<int> Create(BlogForCreateDto dto)
@@ -50,29 +50,20 @@ namespace Restaurant.Core.Repositories
 
         public async Task<bool> Update(Blog obj)
         {
-            Blog? blog = await Get(obj.Id);
-            if (blog is null)
-            {
-                throw new NullReferenceException("Блог не знайдений");
-            }
-
-            blog.Title = obj.Title ?? blog.Title;
-            blog.Content = obj.Content ?? blog.Content;
-            blog.AuthorName = obj.AuthorName ?? blog.AuthorName;
-            blog.Created = obj.Created < minDate ? blog.Created : obj.Created;
+            await _dbContext.Blogs.Where(x => x.Id == obj.Id)
+                .ExecuteUpdateAsync(b => b
+                .SetProperty(b => b.Title, b => obj.Title)
+                .SetProperty(b => b.Content, b => obj.Content)
+                .SetProperty(b => b.AuthorName, b => obj.AuthorName)
+                .SetProperty(b => b.Created, b => obj.Created > minDate ? obj.Created : b.Created));
 
             return await Save();
         }
 
         public async Task<bool> Delete(int id)
         {
-            var obj = await Get(id);
-            if (obj is null)
-            {
-                throw new InvalidOperationException("Такий блог не знайдений.");
-            }
-
-            _dbContext.Blogs.Remove(obj);
+            await _dbContext.Blogs.Where(x => x.Id == id)
+                .ExecuteDeleteAsync();  
             return await Save();
         }
     }

@@ -138,20 +138,6 @@ public class RestaurantDbContext : DbContext
             
         });
 
-        //modelBuilder.Entity<DishBill>(entity =>
-        //{
-        //    entity.HasKey(db => new { db.DishId, db.BillId });
-
-        //    entity.HasOne(db => db.Bill)
-        //        .WithMany(b => b.DishBills)
-        //        .HasForeignKey(db => db.BillId)
-        //        .OnDelete(DeleteBehavior.Cascade);
-        //    entity.HasOne(db => db.Dish)
-        //        .WithMany(d => d.DishBills)
-        //        .HasForeignKey(db => db.DishId)
-        //        .OnDelete(DeleteBehavior.NoAction);
-        //});
-
         modelBuilder.Entity<Cart>(entity =>
         {
             entity.HasKey(c => c.Id);

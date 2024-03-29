@@ -15,13 +15,13 @@ public class CustomersRepository : RepositoryWithSave, ICustomersRepository
     public async Task<ICollection<Customer>> GetAll()
     {
         return await _dbContext.Customers.Include(c => c.Bills)
-            .Include(c => c.Reviews).OrderBy(x => x.Name).ToListAsync();
+            .Include(c => c.Reviews).AsNoTracking().OrderBy(x => x.Name).ToListAsync();
     }
 
     public async Task<Customer?> Get(int id)
     {
         return await _dbContext.Customers.Include(c => c.Bills)
-            .Include(c => c.Reviews).SingleOrDefaultAsync(x => x.Id == id);
+            .Include(c => c.Reviews).AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> Create(CustomerForCreateDto dto)
@@ -46,29 +46,21 @@ public class CustomersRepository : RepositoryWithSave, ICustomersRepository
 
     public async Task<bool> Update(Customer obj)
     {
-        Customer? customer = await Get(obj.Id);
-        if (customer is null)
-        {
-            throw new NullReferenceException("Користувач не знайдений");
-        }
+        await _dbContext.Customers.Where(x => x.Id == obj.Id)
+            .ExecuteUpdateAsync(c => c
+            .SetProperty(c => c.Name, c=> obj.Name)
+            .SetProperty(c => c.PhoneNum, c => obj.PhoneNum)
+            .SetProperty(c => c.Email, c => obj.Email)
+            .SetProperty(c => c.PhotoLink, c => obj.PhotoLink)
+            .SetProperty(c => c.Password, c => obj.Password));
 
-        customer.Name = obj.Name ?? customer.Name;
-        customer.PhoneNum = obj.PhoneNum ?? customer.PhoneNum;
-        customer.Email = obj.Email ?? customer.Email;
-        customer.PhotoLink = obj.PhotoLink ?? customer.PhotoLink;
-        customer.Password = obj.Password ?? customer.Password;
         return await Save();
     }
 
     public async Task<bool> Delete(int id)
     {
-        var obj = await Get(id);
-        if (obj is null)
-        {
-            throw new InvalidOperationException("Такий користувач не знайдений.");
-        }
+        await _dbContext.Customers.Where(x => x.Id == id).ExecuteDeleteAsync();
 
-        _dbContext.Customers.Remove(obj);
         return await Save();
     }
 }

@@ -18,13 +18,13 @@ public class BillsRepository : RepositoryWithSave, IBillsRepository
     {
         return await _dbContext.Bills.Include(b=>b.Table)
             .Include(b => b.Customer)
-            .Include(b => b.Cart)
+            .Include(b => b.Cart).AsNoTracking()
             .OrderBy(x => x.Id).ToListAsync();
     }
 
     public async Task<Bill?> Get(int id)
     {
-        return await _dbContext.Bills.SingleOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Bills.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
     }
     
     //private ICollection<DishBill> MapDishBills(int billId, IDictionary<string, int> dishbills)
@@ -64,11 +64,11 @@ public class BillsRepository : RepositoryWithSave, IBillsRepository
             Price = cart.CalculatePrice()
         };
 
-        if(obj.PaidAmount < obj.Price + obj.Price*0.01m*obj.TipsPercents) 
+        if (obj.PaidAmount < obj.Price + obj.Price * 0.01m * obj.TipsPercents)
         {
             throw new ArgumentException("Заплачена сума менша за ціну + чайові");
         }
-        if(obj.Table != null && !_dbContext.Tables.SingleOrDefault(x => x.Id == obj.TableId)!.Free)
+        if (obj.Table != null && !_dbContext.Tables.SingleOrDefault(x => x.Id == obj.TableId)!.Free)
         {
             throw new ArgumentException("Стіл зайнятий!");
         }
@@ -88,39 +88,26 @@ public class BillsRepository : RepositoryWithSave, IBillsRepository
 
     public async Task<bool> Update(Bill obj)
     {
-        Bill? bill = await Get(obj.Id);
-        if (bill is null)
-        {
-            throw new NullReferenceException("Чек не знайдений");
-        }
-
-        bill.OrderDateAndTime = obj.OrderDateAndTime;
-        bill.PaidAmount = obj.PaidAmount;
-        bill.TipsPercents = obj.TipsPercents;
-        bill.TableId = obj.TableId;
-        bill.Cart = obj.Cart;
-
-        if (bill.Customer is null || bill.Cart is null)
-        {
-            throw new ArgumentNullException("Чек не має замовника");
-        }
+        
         if (obj.PaidAmount < obj.Price + obj.Price * 0.01m * obj.TipsPercents)
         {
             throw new ArgumentException("Заплачена сума менша за ціну + чайові");
         }
+
+        await _dbContext.Bills.Where(x => x.Id == obj.Id).ExecuteUpdateAsync(b => b
+        .SetProperty(b => b.OrderDateAndTime, b => obj.OrderDateAndTime)
+        .SetProperty(b => b.PaidAmount, b => obj.PaidAmount)
+        .SetProperty(b => b.TipsPercents, b => obj.TipsPercents)
+        .SetProperty(b => b.TableId, b => obj.TableId)
+        .SetProperty(b => b.CartId, b => obj.CartId)
+        );       
 
         return await Save();
     }
 
     public async Task<bool> Delete(int id)
     {
-        var obj = await Get(id);
-        if (obj is null)
-        {
-            throw new InvalidOperationException("Такий чек не знайдений.");
-        }
-
-        _dbContext.Bills.Remove(obj);
+        await _dbContext.Bills.Where(x => x.Id == id).ExecuteDeleteAsync();
         return await Save();
     }
 }

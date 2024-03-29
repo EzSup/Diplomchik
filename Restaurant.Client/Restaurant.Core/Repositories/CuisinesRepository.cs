@@ -15,13 +15,13 @@ public class CuisinesRepository : RepositoryWithSave , ICuisinesRepository
     public async Task<ICollection<Cuisine>> GetAll()
     {
         return await _dbContext.Cuisines.Include(c => c.Discount)
-            .Include(c => c.Dishes).OrderBy(x => x.Name).ToListAsync();
+            .Include(c => c.Dishes).AsNoTracking().OrderBy(x => x.Name).ToListAsync();
     }
 
     public async Task<Cuisine?> Get(int id)
     {
         return await _dbContext.Cuisines.Include(c => c.Discount)
-            .Include(c => c.Dishes).SingleOrDefaultAsync(x => x.Id == id);
+            .Include(c => c.Dishes).AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> Create(CuisineForCreateDto dto)
@@ -43,27 +43,18 @@ public class CuisinesRepository : RepositoryWithSave , ICuisinesRepository
 
     public async Task<bool> Update(Cuisine obj)
     {
-        Cuisine? cuisine = await Get(obj.Id);
-        if (cuisine is null)
-        {
-            throw new NullReferenceException("Кухня не знайдена");
-        }
-
-        cuisine.Name = obj.Name ?? cuisine.Name;
-        cuisine.DiscountId = obj.DiscountId is null || obj.DiscountId < 1 ? null : obj.DiscountId;
+        await _dbContext.Cuisines.Where(x => x.Id == obj.Id)
+            .ExecuteUpdateAsync(c => c
+            .SetProperty(c => c.Name, c => obj.Name)
+            .SetProperty(c => c.DiscountId, c=> obj.DiscountId));
 
         return await Save();
     }
 
     public async Task<bool> Delete(int id)
     {
-        var obj = await Get(id);
-        if (obj is null)
-        {
-            throw new InvalidOperationException("Така кухня не знайдена.");
-        }
-
-        _dbContext.Cuisines.Remove(obj);
+        await _dbContext.Cuisines.Where(x => x.Id == id).ExecuteDeleteAsync();
+            
         return await Save();
     }
 }

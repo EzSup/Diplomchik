@@ -16,12 +16,12 @@ public class TablesRepository : RepositoryWithSave, ITablesRepository
 
     public async Task<ICollection<Table>> GetAll()
     {
-        return await _dbContext.Tables.OrderBy(x => x.Id).ToListAsync();
+        return await _dbContext.Tables.OrderBy(x => x.Id).AsNoTracking().ToListAsync();
     }
 
     public async Task<Table?> Get(int id)
     {
-        return await _dbContext.Tables.SingleOrDefaultAsync(x => x.Id == id);
+        return await _dbContext.Tables.AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> Create(TableForCreateDto dto)
@@ -43,27 +43,18 @@ public class TablesRepository : RepositoryWithSave, ITablesRepository
 
     public async Task<bool> Update(Table obj)
     {
-        Table? table = await Get(obj.Id);
-        if (table is null)
-        {
-            throw new NullReferenceException("Стіл не знайдений");
-        }
-
-        table.PriceForHour = obj.PriceForHour;
-        table.Free = obj.Free;
+        await _dbContext.Tables.Where(t => t.Id == obj.Id)
+            .ExecuteUpdateAsync(t => t
+            .SetProperty(t => t.PriceForHour, t => obj.PriceForHour)
+            .SetProperty(t => t.Free, t => obj.Free));
 
         return await Save();
     }
 
     public async Task<bool> Delete(int id)
     {
-        var obj = await Get(id);
-        if (obj is null)
-        {
-            throw new InvalidOperationException("Такий стіл не знайдений.");
-        }
+        await _dbContext.Tables.Where(t => t.Id == id).ExecuteDeleteAsync();
 
-        _dbContext.Tables.Remove(obj);
         return await Save();
     }
 }

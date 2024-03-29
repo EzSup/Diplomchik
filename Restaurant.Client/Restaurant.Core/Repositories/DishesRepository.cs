@@ -19,7 +19,7 @@ public class DishesRepository : RepositoryWithSave, IDishesRepository
         return await _dbContext.Dishes.Include(d => d.Discount)
             .Include(d => d.Cuisine)
             .Include(d => d.Category)
-            .OrderBy(x => x.Name).ToListAsync();
+            .OrderBy(x => x.Name).AsNoTracking().ToListAsync();
     }
 
     public async Task<Dish?> Get(int id)
@@ -27,6 +27,7 @@ public class DishesRepository : RepositoryWithSave, IDishesRepository
         return await _dbContext.Dishes.Include(d => d.Discount)
             .Include(d => d.Cuisine)
             .Include(d => d.Category)
+            .AsNoTracking()
             .SingleOrDefaultAsync(x => x.Id == id);
     }
 
@@ -56,34 +57,24 @@ public class DishesRepository : RepositoryWithSave, IDishesRepository
 
     public async Task<bool> Update(Dish obj)
     {
-        Dish? dish = await Get(obj.Id);
-        if (dish is null)
-        {
-            throw new NullReferenceException("Страва не знайдена");
-        }
-
-        dish.Name = obj.Name;
-        dish.Weight = obj.Weight;
-        dish.Available = obj.Available;
-        dish.Price = obj.Price;
-        dish.IngredientsList = obj.IngredientsList;
-        dish.PhotoLinks = obj.PhotoLinks;
-        dish.DiscountId = obj.DiscountId is null || obj.DiscountId < 1 ? null : obj.DiscountId;
-        dish.CategoryId = obj.CategoryId is null || obj.CategoryId < 1 ? null : obj.CategoryId;
-        dish.CuisineId = obj.CuisineId is null || obj.CuisineId < 1 ? null : obj.CategoryId;
+        await _dbContext.Dishes.Where(x => x.Id == obj.Id)
+            .ExecuteUpdateAsync(d => d
+            .SetProperty(d => d.Name, d => obj.Name)
+            .SetProperty(d => d.Weight, d => obj.Weight)
+            .SetProperty(d => d.Available, d => obj.Available)
+            .SetProperty(d => d.Price, d=> obj.Price)
+            .SetProperty(d => d.IngredientsList, d => obj.IngredientsList)
+            .SetProperty(d => d.PhotoLinks, d => obj.PhotoLinks)
+            .SetProperty(d => d.DiscountId, d => obj.DiscountId)
+            .SetProperty(d => d.CategoryId, d => obj.CategoryId)
+            .SetProperty(d => d.CuisineId, d => obj.CuisineId));
 
         return await Save();
     }
 
     public async Task<bool> Delete(int id)
     {
-        var obj = await Get(id);
-        if (obj is null)
-        {
-            throw new InvalidOperationException("Така страва не знайдена.");
-        }
-
-        _dbContext.Dishes.Remove(obj);
+        await _dbContext.Dishes.Where(d => d.Id == id).ExecuteDeleteAsync();
         return await Save();
     }
 }

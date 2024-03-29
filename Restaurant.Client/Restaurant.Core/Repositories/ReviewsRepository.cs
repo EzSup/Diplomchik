@@ -16,13 +16,13 @@ public class ReviewsRepository : RepositoryWithSave, IReviewsRepository
     {
         return await _dbContext.Reviews.Include(r => r.Author)
             .Include(r => r.Dish)
-            .OrderBy(x => x.Title).ToListAsync();
+            .OrderBy(x => x.Title).AsNoTracking().ToListAsync();
     }
 
     public async Task<Review?> Get(int id)
     {
         return await _dbContext.Reviews.Include(r => r.Author)
-            .Include(r => r.Dish).SingleOrDefaultAsync(x => x.Id == id);
+            .Include(r => r.Dish).AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> Create(ReviewForCreateDto dto)
@@ -47,30 +47,21 @@ public class ReviewsRepository : RepositoryWithSave, IReviewsRepository
 
     public async Task<bool> Update(Review obj)
     {
-        Review? review = await Get(obj.Id);
-        if (review is null)
-        {
-            throw new NullReferenceException("Відгук не знайдений");
-        }
-
-        review.Title = obj.Title;
-        review.Content = obj.Content ?? review.Content;
-        review.Rate = obj.Rate ?? review.Rate;
-        review.AuthorId = obj.AuthorId is null || obj.AuthorId < 1 ? null : obj.AuthorId;
-        review.DishId = obj.DishId is null || obj.DishId < 1 ? null : obj.DishId;
-
+        await _dbContext.Reviews.Where(x => x.Id == obj.Id)
+            .ExecuteUpdateAsync(r => r
+            .SetProperty(r => r.Title, r => obj.Title)
+            .SetProperty(r => r.Content, r => obj.Content)
+            .SetProperty(r => r.Rate, r => obj.Rate)
+            .SetProperty(r => r.AuthorId, r => obj.AuthorId)
+            .SetProperty(r => r.DishId, r => obj.DishId));
         return await Save();
     }
 
     public async Task<bool> Delete(int id)
     {
-        var obj = await Get(id);
-        if (obj is null)
-        {
-            throw new InvalidOperationException("Така категорія не знайдена.");
-        }
+        await _dbContext.Reviews.Where(x => x.Id == id)
+            .ExecuteDeleteAsync();
 
-        _dbContext.Reviews.Remove(obj);
         return await Save();
     }
 }

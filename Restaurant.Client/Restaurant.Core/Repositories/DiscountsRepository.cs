@@ -16,14 +16,14 @@ public class DiscountsRepository : RepositoryWithSave, IDiscountsRepository
     {
         return await _dbContext.Discounts.Include(d => d.Categories)
             .Include(d => d.Cuisine)
-            .Include(d => d.Dishes).OrderBy(x => x.Id).ToListAsync();
+            .Include(d => d.Dishes).AsNoTracking().OrderBy(x => x.Id).ToListAsync();
     }
 
     public async Task<Discount?> Get(int id)
     {
         return await _dbContext.Discounts.Include(d => d.Categories)
             .Include(d => d.Cuisine)
-            .Include(d => d.Dishes).SingleOrDefaultAsync(x => x.Id == id);
+            .Include(d => d.Dishes).AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<int> Create(DiscountForCreateDto dto)
@@ -44,26 +44,18 @@ public class DiscountsRepository : RepositoryWithSave, IDiscountsRepository
 
     public async Task<bool> Update(Discount obj)
     {
-        Discount? discount = await Get(obj.Id);
-        if (discount is null)
-        {
-            throw new NullReferenceException("Знижка не знайдена");
-        }
-
-        discount.PecentsAmount = obj.PecentsAmount;
+        await _dbContext.Discounts.Where(x => x.Id == obj.Id)
+            .ExecuteUpdateAsync(d => d
+            .SetProperty(d => d.PecentsAmount, d => obj.PecentsAmount));
 
         return await Save();
     }
 
     public async Task<bool> Delete(int id)
     {
-        var obj = await Get(id);
-        if (obj is null)
-        {
-            throw new InvalidOperationException("Така знижка не знайдена.");
-        }
+        await _dbContext.Discounts.Where(x => x.Id == id)
+            .ExecuteDeleteAsync();
 
-        _dbContext.Discounts.Remove(obj);
         return await Save();
     }
 }
