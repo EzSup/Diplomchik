@@ -6,7 +6,7 @@ using Restaurant.Core.Functions;
 using Restaurant.Core.Services.Interfaces;
 using System.Security.Claims;
 using Mapster;
-using Restaurant.Core.Dtos;
+using Restaurant.Core.DTOs;
 
 namespace Restaurant.Client.Services
 {
@@ -33,7 +33,7 @@ namespace Restaurant.Client.Services
                 var identity = new ClaimsIdentity(new[]
                 {
                 new Claim(ClaimTypes.NameIdentifier, Info?.Id.ToString() ?? ""),
-            }, "RpgGameAuth");
+            }, "RestaurantAuth");
 
                 var user = new ClaimsPrincipal(identity);
 

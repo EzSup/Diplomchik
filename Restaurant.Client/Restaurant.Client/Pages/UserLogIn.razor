@@ -1,0 +1,24 @@
+﻿@page "/login"
+@layout EmptyLayout
+@inject ICustomersService customersService
+@inject NavigationManager navMan
+@inject CurrentCustomer currentCustomer
+@using Restaurant.Client.Services
+@using Restaurant.Core.DTOs.SmallDtos
+<EditForm Model="dto" OnValidSubmit="LogIn">
+    <InputText @bind-Value="dto.Email"></InputText>
+    <InputText @bind-Value="dto.Password"></InputText>
+    <button type="submit">підтвердити</button>
+</EditForm>
+
+@code {
+    CustomerLogInDto dto = new();
+
+    private async Task LogIn()
+    {
+        if((await currentCustomer.LogInAsync(dto)).Success)
+        {
+            navMan.NavigateTo("/userpage");
+        }
+    }
+}

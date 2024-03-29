@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Restaurant.Core.Dtos;
+using Restaurant.Core.DTOs;
 using Restaurant.Core.Repositories.Interfaces;
 using Restaurant.Core.Models;
+using Restaurant.Core.Functions;
 
 namespace Restaurant.Core.Repositories;
 
@@ -37,9 +38,8 @@ public class CustomersRepository : RepositoryWithSave, ICustomersRepository
             Name = dto.Name,
             PhoneNum = dto.PhoneNum,
             Email = dto.Email,
-            PhotoLink = dto.PhotoLink,
-            Password = dto.Password
-        };
+            Password = Security.HashPassword(dto.Password)
+    };
         _dbContext.Customers.Add(obj);
         
         if (await Save())
@@ -52,6 +52,10 @@ public class CustomersRepository : RepositoryWithSave, ICustomersRepository
 
     public async Task<bool> Update(Customer obj)
     {
+        if (Security.PasswordNeedsRehash(obj.Password))
+        {
+            Security.HashPassword(obj.Password!);
+        }
         await _dbContext.Customers.Where(x => x.Id == obj.Id)
             .ExecuteUpdateAsync(c => c
             .SetProperty(c => c.Name, c=> obj.Name)

@@ -1,4 +1,4 @@
-﻿using Restaurant.Core.Dtos;
+﻿using Restaurant.Core.DTOs;
 using Restaurant.Core.DTOs.ForCreate;
 using Restaurant.Core.Models;
 using Restaurant.Core.Repositories.Interfaces;

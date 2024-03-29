@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata;
-using Restaurant.Core.Dtos;
+using Restaurant.Core.DTOs;
 using Restaurant.Core.DTOs.SmallDtos;
 using Restaurant.Core.Models;
 using Restaurant.Core.Repositories.Interfaces;
@@ -26,20 +26,8 @@ namespace Restaurant.Core.Services
         public async Task<ICollection<Customer>> GetAll() => await _repository.GetAll();
         public async Task<Customer?> Get(int id) => await _repository.Get(id);
         public async Task<Customer?> Get(string email) => await _repository.Get(email);
-        public async Task<int> Create(CustomerForCreateDto dto)
-        {
-            dto.Password = Security.HashPassword(dto.Password!);
-
-            return await _repository.Create(dto);
-        }
-        public async Task<bool> Update(Customer dto)
-        {
-            if (Security.PasswordNeedsRehash(dto.Password))
-            {
-                Security.HashPassword(dto.Password!);
-            }
-            return await _repository.Update(dto);
-        }
+        public async Task<int> Create(CustomerForCreateDto dto)=> await _repository.Create(dto);        
+        public async Task<bool> Update(Customer dto) => await _repository.Update(dto);
         public async Task<bool> Delete(int id) => await _repository.Delete(id);
 
         public async Task<Customer?> LogIn(ICustomersService.LogInData customer)
@@ -54,7 +42,21 @@ namespace Restaurant.Core.Services
             }
             return null;
         }
+
+        public async Task<bool> UpdateLogo(int customerId, string logoPath)
+        {
+            var customer = await Get(customerId);
+            if(customer == null)
+            {
+                return false;
+            }
+            customer.PhotoLink = logoPath;
+            if(await Update(customer))
+            {
+                return true;
+            }
+            return false;
+        }
         
-        //public record LogInData(string email, string password);
     }
 }

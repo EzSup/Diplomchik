@@ -1,4 +1,4 @@
-﻿namespace Restaurant.Core.Dtos;
+﻿namespace Restaurant.Core.DTOs;
 
 public class CustomerDto : CustomerForCreateDto
 {

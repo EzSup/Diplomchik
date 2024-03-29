@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using Restaurant.Client.Services;
+using Restaurant.Client.Services.Interfaces;
 using Restaurant.Core;
+using Restaurant.Core.Functions;
 using Restaurant.Core.Repositories;
 using Restaurant.Core.Repositories.Interfaces;
 using Restaurant.Core.Services;
@@ -26,10 +28,16 @@ namespace Restaurant.Client
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
             builder.Services.AddAuthorizationCore();
+            
+            //builder.Services.Configure<CloudinarySettings>(
+            //    builder.Configuration.GetSection("CloudinarySettings"));
 
             builder.Services.AddScoped<CurrentCustomer>();
             builder.Services.AddScoped<AuthenticationStateProvider>(sp =>
                 sp.GetRequiredService<CurrentCustomer>());
+
+            builder.Services.AddTransient<IFileUploadService, FileUploadService>();
+            
 
             builder.Services.AddScoped<IBillsRepository, BillsRepository>();
             builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();

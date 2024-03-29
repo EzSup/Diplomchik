@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Restaurant.Core.Dtos;
+using Restaurant.Core.DTOs;
 using Restaurant.Core.Repositories.Interfaces;
 using Restaurant.Core.Services.Interfaces;
 using Restaurant.Core.Models;

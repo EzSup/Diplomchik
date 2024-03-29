@@ -1,0 +1,51 @@
+﻿@page "/userpage"
+@layout EmptyLayout
+@using Restaurant.Client.Services
+@using Restaurant.Core.DTOs.SmallDtos
+@using System.Security.Claims
+@inject ICustomersService customerService
+@inject IWebHostEnvironment environment
+@inject CurrentCustomer currentCustomer
+@inject NavigationManager navMan
+
+<p>@customer.Name</p>
+<p>@customer.Email</p>
+<p>@customer.PhoneNum</p>
+<p>@customer.Password</p>
+<p>@customer.PhotoLink</p>
+<img src="@logoPath" width = "100px" height="100px"/>
+<FileInput MaxFilesCount="1" ValueChanged="UpdatePhoto" />
+<h3>UserPage</h3>
+
+@code {
+    private Customer customer = new();
+    private string logoPath = "images/userLogo.jpg";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authenticationState = currentCustomer.GetAuthenticationStateAsync();
+        var user = authenticationState.Result.User;
+
+        var userIdClaim = user.FindFirst(ClaimTypes.NameIdentifier);
+        if (userIdClaim == null)
+        {
+            navMan.NavigateTo("/login");
+        }
+        var userId = userIdClaim.Value;
+        customer = await customerService.Get(int.Parse(userId));
+        if(customer.PhotoLink != null)
+        {
+            logoPath = $"Uploads/{customer.PhotoLink}";
+        }
+
+    }
+
+    private async Task UpdatePhoto(string[] photo)
+    {
+        if(await customerService.UpdateLogo(customer.Id, photo[0]))
+        {
+            customer = await customerService.Get(customer.Id);
+        }
+    }
+
+}
