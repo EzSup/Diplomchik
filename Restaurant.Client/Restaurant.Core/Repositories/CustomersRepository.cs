@@ -25,10 +25,13 @@ public class CustomersRepository : RepositoryWithSave, ICustomersRepository
             .Include(c => c.Reviews).AsNoTracking().SingleOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<Customer?> Get(string email)
+    public async Task<Customer> Get(string email)
     {
         return await _dbContext.Customers.Include(c => c.Bills)
-            .Include(c => c.Reviews).AsNoTracking().SingleOrDefaultAsync(x => x.Email == email);
+            .Include(c => c.Reviews)
+            .AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Email == email) 
+            ?? throw new Exception("Користувач не знайдений!");
     }
 
     public async Task<int> Create(CustomerForCreateDto dto)
@@ -38,8 +41,8 @@ public class CustomersRepository : RepositoryWithSave, ICustomersRepository
             Name = dto.Name,
             PhoneNum = dto.PhoneNum,
             Email = dto.Email,
-            Password = Security.HashPassword(dto.Password)
-    };
+            Password = dto.Password
+        };
         _dbContext.Customers.Add(obj);
         
         if (await Save())
@@ -52,10 +55,6 @@ public class CustomersRepository : RepositoryWithSave, ICustomersRepository
 
     public async Task<bool> Update(Customer obj)
     {
-        if (Security.PasswordNeedsRehash(obj.Password))
-        {
-            Security.HashPassword(obj.Password!);
-        }
         await _dbContext.Customers.Where(x => x.Id == obj.Id)
             .ExecuteUpdateAsync(c => c
             .SetProperty(c => c.Name, c=> obj.Name)

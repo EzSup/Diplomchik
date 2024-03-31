@@ -1,17 +1,22 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Restaurant.Client.Services;
 using Restaurant.Client.Services.Interfaces;
 using Restaurant.Core;
 using Restaurant.Core.Functions;
+using Restaurant.Core.Functions.Interfaces;
 using Restaurant.Core.Repositories;
 using Restaurant.Core.Repositories.Interfaces;
 using Restaurant.Core.Services;
 using Restaurant.Core.Services.Interfaces;
+using Restaurant.Core.States;
 using System.Globalization;
+using System.Text;
 
 namespace Restaurant.Client
 {
@@ -28,16 +33,11 @@ namespace Restaurant.Client
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();
             builder.Services.AddAuthorizationCore();
-            
-            //builder.Services.Configure<CloudinarySettings>(
-            //    builder.Configuration.GetSection("CloudinarySettings"));
 
-            builder.Services.AddScoped<CurrentCustomer>();
-            builder.Services.AddScoped<AuthenticationStateProvider>(sp =>
-                sp.GetRequiredService<CurrentCustomer>());
 
+            builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
             builder.Services.AddTransient<IFileUploadService, FileUploadService>();
-            
+
 
             builder.Services.AddScoped<IBillsRepository, BillsRepository>();
             builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
@@ -49,17 +49,48 @@ namespace Restaurant.Client
             builder.Services.AddScoped<IReviewsRepository, ReviewsRepository>();
             builder.Services.AddScoped<ITablesRepository, TablesRepository>();
             builder.Services.AddScoped<IBlogsRepository, BlogsRepository>();
+            builder.Services.AddScoped<IAccount, Account>();
 
+            builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IDishesService, DishesService>();
             builder.Services.AddScoped<ITablesService, TablesService>();
             builder.Services.AddScoped<ICustomersService, CustomersService>();
             builder.Services.AddScoped<IBlogsService, BlogsService>();
+
+            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7091/") });
 
             builder.Services.AddDbContext<RestaurantDbContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            builder.Services.AddControllers();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "RestaurantAPI", Version = "v1" });
+            });
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+                };
+            });
+
+           
             var app = builder.Build();
 
             app.UseRequestLocalization();
@@ -81,8 +112,16 @@ namespace Restaurant.Client
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
+            app.UseAntiforgery();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "RestaurantAPI V1");
+            });
 
             app.MapControllers();
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseRouting();
 

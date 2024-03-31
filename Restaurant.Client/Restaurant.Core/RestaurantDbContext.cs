@@ -22,9 +22,19 @@ public class RestaurantDbContext : DbContext
     public DbSet<Cart> Carts { get; set; }
     public DbSet<DishCart> DishCarts { get; set; }
     public DbSet<Blog> Blogs { get; set; }
+    public DbSet<User> Users { get; set; } 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.Name)
+            .IsRequired();
+            entity.Property(x => x.Email).IsRequired();
+            entity.Property(x => x.Password).IsRequired();
+        });
+
         modelBuilder.Entity<Dish>(entity =>
         {
             entity.HasKey(d => d.Id);

@@ -1,25 +1,26 @@
-﻿using System.Security.Cryptography;
+﻿using Restaurant.Core.Functions.Interfaces;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Restaurant.Core.Functions
 {
-    public static class Security
+    public class PasswordHasher : IPasswordHasher
     {
         public const int PasswordHashWorkFactor = 11;
 
-        public static string HashPassword(string plainTextPassword)
+        public string HashPassword(string plainTextPassword)
             => BCrypt.Net.BCrypt.HashPassword(plainTextPassword, PasswordHashWorkFactor, enhancedEntropy: true);
 
-        public static bool PasswordNeedsRehash(string hashedPassword)
+        public bool PasswordNeedsRehash(string hashedPassword)
             => BCrypt.Net.BCrypt.PasswordNeedsRehash(hashedPassword, PasswordHashWorkFactor);
 
-        public static bool PasswordsMatch(string plainTextPassword, string hashedPassword)
+        public bool Verify(string plainTextPassword, string hashedPassword)
             => BCrypt.Net.BCrypt.Verify(plainTextPassword, hashedPassword, enhancedEntropy: true);
 
         /// <summary>
         /// Encrypts the given value using AES-256, and returns the result as a Base64-encoded string.
         /// </summary>
-        public static string Encrypt(string value, string key)
+        public string Encrypt(string value, string key)
         {
             using var aes = Aes.Create();
 
@@ -51,7 +52,7 @@ namespace Restaurant.Core.Functions
         /// <summary>
         /// Decrypts the given Base64-encoded value using AES-256, which must have been encrypted using the same key. 
         /// </summary>
-        public static string Decrypt(string value, string key)
+        public string Decrypt(string value, string key)
         {
             var valueBytes = Convert.FromBase64String(value);
 
