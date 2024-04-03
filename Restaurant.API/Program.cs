@@ -1,11 +1,8 @@
 using System.Text.Json.Serialization;
 using Restaurant.Core;
 using Microsoft.EntityFrameworkCore;
-using Restaurant.Core.Repositories;
-using Restaurant.Core.Repositories.Interfaces;
-using Restaurant.Core.Services;
-using Restaurant.Core.Services.Interfaces;
 using Mapster;
+using Restaurant.Persistense;
 
 namespace Restaurant.API
 {
@@ -21,25 +18,13 @@ namespace Restaurant.API
             
             
 
-            //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
-            builder.Services.AddScoped<ICuisinesRepository, CuisinesRepository>();
-            builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
-            builder.Services.AddScoped<IDiscountsRepository, DiscountsRepository>();
-            builder.Services.AddScoped<IDishBillsRepository, DishBillsRepository>();
-            builder.Services.AddScoped<IDishesRepository, DishesRepository>();
-            builder.Services.AddScoped<IReviewsRepository, ReviewsRepository>();
-            builder.Services.AddScoped<ITablesRepository, TablesRepository>();
-
-            builder.Services.AddScoped<IDishesService, DishesService>();
-            builder.Services.AddScoped<ITablesService, TablesService>();
-
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
             builder.Services.AddDbContext<RestaurantDbContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")!);
             });
 
             var app = builder.Build();

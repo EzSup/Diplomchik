@@ -4,11 +4,11 @@ namespace Restaurant.Core.Models;
 
 public class Category
 {
-    public int Id { get; set; }
-    public string? Name { get; set; }
+    public Guid Id { get; set; }
+    public string Name { get; set; } = string.Empty;
     
-    public int? DiscountId { get; set; }
-    
-    public ICollection<Dish> Dishes { get; set; }
+    public Guid DiscountId { get; set; }
+
+    public ICollection<Dish> Dishes { get; set; } = [];
     public Discount? Discount { get; set; }
  }

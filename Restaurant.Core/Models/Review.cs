@@ -2,13 +2,14 @@
 
 public class Review
 {
-    public int Id { get; set; }
-    public string Title { get; set; }
-    public string? Content { get; set; }
-    public double? Rate { get; set; }
-    public int? AuthorId { get; set; }
-    public int? DishId { get; set; }
+    public Guid Id { get; set; }
+    public string? Title { get; set; } = string.Empty;
+    public string? Content { get; set; } = string.Empty;
+    public double? Rate { get; set; } = 0;
 
-    public Dish Dish { get; set; }
-    public Customer Author { get; set; }
+    public Guid AuthorId { get; set; }
+    public Guid DishId { get; set; }
+
+    public Dish? Dish { get; set; }
+    public Customer? Author { get; set; }
 }
