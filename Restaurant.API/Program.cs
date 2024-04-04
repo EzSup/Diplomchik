@@ -3,6 +3,11 @@ using Restaurant.Core;
 using Microsoft.EntityFrameworkCore;
 using Mapster;
 using Restaurant.Persistense;
+using Restaurant.Core.Interfaces;
+using Restaurant.Persistense.Repositories;
+using Restaurant.Application.Interfaces.Repositories;
+using Restaurant.Application.Interfaces.Services;
+using Restaurant.Application.Services;
 
 namespace Restaurant.API
 {
@@ -15,9 +20,12 @@ namespace Restaurant.API
             builder.Services.AddControllers();
             builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
-            
-            
 
+            builder.Services.AddScoped<IBlogsRepository, BlogsRepository>();
+            builder.Services.AddScoped<ITablesRepository, TablesRepository>();
+
+            builder.Services.AddScoped<IBlogsService, BlogsService>();
+            builder.Services.AddScoped<ITablesService, TablesService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();

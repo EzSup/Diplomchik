@@ -10,31 +10,22 @@ namespace Restaurant.Core.Models
     {
         public Guid Id { get; set; }
 
-        public string AuthorName 
-        { 
-            get { return AuthorName; }             
-            set{ AuthorName = value; UpdateLastModified(); }
-        }
-        public string Content
-        {
-            get { return Content; }
-            set { Content = value; UpdateLastModified(); }
-        }
-        public string Title
-        {
-            get { return Title; }
-            set { Title = value; UpdateLastModified(); }
-        }
+        public string AuthorName {  get; set; }
+        public string Content {  get; set; }
+        public string Title { get; set; }
         public DateTime Created { get; private set; }
         public DateTime LastModified { get; private set; }
 
-        public Blog()
+        public Blog() : this(string.Empty, string.Empty, string.Empty)
         {
-            Created = DateTime.Now;
-            LastModified = DateTime.Now;
-            AuthorName = string.Empty;
-            Content = string.Empty;
-            Title = string.Empty;
+        }
+        public Blog(string authorName,  string title, string content)
+        {
+            Created = DateTime.Now.ToUniversalTime();
+            LastModified = DateTime.Now.ToUniversalTime();
+            AuthorName = authorName;
+            Content = content;
+            Title = title;
         }
 
         private void UpdateLastModified() => LastModified = DateTime.Now;

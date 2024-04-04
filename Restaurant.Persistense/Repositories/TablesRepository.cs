@@ -38,19 +38,25 @@ namespace Restaurant.Persistense.Repositories
         {
             return await _context.Tables
                 .AsNoTracking()
-                .Include(t => t.Bills)
+                .Include(t => t.Bills)                
                 .FirstOrDefaultAsync(t => t.Id == id) ?? throw new Exception("Table not found!");
         }
 
-        public async Task<ICollection<Table>> GetByFilter(bool available, decimal price)
+        public async Task<ICollection<Table>> GetByFilter(bool? available, decimal minPrice = 0, decimal maxPrice = decimal.MaxValue)
         {
             var query = _context.Tables.AsNoTracking();
-
-            query = query.Where(t => t.Free == available);
-
-            if(price > 0)
+            if(available != null)
             {
-                query = query.Where(t => t.PriceForHour > price);
+                query = query.Where(t => t.Free == available);
+            }            
+
+            if(minPrice > 0)
+            {
+                query = query.Where(t => t.PriceForHour > minPrice);
+            }
+            if (maxPrice < decimal.MaxValue)
+            {
+                query = query.Where(t => t.PriceForHour  < maxPrice);
             }
 
             return await query.ToListAsync();
@@ -66,7 +72,7 @@ namespace Restaurant.Persistense.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task Add(Table obj)
+        public async Task<Guid> Add(Table obj)
         {
             var table = new Table
             {
@@ -75,27 +81,28 @@ namespace Restaurant.Persistense.Repositories
             };
             _context.Tables.Add(table);
             await _context.SaveChangesAsync();
+            return table.Id;
         }
 
-        public async Task Update(Table obj)
+        public async Task<bool> Update(Table obj)
         {
-            await _context.Tables
+            return await _context.Tables
                 .Where(t => t.Id == obj.Id)
                 .ExecuteUpdateAsync(s =>s
                     .SetProperty(t => t.PriceForHour, obj.PriceForHour)
-                    .SetProperty(t => t.Free, obj.Free));
+                    .SetProperty(t => t.Free, obj.Free)) == 1;
         }
 
-        public async Task Delete(Guid id)
+        public async Task<bool> Delete(Guid id)
         {
-            await _context.Tables
+            return await _context.Tables
                 .Where(t => t.Id == id)
-                .ExecuteDeleteAsync();
+                .ExecuteDeleteAsync() == 1;
         }
 
-        public async Task Purge(IEnumerable<Guid> ids)
+        public async Task<int> Purge(IEnumerable<Guid> ids)
         {
-            await _context.Tables
+            return await _context.Tables
                 .Where(t => ids.Contains(t.Id))
                 .ExecuteDeleteAsync();
         }

@@ -10,10 +10,10 @@ namespace Restaurant.Core.Interfaces
     {
         Task<ICollection<Entity>> GetAll();
         Task<Entity> GetById(Guid id);
-        Task Add(Entity entity);
-        Task Update(Entity entity);
-        Task Delete(Guid id);
-        Task Purge(IEnumerable<Guid> values);
+        Task<Guid> Add(Entity entity);
+        Task<bool> Update(Entity entity);
+        Task<bool> Delete(Guid id);
+        Task<int> Purge(IEnumerable<Guid> values);
         Task<ICollection<Entity>> GetByPage(int page, int pageSize);
     }
 }
