@@ -10,10 +10,23 @@ namespace Restaurant.Core.Models
     {
         public Guid Id { get; set; }
 
-        public string Email { get; set; } = string.Empty;
-        public string PhoneNum { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
+        public string Email { get; set; }
+        public string PhoneNum { get; set; }
+        public string PasswordHash { get; private set; }
 
         public Customer? Customer {  get; set; }
+
+        public User(Guid id, string email, string passwordHash, string phoneNum)
+        {
+            Id = id;
+            Email = email;
+            PhoneNum = phoneNum;
+            PasswordHash = passwordHash;
+        }
+
+        public static User Create(Guid id, string email, string passwordHash, string phoneNum)
+        {
+            return new User(id, email, passwordHash, phoneNum);
+        }
     }
 }

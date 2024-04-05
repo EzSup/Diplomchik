@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.API.Contracts.Blogs;
 using Restaurant.Application.Interfaces.Services;
@@ -59,6 +60,8 @@ namespace Restaurant.API.Controllers
 
         // POST api/<BlogsController>
         [HttpPost("[action]")]
+        //[Authorize(Policy ="AdminPolicy")]
+        [Authorize]
         public async Task<ActionResult<Guid>> Post([FromBody] BlogRequest request)
         {
             if (!ModelState.IsValid)
@@ -78,6 +81,7 @@ namespace Restaurant.API.Controllers
 
         // PUT api/<BlogsController>/5
         [HttpPut("[action]/{id:guid}")]
+        [Authorize]
         public async Task<ActionResult> Put(Guid id, [FromBody] BlogRequest request)
         {
             if(!ModelState.IsValid)
@@ -99,6 +103,7 @@ namespace Restaurant.API.Controllers
 
         // DELETE api/<BlogsController>/5
         [HttpDelete("[action]/{id:guid}")]
+        [Authorize]
         public async Task<ActionResult> Delete(Guid id)
         {
             try
@@ -113,6 +118,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpDelete("[action]")]
+        [Authorize]
         public async Task<ActionResult<int>> Purge([FromBody]IEnumerable<Guid> ids)
         {
             if (!ModelState.IsValid)

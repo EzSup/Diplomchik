@@ -1,4 +1,5 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.API.Contracts.Blogs;
 using Restaurant.API.Contracts.Tables;
@@ -35,7 +36,7 @@ namespace Restaurant.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("[action]")]       
         public async Task<ActionResult<ICollection<TableResponse>>> GetByFilter(bool? available, decimal minPrice, decimal maxPrice)
         {
             var tables = await _tablesService.GetByFilter(available, minPrice, maxPrice);
@@ -54,6 +55,7 @@ namespace Restaurant.API.Controllers
 
         // POST api/<BlogsController>
         [HttpPost("[action]")]
+        [Authorize]
         public async Task<ActionResult<Guid>> Post([FromBody] TableRequest request)
         {
             if (!ModelState.IsValid)
@@ -73,6 +75,7 @@ namespace Restaurant.API.Controllers
 
         // PUT api/<BlogsController>/5
         [HttpPut("[action]/{id:guid}")]
+        [Authorize]
         public async Task<ActionResult> Put(Guid id, [FromBody] TableRequest request)
         {
             if (!ModelState.IsValid)
@@ -94,6 +97,7 @@ namespace Restaurant.API.Controllers
 
         // DELETE api/<BlogsController>/5
         [HttpDelete("[action]/{id:guid}")]
+        [Authorize]
         public async Task<ActionResult> Delete(Guid id)
         {
             try
@@ -108,6 +112,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpDelete("[action]")]
+        [Authorize]
         public async Task<ActionResult<int>> Purge([FromBody] IEnumerable<Guid> ids)
         {
             if (!ModelState.IsValid)
