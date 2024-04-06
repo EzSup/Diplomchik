@@ -23,30 +23,30 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Register([FromBody]RegisterUserRequest request)
+        public async Task<ActionResult<RegisterUserResponse>> Register([FromBody]RegisterUserRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new RegisterUserResponse(false, "Дані некоректні"));
             }
             try
             {
                 await _usersService.Register(request.email, request.password, request.phoneNumber);
 
-                return Ok();
+                return Ok(new RegisterUserResponse(true, "Успішно зареєстровано!"));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new RegisterUserResponse(false, ex.Message));
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult> Login([FromBody]LoginUserRequest request)
+        public async Task<ActionResult<LoginUserResponse>> Login([FromBody]LoginUserRequest request)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(new LoginUserResponse(false, "Invalid state"));
             }
             try
             {
@@ -54,11 +54,11 @@ namespace Restaurant.API.Controllers
 
                 _httpContextAccessor.HttpContext.Response.Cookies.Append("tasty-cookies", token);
 
-                return Ok();
+                return Ok(new LoginUserResponse(true, null, token));
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new LoginUserResponse(false, ex.Message));
             }
         }
 
