@@ -1,5 +1,6 @@
 ﻿@page "/"
 @inject IStringLocalizer<Resource> Localizer
+@inject IJSRuntime JS
 
 <PageTitle>Index</PageTitle>
 <body id="index">
@@ -245,3 +246,9 @@
 		</div>
 </footer>
 </body>
+
+@code{
+	public async Task abc(){
+		await JS.InvokeVoidAsync("","");
+	}
+}
