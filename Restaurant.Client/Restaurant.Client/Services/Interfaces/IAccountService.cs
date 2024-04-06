@@ -1,17 +1,11 @@
-﻿using Restaurant.Core.DTOs.SmallDtos;
-using Restaurant.Core.Repositories.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Restaurant.Core.DTOs.Responses.CustomResponses;
+﻿using Restaurant.Client.Contracts.Users;
 
 namespace Restaurant.Core.Services.Interfaces
 {
     public interface IAccountService
     {
-        Task<RegistrationResponse> RegisterAsync(RegisterDto model);
-        Task<LoginResponse> LoginAsync(LoginDto model);
+        Task RegisterAsync(RegisterDto model);
+        Task LoginAsync(LoginUserRequest model);
+        Task LogoutAsync();
     }
 }

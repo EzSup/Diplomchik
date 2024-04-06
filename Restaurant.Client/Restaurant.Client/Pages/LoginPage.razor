@@ -1,7 +1,5 @@
 ﻿@page "/login"
 @layout EmptyLayout
-@inject IAccountService accountService
-@inject IJSRuntime js
 <div class="container">
     <div class="row">
         <div class="col-sm-4">
@@ -26,19 +24,12 @@
 </div>
 
 @code {
-    LoginDto Login = new();
+    LoginUserRequest Login = new();
+
 
     async Task LoginClicked()
     {
-        LoginResponse response = await accountService.LoginAsync(Login);
-        if (!response.Flag)
-        {
-            await js.InvokeVoidAsync("alert", response.Message);
-            return;
-        }
-
-        var customAuthStateProvider = (CustomAuthenticationStateProvider)AuthStateProvider;
-        customAuthStateProvider.UpdateAuthenticationState(response.JWTToken);
+        await accountService.LoginAsync(Login);
         NavManager.NavigateTo("/", forceLoad: true);
     }
 }

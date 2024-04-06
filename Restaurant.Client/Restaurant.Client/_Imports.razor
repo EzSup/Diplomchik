@@ -12,11 +12,7 @@
 @using Restaurant.Client.Locales
 @using System.Globalization
 @using Restaurant.Core.Services.Interfaces
-@using Restaurant.Core.Models
-@using Restaurant.Core.DTOs.ForCreate
-@using Restaurant.Core.DTOs
-@using Restaurant.Core.DTOs.SmallDtos
-@using Restaurant.Core.States
-@using static Restaurant.Core.DTOs.Responses.CustomResponses
 @inject AuthenticationStateProvider AuthStateProvider
 @inject NavigationManager NavManager
+@inject IAccountService accountService
+@using Restaurant.Client.Contracts.Users
