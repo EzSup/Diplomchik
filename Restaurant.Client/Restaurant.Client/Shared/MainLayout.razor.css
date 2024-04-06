@@ -1,18 +1,77 @@
+::deep html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
 .page {
     position: relative;
     display: flex;
     flex-direction: column;
     background: #242121;
+    min-height: 100vh;
 }
 
+::deep h1 {
+    font-family: 'Aleo';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 60px;
+    text-align: center;
+    color: #878477;
+}
+::deep h2 {
+    font-family: 'Aleo';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 50px;
+    line-height: 60px;
+    letter-spacing: 0.1em;
+    color: #FFF8E0;
+}
+::deep h3 {
+    font-family: 'Merriweather Sans';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 40px;
+    line-height: 50px;
+    color: #A7A293;
+}
+::deep h4 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 50px;
+    line-height: 61px;
+    color: #A7A293;
+}
+::deep h5 {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 48px;
+    color: #A7A293;
+}
+::deep p {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 36px;
+    color: #878477;
+}
 main {
-    top:0;
+    top: 0;
     left: 0;
     right: 0;
     margin: 0;
     padding: 0;
     border: 0;
     width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .navbar {
