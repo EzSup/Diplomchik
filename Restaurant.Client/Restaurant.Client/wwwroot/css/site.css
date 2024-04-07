@@ -157,6 +157,8 @@ button, a {
     row-gap: 0px;
     width: 100vw;
     overflow: hidden;
+    /*    min-height: 80vh;*/
+    margin: 200px 0;
 }
 
 .Main-Content .Title {

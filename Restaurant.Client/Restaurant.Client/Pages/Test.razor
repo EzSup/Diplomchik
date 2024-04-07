@@ -6,23 +6,18 @@
 @* @attribute [Authorize] *@
 <style>    
     .forms {
-        width: 50%;
+        width: 80%;
         max-width: 700px;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        margin: 0 auto;
     }
 </style>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<h3>Articles</h3>
-
+<div class="Main-Content">
 <div class="forms">
+    <h3>Articles</h3>
 <EditForm Model="request" OnValidSubmit="post">
     <DataAnnotationsValidator />
     <div class="form-group">
@@ -47,6 +42,7 @@
 
 @* <p  style="color: white;"> @value </p>
 @((MarkupString)value)   *@
+</div>
 </div>
 @code {
     BlogsCreateRequest request = new();
