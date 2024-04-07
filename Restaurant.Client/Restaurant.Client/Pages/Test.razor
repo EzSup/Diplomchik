@@ -5,6 +5,14 @@
 @inject IBlogsService blogsService
 @* @attribute [Authorize] *@
 <style>    
+    .forms {
+        width: 50%;
+        max-width: 700px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 </style>
 <br>
 <br>
@@ -14,7 +22,7 @@
 <br>
 <h3>Articles</h3>
 
-
+<div class="forms">
 <EditForm Model="request" OnValidSubmit="post">
     <DataAnnotationsValidator />
     <div class="form-group">
@@ -39,7 +47,7 @@
 
 @* <p  style="color: white;"> @value </p>
 @((MarkupString)value)   *@
-
+</div>
 @code {
     BlogsCreateRequest request = new();
     string createdId = "";
