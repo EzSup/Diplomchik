@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
+using Restaurant.Client.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -7,15 +8,22 @@ namespace Restaurant.Client.Auth
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
         private readonly ClaimsPrincipal anonymous = new(new ClaimsIdentity());
+        private readonly ICookiesService _cookiesService;
+
+        public CustomAuthenticationStateProvider(ICookiesService cookies)
+        {
+            _cookiesService = cookies;
+        }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             try
             {
-                if (string.IsNullOrEmpty(Constants.JWTToken))
+                var jwtToken = _cookiesService.GetCookie("tasty-cookies");
+                if (string.IsNullOrEmpty(jwtToken))
                     return await Task.FromResult(new AuthenticationState(anonymous));
 
-                var getUserClaims = DecryptToken(Constants.JWTToken);
+                var getUserClaims = DecryptToken(jwtToken);
                 if (getUserClaims == null)
                     return await Task.FromResult(new AuthenticationState(anonymous));
 
@@ -28,18 +36,17 @@ namespace Restaurant.Client.Auth
             }
         }
 
-        public void UpdateAuthenticationState(string jwtToken)
+        public void UpdateAuthenticationState()
         {
             var claimsPrincipal = new ClaimsPrincipal();
+            var jwtToken = _cookiesService.GetCookie("tasty-cookies");
             if (!string.IsNullOrEmpty(jwtToken))
             {
-                Constants.JWTToken = jwtToken;
                 var getUserClaims = DecryptToken(jwtToken);
                 claimsPrincipal = SetClaimPrincipal(getUserClaims);
             }
             else
             {
-                Constants.JWTToken = null!;
             }
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
         }

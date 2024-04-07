@@ -27,6 +27,7 @@ namespace Restaurant.Client
 
             builder.Services.AddTransient<JwtTokenHandler>();
 
+            builder.Services.AddTransient<ICookiesService, CookiesService>();
             builder.Services.AddTransient<IFileUploadService, FileUploadService>();
 
             builder.Services.AddScoped<IAccountService, AccountService>();

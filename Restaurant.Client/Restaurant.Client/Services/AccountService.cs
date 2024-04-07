@@ -35,7 +35,7 @@ namespace Restaurant.Core.Services
                 await _jsruntime.InvokeVoidAsync("alert", result.Message);
                 return;
             }
-            _authStateProv.UpdateAuthenticationState(result.JWTToken);
+            _authStateProv.UpdateAuthenticationState();
             if(result.Flag)
             {
                 _navManager.NavigateTo("/", forceLoad: true);
@@ -60,7 +60,7 @@ namespace Restaurant.Core.Services
         public async Task LogoutAsync()
         {
             var response = await _httpClient.PutAsJsonAsync("api/Users/Logout","");
-            _authStateProv.UpdateAuthenticationState(null);
+            _authStateProv.UpdateAuthenticationState();
         }
     }
 }

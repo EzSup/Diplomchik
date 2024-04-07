@@ -39,7 +39,6 @@
 @((MarkupString)value)   *@
 
 @code {
-
     BlogsCreateRequest request = new();
     string createdId = "";
 
@@ -50,7 +49,7 @@
     }
 
     private Dictionary<string, object> editorConf = new Dictionary<string, object>{
-       {"plugins", "a11ychecker advcode advtemplate advlist advtable anchor autocorrect autosave editimage image link linkchecker lists media mediaembed pageembed powerpaste searchreplace table template tinymcespellchecker typography visualblocks wordcount"},
+       {"plugins", "advlist anchor autosave image link linkchecker lists media searchreplace table template visualblocks wordcount"},
      };
 
 }
