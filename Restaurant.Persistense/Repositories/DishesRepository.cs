@@ -101,7 +101,7 @@ namespace Restaurant.Persistense.Repositories
                 .Include(x => x.Category)
                 .Include(x => x.Discount)
                 .FirstOrDefaultAsync(x => x.Id == id)
-                ?? throw new Exception("Немає такої страви!");
+                ?? throw new KeyNotFoundException("Dish not found!");
         }
 
         public async Task<ICollection<Dish>> GetByPage(int page, int pageSize)
@@ -111,7 +111,7 @@ namespace Restaurant.Persistense.Repositories
                 return await _context.Dishes.AsNoTracking()
                     .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             }
-            throw new NotImplementedException();
+            throw new ArgumentException("Page size and number has to be greater than 0!");
         }
 
         public async Task<int> Purge(IEnumerable<Guid> values)

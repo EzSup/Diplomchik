@@ -21,7 +21,7 @@ namespace Restaurant.Persistense.Repositories
         public async Task<Guid> Add(Customer entity)
         {
             if (!_context.Users.Any(x => x.Id == entity.UserId))
-                throw new Exception("You have to create user first!");
+                throw new KeyNotFoundException("You have to create user first!");
 
             var model = new Customer()
             {
@@ -77,7 +77,7 @@ namespace Restaurant.Persistense.Repositories
                 .Include(x => x.Cart)
                 .Include(x => x.Bills)
                 .FirstOrDefaultAsync(x => x.Id == id)
-                ?? throw new Exception("Customer not found!");
+                ?? throw new KeyNotFoundException("Customer not found!");
         }
 
         public async Task<ICollection<Customer>> GetByPage(int page, int pageSize)
@@ -87,7 +87,7 @@ namespace Restaurant.Persistense.Repositories
                 return await _context.Customers.AsNoTracking()
                     .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             }
-            throw new NotImplementedException();
+            throw new ArgumentException("Page size and number has to be greater than 0!");
         }
 
         public async Task<int> Purge(IEnumerable<Guid> values)

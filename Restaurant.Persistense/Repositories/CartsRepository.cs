@@ -55,7 +55,7 @@ namespace Restaurant.Persistense.Repositories
                 .Include(x => x.DishCarts)
                 .Include(x => x.Customer)
                 .Include(x => x.Bill)
-                .FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception("Cuisine not found!");
+                .FirstOrDefaultAsync(x => x.Id == id) ?? throw new KeyNotFoundException("Cuisine not found!");
         }
 
         public async Task<ICollection<Cart>> GetByPage(int page, int pageSize)
@@ -65,7 +65,7 @@ namespace Restaurant.Persistense.Repositories
                 return await _context.Carts.AsNoTracking()
                     .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             }
-            throw new NotImplementedException();
+            throw new ArgumentException("Page size and number has to be greater than 0!");
         }
 
         public async Task<int> Purge(IEnumerable<Guid> values)

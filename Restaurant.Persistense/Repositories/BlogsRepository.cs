@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Restaurant.Persistense.Repositories
 {
@@ -31,14 +26,14 @@ namespace Restaurant.Persistense.Repositories
         {
             return await _context.Blogs
                 .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.Id == id) ?? throw new Exception("Table not found!");
+                .FirstOrDefaultAsync(t => t.Id == id) ?? throw new KeyNotFoundException("Blog not found!");
         }
 
         public async Task<ICollection<Blog>> GetByFilter(DateTime after, string? AuthorName, string? TitleContains)
         {
             var query = _context.Blogs.AsNoTracking();
 
-            if(!String.IsNullOrWhiteSpace(AuthorName))
+            if (!String.IsNullOrWhiteSpace(AuthorName))
             {
                 query = query.Where(t => t.AuthorName.Contains(AuthorName));
             }
@@ -46,10 +41,10 @@ namespace Restaurant.Persistense.Repositories
             {
                 query = query.Where(t => t.Title.Contains(TitleContains));
             }
-            if(after >= minDate)
+            if (after >= minDate)
             {
                 query = query.Where(t => t.Created > after);
-            }            
+            }
 
             return await query.ToListAsync();
         }
@@ -61,7 +56,7 @@ namespace Restaurant.Persistense.Repositories
                 return await _context.Blogs.AsNoTracking()
                     .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             }
-            throw new NotImplementedException();
+            throw new ArgumentException("Page size and number has to be greater than 0!");
         }
 
         public async Task<Guid> Add(Blog obj)

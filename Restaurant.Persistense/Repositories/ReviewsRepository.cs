@@ -48,7 +48,7 @@ namespace Restaurant.Persistense.Repositories
             return await _context.Reviews.AsNoTracking()
                 .Include(x => x.Dish)
                 .Include(x => x.Author)
-                .FirstOrDefaultAsync(x => x.Id == id) ?? throw new Exception("Review not found!");
+                .FirstOrDefaultAsync(x => x.Id == id) ?? throw new KeyNotFoundException("Review not found!");
         }
 
         public async Task<ICollection<Review>> GetByPage(int page, int pageSize)
@@ -58,7 +58,7 @@ namespace Restaurant.Persistense.Repositories
                 return await _context.Reviews.AsNoTracking()
                     .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             }
-            throw new NotImplementedException();
+            throw new ArgumentException("Page size and number has to be greater than 0!");
         }
 
         public async Task<ICollection<Review>> GetByFilter(Guid? DishId = null, Guid? AuthorId = null, double minRate = 1, double maxRate = 5)

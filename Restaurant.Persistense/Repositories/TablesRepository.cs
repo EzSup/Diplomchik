@@ -39,7 +39,7 @@ namespace Restaurant.Persistense.Repositories
             return await _context.Tables
                 .AsNoTracking()
                 .Include(t => t.Bills)                
-                .FirstOrDefaultAsync(t => t.Id == id) ?? throw new Exception("Table not found!");
+                .FirstOrDefaultAsync(t => t.Id == id) ?? throw new KeyNotFoundException("Table not found!");
         }
 
         public async Task<ICollection<Table>> GetByFilter(bool? available, decimal minPrice = 0, decimal maxPrice = decimal.MaxValue)
@@ -69,7 +69,7 @@ namespace Restaurant.Persistense.Repositories
                 return await _context.Tables.AsNoTracking()
                     .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             }
-            throw new NotImplementedException();
+            throw new ArgumentException("Page size and number has to be greater than 0!");
         }
 
         public async Task<Guid> Add(Table obj)

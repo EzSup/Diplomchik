@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Mapster;
 using Restaurant.Core.Models;
 using Microsoft.EntityFrameworkCore;
+using Restaurant.Core.CustomExceptions;
 
 namespace Restaurant.Persistense.Repositories
 {
@@ -21,7 +22,7 @@ namespace Restaurant.Persistense.Repositories
         public async Task Add(User user)
         {
             if(_context.Users.Any(x => x.Email == user.Email || x.PhoneNum == user.PhoneNum)) {
-                throw new Exception("Користувач з такими даними вже існує!");
+                throw new UserAlreadyExistsException("User with these credits already exists!");
             }
             await _context.Users.AddAsync(user);
             await _context.SaveChangesAsync();
