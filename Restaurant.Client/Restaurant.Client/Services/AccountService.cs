@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 using Mapster;
 using Microsoft.AspNetCore.Components;
+using Restaurant.Client.Services.Interfaces;
 
 namespace Restaurant.Core.Services
 {
@@ -14,16 +15,19 @@ namespace Restaurant.Core.Services
         private readonly CustomAuthenticationStateProvider _authStateProv;
         private readonly IJSRuntime _jsruntime;
         private readonly NavigationManager _navManager;
+        private readonly ICookiesService _cookiesService;
 
         public AccountService(IHttpClientFactory factory, 
             AuthenticationStateProvider authstateprov,
             IJSRuntime jsRuntime, 
-            NavigationManager navManager)
+            NavigationManager navManager,
+            ICookiesService cookiesService)
         {
             _httpClient = factory.CreateClient("API");
             _authStateProv = (CustomAuthenticationStateProvider)authstateprov;
             _jsruntime = jsRuntime;
             _navManager = navManager;
+            _cookiesService = cookiesService;
         }
 
         public async Task LoginAsync(LoginUserRequest model)
@@ -35,8 +39,8 @@ namespace Restaurant.Core.Services
                 await _jsruntime.InvokeVoidAsync("alert", result.Message);
                 return;
             }
-            _authStateProv.UpdateAuthenticationState();
-            if(result.Flag)
+            await _authStateProv.UpdateAuthenticationState(result.JWTToken);
+            if (result.Flag)
             {
                 _navManager.NavigateTo("/", forceLoad: true);
             }
@@ -51,7 +55,7 @@ namespace Restaurant.Core.Services
             string message = String.Concat(result.Flag ? "Успіх!" : "Помилка!",
                 result.Message);
             await _jsruntime.InvokeVoidAsync("alert", message);
-            if(result.Flag)
+            if (result.Flag)
             {
                 _navManager.NavigateTo("/login", forceLoad: true);
             }
@@ -59,8 +63,9 @@ namespace Restaurant.Core.Services
 
         public async Task LogoutAsync()
         {
-            var response = await _httpClient.PutAsJsonAsync("api/Users/Logout","");
-            _authStateProv.UpdateAuthenticationState();
+            var response = await _httpClient.DeleteAsync("api/Users/Logout");
+            //_cookiesService.DeleteCookie("tasty-cookies");
+            await _authStateProv.UpdateAuthenticationState(null);
         }
     }
 }

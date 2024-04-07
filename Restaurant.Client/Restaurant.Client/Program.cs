@@ -7,6 +7,9 @@ using Restaurant.Core.Services.Interfaces;
 using Restaurant.Client.Auth;
 using System.Globalization;
 using Restaurant.Client.Extensions;
+using Blazored.LocalStorage;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Restaurant.Client
 {
@@ -27,6 +30,18 @@ namespace Restaurant.Client
 
             builder.Services.AddTransient<JwtTokenHandler>();
 
+            builder.Services.AddBlazoredLocalStorage(config =>
+            {
+                config.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                config.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                config.JsonSerializerOptions.IgnoreReadOnlyProperties = true;
+                config.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                config.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                config.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
+                config.JsonSerializerOptions.WriteIndented = false;
+            });
+
+            //builder.Services.AddTransient<Services.Interfaces.ILocalStorageService, LocalStorageService>();
             builder.Services.AddTransient<ICookiesService, CookiesService>();
             builder.Services.AddTransient<IFileUploadService, FileUploadService>();
 

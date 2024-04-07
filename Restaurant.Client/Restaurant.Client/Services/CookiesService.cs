@@ -19,10 +19,7 @@ namespace Restaurant.Client.Services
 
         public void DeleteCookie(string key)
         {
-            _httpContext.Response.Cookies.Append(key, "", new CookieOptions
-            {
-                Expires = DateTime.Now.AddDays(-1) // Встановлюємо минущу дату для видалення куки
-            });
+            _httpContext.Response.Cookies.Delete(key);
         }
 
         public void SetCookie(string key, string value)

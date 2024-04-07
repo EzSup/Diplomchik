@@ -2,28 +2,32 @@
 using Restaurant.Client.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Blazored.LocalStorage;
 
 namespace Restaurant.Client.Auth
 {
     public class CustomAuthenticationStateProvider : AuthenticationStateProvider
     {
+        private const string tokenName = "jwtToken";
         private readonly ClaimsPrincipal anonymous = new(new ClaimsIdentity());
         private readonly ICookiesService _cookiesService;
+        private readonly Blazored.LocalStorage.ILocalStorageService _localStorageService;
 
-        public CustomAuthenticationStateProvider(ICookiesService cookies)
+        public CustomAuthenticationStateProvider(ICookiesService cookies,
+            Blazored.LocalStorage.ILocalStorageService localStorageService)
         {
             _cookiesService = cookies;
+            _localStorageService = localStorageService;
         }
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             try
             {
-                var jwtToken = _cookiesService.GetCookie("tasty-cookies");
-                if (string.IsNullOrEmpty(jwtToken))
+                if (string.IsNullOrEmpty(await _localStorageService.GetItemAsStringAsync(tokenName)))
                     return await Task.FromResult(new AuthenticationState(anonymous));
 
-                var getUserClaims = DecryptToken(jwtToken);
+                var getUserClaims = DecryptToken(await _localStorageService.GetItemAsStringAsync(tokenName));
                 if (getUserClaims == null)
                     return await Task.FromResult(new AuthenticationState(anonymous));
 
@@ -36,17 +40,20 @@ namespace Restaurant.Client.Auth
             }
         }
 
-        public void UpdateAuthenticationState()
+        public async Task UpdateAuthenticationState(string jwtToken)
         {
             var claimsPrincipal = new ClaimsPrincipal();
-            var jwtToken = _cookiesService.GetCookie("tasty-cookies");
             if (!string.IsNullOrEmpty(jwtToken))
             {
+                await _localStorageService.SetItemAsStringAsync(tokenName, jwtToken);
+                //Constants.JWTToken = jwtToken;
                 var getUserClaims = DecryptToken(jwtToken);
                 claimsPrincipal = SetClaimPrincipal(getUserClaims);
             }
             else
             {
+                await _localStorageService.RemoveItemAsync(tokenName);
+                //Constants.JWTToken = null!;
             }
             NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
         }
