@@ -7,6 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Pages\Tables\EightSeatsTable.razor.css" />
+    <None Remove="Pages\Tables\FourSeatsTable.razor.css" />
+    <None Remove="Pages\Tables\SixSeatsTable.razor.css" />
+    <None Remove="Pages\Tables\TwoSeatsTable.razor.css" />
+    <None Remove="Pages\Tables\TwoSeatsTableHorizontal.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Pages\Tables\FourSeatsTable.razor.css" />
+    <Content Include="Pages\Tables\SixSeatsTable.razor.css" />
+    <Content Include="Pages\Tables\EightSeatsTable.razor.css" />
+    <Content Include="Pages\Tables\TwoSeatsTableHorizontal.razor.css" />
+    <Content Include="Pages\Tables\TwoSeatsTable.razor.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Helpers\" />
     <Folder Include="wwwroot\fonts\Inter\" />
