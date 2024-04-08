@@ -67,7 +67,8 @@ namespace Restaurant.Client.Auth
                 new List<Claim>
                 {
                     new(ClaimTypes.Name, claims.userId!),
-                    new(ClaimTypes.Email, claims.Email)
+                    new(ClaimTypes.Email, claims.Email),
+                    new(ClaimTypes.Role, claims.Policy)
                 }, "JwtAuth"));
         }
 
@@ -81,8 +82,9 @@ namespace Restaurant.Client.Auth
 
             var userId = token.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.NameIdentifier);
             var email = token.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.Email);
+            var policy = token.Claims.FirstOrDefault(_ => _.Type == ClaimTypes.Role);
 
-            return new CustomUserClaims(userId.Value ?? "", email.Value ?? "");
+            return new CustomUserClaims(userId.Value ?? "", email.Value ?? "", policy.Value ?? "");
         }
     }
 }

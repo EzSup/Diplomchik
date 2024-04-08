@@ -3,7 +3,7 @@
 @using Restaurant.Client.Contracts.Blogs
 @using Restaurant.Client.Services.Interfaces
 @inject IBlogsService blogsService
-@* @attribute [Authorize] *@
+@attribute [Authorize(Policy = "AdminPolicy")]
 <style>    
     .forms {
         width: 80%;

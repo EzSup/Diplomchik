@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Restaurant.Client.Auth
 {
-    public record CustomUserClaims(string userId = null!, string Email = null!);
+    public record CustomUserClaims(string userId = null!, string Email = null!, string Policy = null!);
 }
