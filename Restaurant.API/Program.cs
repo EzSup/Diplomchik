@@ -36,6 +36,8 @@ namespace Restaurant.API
 
             builder.Services.Configure<JwtOptions>(
                 configuration.GetSection("JwtOptions"));
+            builder.Services.Configure<AuthorizationOptions>(
+                configuration.GetSection("AuthorizationOptions"));
 
             builder.Services.AddHttpContextAccessor();
 

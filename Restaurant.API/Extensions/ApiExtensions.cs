@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Restaurant.Application.Interfaces.Services;
+using Restaurant.Application.Services;
+using Restaurant.Core.Enums;
 using Restaurant.Infrastructure;
 using System.Text;
 
@@ -35,15 +39,34 @@ namespace Restaurant.API.Extensions
                         }
                     };
                 });
+
+            services.AddScoped<IPermissionsService, PermissionService>();
+            services.AddSingleton<IAuthorizationHandler, PermissionAuthorizationHandler>();
+
             services.AddAuthorization(
                 options =>
-            {
-                options.AddPolicy("AdminPolicy", policy =>
                 {
-                    policy.RequireClaim("Admin", "true");
-                });
-            }
+                    options.AddPolicy("UserPolicy", policy =>
+                    {
+                        policy.AddRequirements(new PermissionRequirement([Permission.Read]));
+                    });
+                    options.AddPolicy("AdminPolicy", policy =>
+                    {
+                        policy.AddRequirements(new PermissionRequirement(
+                            [Permission.Read,
+                            Permission.Create,
+                            Permission.Update,
+                            Permission.Delete]));
+                    });
+                }
             );
+        }
+
+        public static IEndpointConventionBuilder RequirePermissions<TBuilder>(
+            this TBuilder builder, params Permission[] permissions) where TBuilder : IEndpointConventionBuilder
+        {
+            return builder.RequireAuthorization(policy =>
+            policy.AddRequirements(new PermissionRequirement(permissions)));
         }
     }
 }

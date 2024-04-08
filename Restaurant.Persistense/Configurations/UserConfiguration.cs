@@ -20,6 +20,12 @@ namespace Restaurant.Persistense.Configurations
             builder.HasOne(r => r.Customer)
                 .WithOne(c => c.User)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(u => u.Roles)
+                .WithMany(r => r.Users)
+                .UsingEntity<UserRole>(
+                    l => l.HasOne<Role>().WithMany().HasForeignKey(r => r.RoleId),
+                    r => r.HasOne<User>().WithMany().HasForeignKey(r => r.UserId));
         }
     }
 }

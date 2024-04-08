@@ -15,6 +15,7 @@ namespace Restaurant.Core.Models
         public string PasswordHash { get; private set; }
 
         public Customer? Customer {  get; set; }
+        public ICollection<Role> Roles { get; set; } = [];
 
         public User(Guid id, string email, string passwordHash, string phoneNum)
         {

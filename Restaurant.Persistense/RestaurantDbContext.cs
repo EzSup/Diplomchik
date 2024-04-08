@@ -1,14 +1,19 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restaurant.Persistense.Configurations;
 using Restaurant.Core.Models;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Restaurant.Persistense
 {
     public class RestaurantDbContext : DbContext
     {
-        public RestaurantDbContext(DbContextOptions<RestaurantDbContext> options) : base(options)
+        private readonly IOptions<Infrastructure.AuthorizationOptions> _authOptions;
+
+        public RestaurantDbContext(DbContextOptions<RestaurantDbContext> options,
+            IOptions<Infrastructure.AuthorizationOptions> authOptions) : base(options)
         {
-            
+            _authOptions = authOptions;
         }
 
         public DbSet<Bill> Bills { get; set; }
@@ -24,6 +29,11 @@ namespace Restaurant.Persistense
         public DbSet<Table> Tables { get; set; }
         public DbSet<User> Users { get; set; }
 
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new BillConfiguration());
@@ -38,6 +48,11 @@ namespace Restaurant.Persistense
             modelBuilder.ApplyConfiguration(new ReviewConfiguration());
             modelBuilder.ApplyConfiguration(new TableConfiguration());
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new PermissionConfiguration());
+
+            modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
+            modelBuilder.ApplyConfiguration(new RolePermissionConfiguration(_authOptions.Value));
 
             base.OnModelCreating(modelBuilder);
         }

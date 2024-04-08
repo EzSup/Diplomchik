@@ -27,7 +27,8 @@ namespace Restaurant.Infrastructure
             Claim[] claims =
             [
                 new(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new(ClaimTypes.Email, user.Email.ToString())
+                new(ClaimTypes.Email, user.Email.ToString()),
+                new(ClaimTypes.Role, user.Roles.First().Name!)
             ];
 
             var signingCredentials = new SigningCredentials(

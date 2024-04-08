@@ -29,6 +29,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<ActionResult<ICollection<TableResponse>>> GetByPage(int page, int pageSize)
         {
             var tables = await _tablesService.GetByPage(page, pageSize);
@@ -55,7 +56,7 @@ namespace Restaurant.API.Controllers
 
         // POST api/<BlogsController>
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<ActionResult<Guid>> Post([FromBody] TableRequest request)
         {
             if (!ModelState.IsValid)
