@@ -62,11 +62,12 @@ namespace Restaurant.API.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpDelete]
         public ActionResult Logout()
         {
             try
             {
+                //_httpContextAccessor.HttpContext.Response.Cookies.Append("tasty-cookies", "");
                 _httpContextAccessor.HttpContext.Response.Cookies.Delete("tasty-cookies");
                 return Ok();
             }

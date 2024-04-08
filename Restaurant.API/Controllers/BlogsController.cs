@@ -11,7 +11,7 @@ using System;
 
 namespace Restaurant.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class BlogsController : ControllerBase
     {
@@ -23,7 +23,7 @@ namespace Restaurant.API.Controllers
         }
 
         // GET: api/<BlogsController>
-        [HttpGet("[action]")]
+        [HttpGet]
         public async Task<ActionResult<ICollection<BlogResponse>>> GetAll()
         {
             var blogs =  await _blogsService.GetAll();
@@ -31,7 +31,7 @@ namespace Restaurant.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("[action]")]
+        [HttpGet]
         public async Task<ActionResult<ICollection<BlogResponse>>> GetByPage(int page, int pageSize)
         {
             var blogs = await _blogsService.GetByPage(page, pageSize);
@@ -39,7 +39,7 @@ namespace Restaurant.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("[action]")]
+        [HttpGet]
         public async Task<ActionResult<ICollection<BlogResponse>>> GetByFilter(DateTime? createdAfter, string? authorName, string? titleContains)
         {
             if(createdAfter == null)
@@ -50,7 +50,7 @@ namespace Restaurant.API.Controllers
         }
 
         // GET api/<BlogsController>/5
-        [HttpGet("[action]/{id:guid}")]
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult<BlogResponse>> Get(Guid id)
         {
             var blog = await _blogsService.GetById(id);
@@ -59,7 +59,7 @@ namespace Restaurant.API.Controllers
         }
 
         // POST api/<BlogsController>
-        [HttpPost("[action]")]
+        [HttpPost]
         //[Authorize(Policy ="AdminPolicy")]
         [Authorize]
         public async Task<ActionResult<Guid>> Post([FromBody] BlogRequest request)
@@ -80,7 +80,7 @@ namespace Restaurant.API.Controllers
         }
 
         // PUT api/<BlogsController>/5
-        [HttpPut("[action]/{id:guid}")]
+        [HttpPut("{id:guid}")]
         [Authorize]
         public async Task<ActionResult> Put(Guid id, [FromBody] BlogRequest request)
         {
@@ -102,7 +102,7 @@ namespace Restaurant.API.Controllers
         }
 
         // DELETE api/<BlogsController>/5
-        [HttpDelete("[action]/{id:guid}")]
+        [HttpDelete("{id:guid}")]
         [Authorize]
         public async Task<ActionResult> Delete(Guid id)
         {
@@ -117,7 +117,7 @@ namespace Restaurant.API.Controllers
             }
         }
 
-        [HttpDelete("[action]")]
+        [HttpDelete]
         [Authorize]
         public async Task<ActionResult<int>> Purge([FromBody]IEnumerable<Guid> ids)
         {

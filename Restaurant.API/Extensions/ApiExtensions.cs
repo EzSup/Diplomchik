@@ -30,25 +30,19 @@ namespace Restaurant.API.Extensions
                     {
                         OnMessageReceived = context =>
                         {
-                            //var authorizationHeader = context.Request.Headers["Authorization"].ToString();
-                            //if (!string.IsNullOrEmpty(authorizationHeader) && authorizationHeader.StartsWith("Bearer "))
-                            //{
-                            //    var token = authorizationHeader.Substring("Bearer ".Length).Trim();
-                            //    context.Token = token;
-                            //}
                             context.Token = context.HttpContext.Request.Cookies["tasty-cookies"];
                             return Task.CompletedTask;
                         }
                     };
                 });
             services.AddAuthorization(
-            //    options =>
-            //{
-            //    options.AddPolicy("AdminPolicy", policy =>
-            //    {
-            //        policy.RequireClaim("Admin", "true");
-            //    });
-            //}
+                options =>
+            {
+                options.AddPolicy("AdminPolicy", policy =>
+                {
+                    policy.RequireClaim("Admin", "true");
+                });
+            }
             );
         }
     }
