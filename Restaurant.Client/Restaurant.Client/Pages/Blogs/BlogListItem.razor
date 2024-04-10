@@ -1,14 +1,18 @@
 ﻿@using Restaurant.Client.Contracts.Blogs
-
-<div class="card" @onclick="() => GoToBlogDetails(blog.Id)">
-    <div class="card-body">
-        <h3 class="card-title">@blog.Title</h3>
-        <h6 class="card-subtitle mb-2 text-muted">@blog.AuthorName</h6>
+<div class="wrap-row">
+    <div class="wrap-row-content" @onclick="() => GoToBlogDetails(blog.Id)">
         @if (!string.IsNullOrEmpty(blog.ImageLink))
         {
             <img src="@blog.ImageLink" height="200px" class="card-img-top" alt="Blog Image">
         }
+        <p>@blog.Created</p>
+        <div>
+        <h2>@blog.AuthorName</h2>
+        <h3 class="card-title">@blog.Title</h3>
+        </div>
+        @* <p class="card-subtitle mb-2">@blog.AuthorName</p> *@
         @* <p class="card-text">@((MarkupString)blog.Content)</p> *@
+        
     </div>
 </div>
 

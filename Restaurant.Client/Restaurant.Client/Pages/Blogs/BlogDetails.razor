@@ -2,18 +2,32 @@
 @using Restaurant.Client.Contracts.Blogs
 @inject IBlogsService blogsSerivce
 @page "/blogDetails/{blogId:guid}"
-<h3>BlogDetails</h3>
+<div class="Main-Content">
+    <div class="Title">
+        <div class="Title content">
+            <h1>BlogDetails</h1>          
+        </div>
+    </div>
+
 @if(blog != null)
 {
-    <h3>@blog.Title</h3>
-    <h6>@blog.AuthorName</h6>
+        <div class="Content-wrap flex-col">
+            <div class="Container align-items-center w-75">
+                <div class="Container-wrap flex-col">
+    <h2>@blog.Title</h2>
+    <h1>@blog.AuthorName</h1>
+    </div>
+    <div class="Container-wrap flex-row">
     @if (!string.IsNullOrEmpty(blog.ImageLink))
     {
-        <img src="@blog.ImageLink" alt="Blog Image">
+        <img src="@blog.ImageLink" alt="Blog Image" style="max-width: 600px">
     }
     <p class="card-text">@((MarkupString)blog.Content)</p> 
+    </div>
+    </div>
+    </div>
 }
-
+</div>
 @code {
     [Parameter]
     public Guid blogId { get; set; }
