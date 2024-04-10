@@ -120,4 +120,7 @@
   <data name="ReserveATable" xml:space="preserve">
     <value>Reserve a table</value>
   </data>
+  <data name="blogsListNavLink" xml:space="preserve">
+    <value>Blogs</value>
+  </data>
 </root>

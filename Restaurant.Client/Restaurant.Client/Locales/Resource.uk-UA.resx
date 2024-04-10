@@ -120,4 +120,7 @@
   <data name="ReserveATable" xml:space="preserve">
     <value>Забронювати столик</value>
   </data>
+  <data name="blogsListNavLink" xml:space="preserve">
+    <value>Блоги</value>
+  </data>
 </root>

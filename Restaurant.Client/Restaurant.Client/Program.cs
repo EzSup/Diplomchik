@@ -10,6 +10,8 @@ using Restaurant.Client.Extensions;
 using Blazored.LocalStorage;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Restaurant.Client.Contracts;
+using System.Configuration;
 
 namespace Restaurant.Client
 {
@@ -18,6 +20,7 @@ namespace Restaurant.Client
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            var configuration = builder.Configuration;
 
             ConfigureLocalization(builder.Services);
             builder.Services.AddControllers();
@@ -27,6 +30,9 @@ namespace Restaurant.Client
             builder.Services.AddServerSideBlazor();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddHttpContextAccessor();
+
+            builder.Services.Configure<CloudinarySettings>(
+                configuration.GetSection("CloudinarySettings"));
 
             builder.Services.AddTransient<JwtTokenHandler>();
 
@@ -43,7 +49,7 @@ namespace Restaurant.Client
 
             //builder.Services.AddTransient<Services.Interfaces.ILocalStorageService, LocalStorageService>();
             builder.Services.AddTransient<ICookiesService, CookiesService>();
-            builder.Services.AddTransient<IFileUploadService, FileUploadService>();
+            builder.Services.AddTransient<IPhotoService, PhotoService>();
 
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IBlogsService, BlogsService>();
