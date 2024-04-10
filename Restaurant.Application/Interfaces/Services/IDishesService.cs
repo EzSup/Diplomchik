@@ -5,11 +5,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant.Core.Interfaces
+namespace Restaurant.Application.Interfaces.Services
 {
-    public interface IDishesRepository : ICrudRepository<Dish>
+    public interface IDishesService
     {
-        Task<ICollection<Dish>> GetByPageAvailable(int page, int pageSize);
+        Task<ICollection<Dish>> GetAll();
+        Task<Dish> GetById(Guid id);
+        Task<Guid> Add(Dish entity);
+        Task<bool> Update(Dish entity);
+        Task<bool> Delete(Guid id);
+        Task<int> Purge(IEnumerable<Guid> values);
+        Task<ICollection<Dish>> GetByPage(int page, int pageSize);
         Task<ICollection<Dish>> GetByFilter(string? Name = null,
             double MinWeight = 0,
             double MaxWeight = double.MaxValue,
@@ -19,7 +25,6 @@ namespace Restaurant.Core.Interfaces
             decimal MaxPrice = decimal.MaxValue,
             string? Category = null,
             string? Cuisine = null,
-            double discountPercentsMin = 0
-            );
+            double discountPercentsMin = 0);
     }
 }

@@ -61,7 +61,7 @@ namespace Restaurant.Persistense.Repositories
 
         public async Task<Guid> Add(Blog obj)
         {
-            var blog = new Blog(obj.AuthorName, obj.Title, obj.Content);
+            var blog = new Blog(obj.AuthorName, obj.Title, obj.Content, obj.ImageLink);
             _context.Blogs.Add(blog);
             await _context.SaveChangesAsync();
             return blog.Id;
@@ -74,7 +74,8 @@ namespace Restaurant.Persistense.Repositories
                 .ExecuteUpdateAsync(s => s
                     .SetProperty(t => t.AuthorName, obj.AuthorName)
                     .SetProperty(t => t.Title, obj.Title)
-                    .SetProperty(t => t.Content, obj.Content)) == 1;
+                    .SetProperty(t => t.Content, obj.Content)
+                    .SetProperty(t => t.ImageLink, obj.ImageLink)) == 1;
         }
 
         public async Task<bool> Delete(Guid id)

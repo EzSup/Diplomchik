@@ -76,7 +76,7 @@ namespace Restaurant.API.Controllers
 
         // PUT api/<BlogsController>/5
         [HttpPut("{id:guid}")]
-        [Authorize]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<ActionResult> Put(Guid id, [FromBody] TableRequest request)
         {
             if (!ModelState.IsValid)
@@ -98,7 +98,7 @@ namespace Restaurant.API.Controllers
 
         // DELETE api/<BlogsController>/5
         [HttpDelete("{id:guid}")]
-        [Authorize]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<ActionResult> Delete(Guid id)
         {
             try
@@ -113,7 +113,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<ActionResult<int>> Purge([FromBody] IEnumerable<Guid> ids)
         {
             if (!ModelState.IsValid)

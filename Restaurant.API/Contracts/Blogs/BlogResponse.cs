@@ -5,6 +5,7 @@
         string Title,
         string AuthorName,
         string Content,
-        DateTime Created
+        DateTime Created,
+        string? ImageLink
     );
 }

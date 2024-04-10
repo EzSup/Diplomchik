@@ -1,0 +1,54 @@
+﻿using Restaurant.Application.Interfaces.Services;
+using Restaurant.Core.Interfaces;
+using Restaurant.Core.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Restaurant.Application.Services
+{
+    public class DishesService : IDishesService
+    {
+        private readonly IDishesRepository _dishesRepository;
+
+        public DishesService(IDishesRepository dishesRepository)
+        {
+            _dishesRepository = dishesRepository;
+        }
+
+        public async Task<ICollection<Dish>> GetAll() 
+            => await _dishesRepository.GetAll();
+        public async Task<Dish> GetById(Guid id)
+            => await _dishesRepository.GetById(id);
+        public async Task<Guid> Add(Dish entity)
+            => await _dishesRepository.Add(entity);
+        public async Task<bool> Update(Dish entity)
+            => await (_dishesRepository.Update(entity));
+        public async Task<bool> Delete(Guid id)
+            => await _dishesRepository.Delete(id);
+        public async Task<int> Purge(IEnumerable<Guid> values)
+            => await _dishesRepository.Purge(values);
+
+        public async Task<ICollection<Dish>> GetByFilter(string? Name = null,
+            double MinWeight = 0,
+            double MaxWeight = double.MaxValue,
+            IEnumerable<string>? Ingredients = null,
+            bool? Available = null,
+            decimal MinPrice = 0,
+            decimal MaxPrice = decimal.MaxValue,
+            string? Category = null,
+            string? Cuisine = null,
+            double discountPercentsMin = 0)
+            => await _dishesRepository.GetByFilter(Name, MinWeight, MaxWeight,
+                Ingredients, Available, MinPrice, MaxPrice,
+                Category, Cuisine, discountPercentsMin);
+
+        public async Task<ICollection<Dish>> GetByPage(int page, int pageSize)
+            => await _dishesRepository.GetByPage(page, pageSize);
+        
+        public async Task<ICollection<Dish>> GetByPageAvailable(int page, int pageSize)
+            => await _dishesRepository.GetByPageAvailable(page, pageSize);
+    }
+}

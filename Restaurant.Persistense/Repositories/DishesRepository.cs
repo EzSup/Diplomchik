@@ -114,6 +114,17 @@ namespace Restaurant.Persistense.Repositories
             throw new ArgumentException("Page size and number has to be greater than 0!");
         }
 
+        public async Task<ICollection<Dish>> GetByPageAvailable (int page, int pageSize)
+        {
+            if (pageSize > 0 && page > 0)
+            {
+                return await _context.Dishes.AsNoTracking()
+                    .Where(x => x.Available)
+                    .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+            }
+            throw new ArgumentException("Page size and number has to be greater than 0!");
+        }
+
         public async Task<int> Purge(IEnumerable<Guid> values)
         {
             return await _context.Dishes

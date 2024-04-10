@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurant.API.Contracts.Blogs;
 using Restaurant.Application.Interfaces.Services;
 using Restaurant.Core.Models;
+using Newtonsoft.Json;
 using System;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -60,17 +61,20 @@ namespace Restaurant.API.Controllers
 
         // POST api/<BlogsController>
         [HttpPost]
-        //[Authorize(Policy ="AdminPolicy")]
-        [Authorize]
-        public async Task<ActionResult<Guid>> Post([FromBody] BlogRequest request)
+        [Authorize(Policy = "AdminPolicy")]
+        public async Task<ActionResult<Guid>> Post(BlogRequest request)
         {
+
             if (!ModelState.IsValid)
             {
                 return BadRequest();
             }
             try
             {
-                var blog = request.Adapt<Blog>();
+                var blog = new Blog(request.AuthorName,
+                    request.Title,
+                    request.Content,
+                    request.ImageLink);
                 return Ok(await _blogsService.Add(blog));
             }
             catch (Exception ex)
@@ -81,7 +85,7 @@ namespace Restaurant.API.Controllers
 
         // PUT api/<BlogsController>/5
         [HttpPut("{id:guid}")]
-        [Authorize]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<ActionResult> Put(Guid id, [FromBody] BlogRequest request)
         {
             if(!ModelState.IsValid)
@@ -103,7 +107,7 @@ namespace Restaurant.API.Controllers
 
         // DELETE api/<BlogsController>/5
         [HttpDelete("{id:guid}")]
-        [Authorize]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<ActionResult> Delete(Guid id)
         {
             try
@@ -118,7 +122,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpDelete]
-        [Authorize]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<ActionResult<int>> Purge([FromBody]IEnumerable<Guid> ids)
         {
             if (!ModelState.IsValid)
