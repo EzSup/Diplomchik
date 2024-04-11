@@ -47,7 +47,21 @@ namespace Restaurant.Persistense.Repositories
         public async Task<ICollection<Dish>> GetAll()
         {
             return await _context.Dishes.AsNoTracking()
-                .OrderBy(x => x.CategoryId)
+                //.OrderBy(x => x.CategoryId)
+                .Select(d => new Dish
+                {
+                    // Вказати всі властивості, які потрібно скопіювати
+                    Id = d.Id,
+                    Name = d.Name,
+                    Weight = d.Weight,
+                    Available = d.Available,
+                    Price = d.Price,
+                    PhotoLinks = d.PhotoLinks,
+                    IngredientsList = d.IngredientsList,
+                    DiscountId = d.DiscountId,
+                    CategoryId = d.CategoryId,
+                    CuisineId=d.CuisineId,
+                })
                 .ToListAsync();
         }
 
@@ -93,15 +107,16 @@ namespace Restaurant.Persistense.Repositories
 
         public async Task<Dish> GetById(Guid id)
         {
-            return await _context.Dishes
+            var dish =  await _context.Dishes
                 .AsNoTracking()
-                .Include(x => x.DishCarts)
-                .Include(x => x.Reviews)
-                .Include(x => x.Cuisine)
-                .Include(x => x.Category)
-                .Include(x => x.Discount)
+                //.Include(x => x.DishCarts)
+                //.Include(x => x.Reviews)
+                //.Include(x => x.Cuisine)
+                //.Include(x => x.Category)
+                //.Include(x => x.Discount)
                 .FirstOrDefaultAsync(x => x.Id == id)
                 ?? throw new KeyNotFoundException("Dish not found!");
+            return dish;
         }
 
         public async Task<ICollection<Dish>> GetByPage(int page, int pageSize)
@@ -142,10 +157,10 @@ namespace Restaurant.Persistense.Repositories
                     .SetProperty(r => r.IngredientsList, entity.IngredientsList)
                     .SetProperty(r => r.Available, entity.Available)
                     .SetProperty(r => r.Price, entity.Price)
-                    .SetProperty(r => r.PhotoLinks, entity.PhotoLinks)
-                    .SetProperty(r => r.DiscountId, entity.DiscountId)
-                    .SetProperty(r => r.CuisineId, entity.CuisineId)
-                    .SetProperty(r => r.CategoryId, entity.CategoryId)) == 1;
+                    .SetProperty(r => r.PhotoLinks, entity.PhotoLinks )
+                    .SetProperty(r => r.DiscountId, entity.DiscountId == Guid.Empty ? null : entity.DiscountId)
+                    .SetProperty(r => r.CuisineId, entity.CuisineId == Guid.Empty ? null : entity.CuisineId)
+                    .SetProperty(r => r.CategoryId, entity.CategoryId == Guid.Empty ? null : entity.CategoryId)) == 1;
         }
     }
 }

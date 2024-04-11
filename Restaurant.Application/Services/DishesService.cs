@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Interfaces.Services;
+﻿using Microsoft.EntityFrameworkCore;
+using Restaurant.Application.Interfaces.Services;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
 using System;
@@ -50,5 +51,30 @@ namespace Restaurant.Application.Services
         
         public async Task<ICollection<Dish>> GetByPageAvailable(int page, int pageSize)
             => await _dishesRepository.GetByPageAvailable(page, pageSize);
+
+        public async Task<ICollection<Dish>> GetByFilterPage(int page, int pageSize, string? Name = null,
+            double MinWeight = 0,
+            double MaxWeight = double.MaxValue,
+            IEnumerable<string>? Ingredients = null,
+            bool? Available = null,
+            decimal MinPrice = 0,
+            decimal MaxPrice = decimal.MaxValue,
+            string? Category = null,
+            string? Cuisine = null,
+            double discountPercentsMin = 0)
+        {
+            var filtered = await _dishesRepository.GetByFilter(Name, MinWeight, MaxWeight,
+                Ingredients, Available, MinPrice, MaxPrice,
+                Category, Cuisine, discountPercentsMin);
+
+            if (pageSize > 0 && page > 0)
+            {
+                return filtered
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+            }
+            throw new ArgumentException("Page size and number has to be greater than 0!");
+        }
     }
 }

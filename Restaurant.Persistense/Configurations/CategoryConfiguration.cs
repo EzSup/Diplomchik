@@ -17,6 +17,8 @@ namespace Restaurant.Persistense.Configurations
                 .HasForeignKey(b => b.DiscountId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            builder.Navigation(d => d.Discount).IsRequired(false);
+
         }
     }
 }

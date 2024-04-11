@@ -26,6 +26,11 @@ namespace Restaurant.Persistense.Configurations
                 .WithMany(dis => dis.Dishes)
                 .HasForeignKey(d => d.DiscountId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+
+            builder.Navigation(d => d.Category).IsRequired(false);
+            builder.Navigation(d => d.Cuisine).IsRequired(false);
+            builder.Navigation(d => d.Discount).IsRequired(false);
         }
     }
 }

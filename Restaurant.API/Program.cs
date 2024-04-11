@@ -44,10 +44,16 @@ namespace Restaurant.API
             builder.Services.AddScoped<IBlogsRepository, BlogsRepository>();
             builder.Services.AddScoped<ITablesRepository, TablesRepository>();
             builder.Services.AddScoped<IUsersRepository, UsersRepository>();
+            builder.Services.AddScoped<ICuisinesRepository, CuisinesRepository>();
+            builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
+            builder.Services.AddScoped<IDishesRepository, DishesRepository>();
 
             builder.Services.AddScoped<IBlogsService, BlogsService>();
             builder.Services.AddScoped<ITablesService, TablesService>();
             builder.Services.AddScoped<IUsersService, UsersService>();
+            builder.Services.AddScoped<ICuisinesService, CuisinesService>();
+            builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+            builder.Services.AddScoped<IDishesService, DishesService>();
 
             builder.Services.AddScoped<IJwtProvider, JwtProvider>();
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();

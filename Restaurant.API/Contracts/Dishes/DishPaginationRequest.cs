@@ -1,6 +1,8 @@
 ﻿namespace Restaurant.API.Contracts.Dishes
 {
     public record DishPaginationRequest(
+        int pageIndex,
+        int pageSize,
         string? Name = null,
             double MinWeight = 0,
             double MaxWeight = double.MaxValue,

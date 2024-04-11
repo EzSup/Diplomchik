@@ -263,6 +263,29 @@ namespace Restaurant.Persistense.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            //migrationBuilder.InsertData(
+            //    table: "Cuisines",
+            //    columns: new[] {"Id", "Name", "DiscountId" },
+            //    values: new object[,]
+            //    {
+            //        {new Guid(), "French", null },
+            //        {new Guid(),"Italian", null },
+            //        {new Guid(),"Turkish", null},
+            //        {new Guid(),"Japaneese", null }
+            //    });
+
+            //migrationBuilder.InsertData(
+            //    table: "Categories",
+            //    columns: new[] {"Id", "Name","DiscountId" },
+            //    values: new object[,]
+            //    {
+            //        {new Guid(),"First courses", null },
+            //        {new Guid(),"Hot dishes", null },
+            //        {new Guid(),"Side dishes", null},
+            //        {new Guid(),"Hot drinks", null },
+            //        {new Guid(),"Desserts" , null}
+            //    });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Bills_CartId",
                 table: "Bills",

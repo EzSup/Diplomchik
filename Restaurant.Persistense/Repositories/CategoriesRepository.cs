@@ -76,7 +76,7 @@ namespace Restaurant.Persistense.Repositories
                 .Where(r => r.Id == entity.Id)
                 .ExecuteUpdateAsync(s => s
                     .SetProperty(r => r.Name, entity.Name)
-                    .SetProperty(r => r.DiscountId, entity.DiscountId)) == 1;
+                    .SetProperty(r => r.DiscountId, entity.DiscountId == Guid.Empty ? null : entity.DiscountId)) == 1;
         }
     }
 }

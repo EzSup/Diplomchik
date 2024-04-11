@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Restaurant.Persistense;
@@ -11,9 +12,11 @@ using Restaurant.Persistense;
 namespace Restaurant.Persistense.Migrations
 {
     [DbContext(typeof(RestaurantDbContext))]
-    partial class RestaurantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240410163816_UpdateDishDiscountCategoryCuisine")]
+    partial class UpdateDishDiscountCategoryCuisine
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -58,7 +61,7 @@ namespace Restaurant.Persistense.Migrations
 
                     b.HasIndex("TableId");
 
-                    b.ToTable("Bills", (string)null);
+                    b.ToTable("Bills");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Blog", b =>
@@ -90,7 +93,7 @@ namespace Restaurant.Persistense.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Blogs", (string)null);
+                    b.ToTable("Blogs");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Cart", b =>
@@ -101,7 +104,7 @@ namespace Restaurant.Persistense.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Category", b =>
@@ -121,7 +124,7 @@ namespace Restaurant.Persistense.Migrations
 
                     b.HasIndex("DiscountId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Cuisine", b =>
@@ -142,7 +145,7 @@ namespace Restaurant.Persistense.Migrations
                     b.HasIndex("DiscountId")
                         .IsUnique();
 
-                    b.ToTable("Cuisines", (string)null);
+                    b.ToTable("Cuisines");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Customer", b =>
@@ -172,7 +175,7 @@ namespace Restaurant.Persistense.Migrations
                     b.HasIndex("UserId")
                         .IsUnique();
 
-                    b.ToTable("Customers", (string)null);
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Discount", b =>
@@ -186,7 +189,7 @@ namespace Restaurant.Persistense.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Discounts", (string)null);
+                    b.ToTable("Discounts");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Dish", b =>
@@ -233,7 +236,7 @@ namespace Restaurant.Persistense.Migrations
 
                     b.HasIndex("DiscountId");
 
-                    b.ToTable("Dishes", (string)null);
+                    b.ToTable("Dishes");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.DishCart", b =>
@@ -251,7 +254,7 @@ namespace Restaurant.Persistense.Migrations
 
                     b.HasIndex("CartId");
 
-                    b.ToTable("DishCarts", (string)null);
+                    b.ToTable("DishCarts");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Permission", b =>
@@ -268,7 +271,7 @@ namespace Restaurant.Persistense.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Permissions", (string)null);
+                    b.ToTable("Permissions");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Review", b =>
@@ -301,7 +304,7 @@ namespace Restaurant.Persistense.Migrations
 
                     b.HasIndex("DishId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Role", b =>
@@ -318,7 +321,7 @@ namespace Restaurant.Persistense.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles", (string)null);
+                    b.ToTable("Roles");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.RolePermission", b =>
@@ -333,7 +336,7 @@ namespace Restaurant.Persistense.Migrations
 
                     b.HasIndex("PermissionId");
 
-                    b.ToTable("RolePermissions", (string)null);
+                    b.ToTable("RolePermissions");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Table", b =>
@@ -350,7 +353,7 @@ namespace Restaurant.Persistense.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tables", (string)null);
+                    b.ToTable("Tables");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.User", b =>
@@ -379,7 +382,7 @@ namespace Restaurant.Persistense.Migrations
                     b.HasIndex("PhoneNum")
                         .IsUnique();
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.UserRole", b =>
@@ -394,7 +397,7 @@ namespace Restaurant.Persistense.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("UserRoles", (string)null);
+                    b.ToTable("UserRoles");
                 });
 
             modelBuilder.Entity("Restaurant.Core.Models.Bill", b =>

@@ -12,9 +12,9 @@ public class Dish
     public decimal Price { get; set; }
     public ICollection<string?> PhotoLinks { get; set; } = [];
 
-    public Guid DiscountId { get; set; }
-    public Guid CategoryId { get; set; }
-    public Guid CuisineId { get; set; }
+    public Guid? DiscountId { get; set; }
+    public Guid? CategoryId { get; set; }
+    public Guid? CuisineId { get; set; }
     //navigation
     public Cuisine? Cuisine { get; set; }
     public Discount? Discount { get; set; }
