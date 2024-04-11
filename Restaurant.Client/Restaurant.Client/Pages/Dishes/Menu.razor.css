@@ -1,0 +1,3 @@
+﻿all: initial; * {
+    all: unset;
+}

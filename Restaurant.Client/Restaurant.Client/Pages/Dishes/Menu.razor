@@ -1,0 +1,45 @@
+﻿@page "/menu"
+@using Restaurant.Client.Services.Interfaces
+@inject IDishesService dishesService
+<h3>Dishes list</h3>
+<body >
+    <!-- Вікно зі стравами -->
+    <div class="menu-container">
+        <!-- Приклад однієї картки страви -->
+        <div class="dish-card">
+            <h2>Страва 1</h2>
+            <p>Опис страви 1</p>
+            <p>Ціна: $10</p>
+            <!-- Додаткові дані та кнопки можна додати тут -->
+        </div>
+        <!-- Додайте інші картки страв за необхідності -->
+    </div>
+
+    <!-- Вікно з фільтрами -->
+    <div class="filters-container">
+        <div class="filter">
+            <label for="category">Категорія:</label>
+            <select id="category">
+                <option value="all">Усі</option>
+                <option value="main">Основні страви</option>
+                <option value="dessert">Десерти</option>
+                <!-- Додайте інші категорії за необхідності -->
+            </select>
+        </div>
+        <div class="filter">
+            <label for="price">Ціна:</label>
+            <select id="price">
+                <option value="all">Усі</option>
+                <option value="0-10">$0 - $10</option>
+                <option value="10-20">$10 - $20</option>
+                <!-- Додайте інші діапазони цін за необхідності -->
+            </select>
+        </div>
+        <!-- Додайте інші фільтри за необхідності -->
+        <button class="apply-btn">Застосувати фільтри</button>
+    </div>
+</body>
+@code
+{
+
+}

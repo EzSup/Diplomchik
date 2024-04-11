@@ -123,4 +123,7 @@
   <data name="blogsListNavLink" xml:space="preserve">
     <value>Блоги</value>
   </data>
+  <data name="menuNavLink" xml:space="preserve">
+    <value>Меню</value>
+  </data>
 </root>
