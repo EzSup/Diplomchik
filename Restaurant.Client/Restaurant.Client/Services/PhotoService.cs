@@ -23,19 +23,34 @@ namespace Restaurant.Client.Services
 
         public async Task<ImageUploadResult> AddPhotoAsync(IBrowserFile file)
         {
+            var name = Guid.NewGuid().ToString();
+            name = string.Concat(name, Path.GetExtension(file.Name));
             var uploadResult = new ImageUploadResult();
             if (file.Size > 0)
             {
                 using var stream = file.OpenReadStream();
                 var uploadParams = new ImageUploadParams
                 {
-                    File = new FileDescription(file.Name, stream),
+                    File = new FileDescription(name, stream),
                     Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face")
                 };
                 uploadResult = await _cloudinary.UploadAsync(uploadParams);
 
             }
             return uploadResult;
+        }
+
+        public async Task<IEnumerable<ImageUploadResult>> AddPhotosAsync(IEnumerable<IBrowserFile> files)
+        {
+            List<ImageUploadResult> results = new List<ImageUploadResult>();
+
+            foreach(var file in files)
+            {
+                var uploadResult = await AddPhotoAsync(file);
+                results.Add(uploadResult);
+            }
+
+            return results;
         }
 
         public async Task<DeletionResult> DeletePhotoAsync(string publicId)

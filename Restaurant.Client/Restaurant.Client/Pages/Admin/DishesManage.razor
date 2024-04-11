@@ -1,0 +1,166 @@
+﻿@using Restaurant.Client.Shared.Admin
+@using Restaurant.Client.Contracts.Dishes
+@using Restaurant.Client.Contracts.Categories
+@using Restaurant.Client.Contracts.Cuisines
+@using Restaurant.Client.Services.Interfaces
+@using Mapster
+@inject IDishesService dishesService
+@inject ICategoriesService categoriesService
+@inject ICuisinesService cuisinesService
+@inject IPhotoService photoService
+@inject ISnackbar snackbar
+@page "/dishesManage"
+@layout AdminLayout
+<MudPaper Elevation="25">
+    <MudToolBar>
+        <MudIconButton Icon="@Icons.Material.Outlined.Refresh" @onclick="Delete" Color="Color.Inherit" Class="mr-5" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Add" Href="/dishAdd" Color="Color.Inherit" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Edit" @onclick="Update" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Remove" @onclick="Delete" />
+    </MudToolBar>
+</MudPaper>
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="8">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+                <MudTable T="DishResponse" Items="@dishes" Hover="true"
+                          @bind-SelectedItem="dish" OnRowClick="@OnRowClickHandler">
+                    @* <ToolBarContent>
+                    <MudText Typo="Typo.h6">Dishes</MudText>
+                    <MudSpacer />
+                    </ToolBarContent> *@
+                    <HeaderContent>
+                        <MudTh>Name</MudTh>
+                        <MudTh>Available</MudTh>
+                        <MudTh>Price</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Name">@context.Name</MudTd>
+                        <MudTd DataLabel="Available">@context.Available</MudTd>
+                        <MudTd DataLabel="Price">@context.Price</MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                </MudTable>
+            </MudPaper>
+        </MudItem>
+        @if(dishEditingObject != null){
+        <MudItem xs="12" sm="6" md="4" >
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+                <EditForm Model="dishEditingObject" OnValidSubmit="Update">
+                    <MudTextField Label="Id" @bind-Value="dishEditingObject.Id" ReadOnly/>
+                    <MudTextField Label="Name" HelperText="Enter an expense type name" @bind-Value="dishEditingObject.Name" />
+                    <MudNumericField Label="Price" @bind-Value="dishEditingObject.Price" />
+                    <MudSwitch Label="Available" @bind-Checked="dishEditingObject.Available" Color="Color.Success" UnCheckedColor="Color.Error" />
+                    <MudNumericField Label="Weight" @bind-Value="dishEditingObject.Weight" />
+                    <MudTextField AutoGrow Label="Ingredients" @bind-Value="ingredients" />
+                    @if(dishEditingObject.PhotoLinks != null)
+                    {
+                        @foreach(var image in dishEditingObject.PhotoLinks)
+                        {
+                            <img src="@image" width="100px" height="80px"/>
+                        }
+                    }
+                    @* <InputFile accept=".png,.jpg,.jpeg,.gif" OnChange="HandleFileChange" class="form-control" multiple /> *@
+                    @if (cuisines != null)
+                    {
+                            <MudSelect T="Guid" Label="Cuisine" @bind-Value="@dishEditingObject.CuisineId" AdornmentIcon="@Icons.Material.Filled.FoodBank">
+                            @foreach (var cuisine in cuisines)
+                            {
+                                <MudSelectItem Value="@cuisine.Id">@cuisine.Name</MudSelectItem>
+                            }
+                        </MudSelect>
+                    }
+                    @if (categories != null)
+                    {
+                        <MudSelect T="Guid" Label="Category" @bind-Value="@dishEditingObject.CategoryId" AdornmentIcon="@Icons.Material.Filled.Fastfood">
+                            @foreach (var category in categories)
+                            {
+                                <MudSelectItem Value="@category.Id">@category.Name</MudSelectItem>
+                            }
+                        </MudSelect>
+                    }
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" >Update</MudButton>
+                    <MudButton OnClick="Delete" Variant="Variant.Filled" Color="Color.Error" Class="ml-auto">Delete</MudButton>
+                </EditForm>
+            </MudPaper>
+        </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
+
+
+@code {
+    private DishResponse dish;
+    private DishRequest _itemToUpdate;
+    private List<DishResponse> dishes = new();
+    CategoryResponse[] categories;
+    CuisineResponse[] cuisines;
+    Dish dishEditingObject;
+    //List<IBrowserFile> photos;
+    string ingredients;
+
+    private class Dish()
+    {
+        public Guid Id;
+        public string Name;
+        public double Weight;
+        public string[] IngredientsList;
+        public ICollection<string> PhotoLinks;
+        public bool? Available;
+        public decimal Price;
+        public Guid CategoryId { get; set; }
+        public Guid CuisineId { get; set; }
+        public Guid DiscountId { get; set; }
+    }
+
+    private async Task Delete()
+    {
+        if (await dishesService.Delete(dishEditingObject.Id))
+        {
+            snackbar.Add("ВИДАЛИЛИ!", Severity.Success);
+            NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
+        }
+    }
+    private async Task Update()
+    {
+        //var results = dish.PhotoLinks;
+        // if (photos != null && photos.Count > 0)
+        // {
+        //     results = (await photoService.AddPhotosAsync(photos)).Select(x => x.Uri.ToString()).ToList();
+        // }
+        //dishEditingObject.PhotoLinks = results;
+        dishEditingObject.IngredientsList = ingredients.Split(", ");
+        _itemToUpdate = dishEditingObject.Adapt<DishRequest>();
+        if(await dishesService.Update(_itemToUpdate))
+        {
+            snackbar.Add("ОНОВИЛИ", Severity.Success);
+            NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
+        }
+    }
+
+    private async Task Refresh()
+    {
+        dishes = (await dishesService.GetAllDishes()).ToList();
+        categories = (await categoriesService.GetAll()).ToArray();
+        cuisines = (await cuisinesService.GetAll()).ToArray();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+    }
+
+    // private async Task HandleFileChange(InputFileChangeEventArgs e)
+    // {
+    //     photos = e.GetMultipleFiles().ToList();
+    // }
+
+    private void OnRowClickHandler(TableRowClickEventArgs<DishResponse> args)
+    {
+        dishEditingObject = args.Item.Adapt<Dish>();
+        ingredients = string.Join(", ", args.Item.IngredientsList);
+    }
+}

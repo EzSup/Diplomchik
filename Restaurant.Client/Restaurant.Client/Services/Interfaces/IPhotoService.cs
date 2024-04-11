@@ -7,5 +7,6 @@ namespace Restaurant.Client.Services.Interfaces
     {
         Task<ImageUploadResult> AddPhotoAsync(IBrowserFile file);
         Task<DeletionResult> DeletePhotoAsync(string publicId);
+        Task<IEnumerable<ImageUploadResult>> AddPhotosAsync(IEnumerable<IBrowserFile> files);
     }
 }
