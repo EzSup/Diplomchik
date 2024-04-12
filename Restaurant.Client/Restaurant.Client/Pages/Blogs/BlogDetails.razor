@@ -10,17 +10,18 @@
 
     @if (blog != null)
     {
-        <div class="Content-wrap flex-col">
-            <div class="Container align-items-center w-75">
-                <div class="Container-wrap flex-col">
+    <div class="wrap-row">
+        <div class="wrap-row-content">
+            @if (!string.IsNullOrEmpty(blog.ImageLink))
+            {
+                <img src="@blog.ImageLink" alt="Blog Image" style="max-width: 600px">
+            }
+            <p>@blog.Created</p>
+            <div class="Blog-Titles">
                     <h2>@blog.Title</h2>
                     <h1>@blog.AuthorName</h1>
                 </div>
-                <div class="Container-wrap flex-row">
-                    @if (!string.IsNullOrEmpty(blog.ImageLink))
-                    {
-                        <img src="@blog.ImageLink" alt="Blog Image" style="max-width: 600px">
-                    }
+                <div class="Container-wrap flex-row">                   
                     <p class="card-text">@((MarkupString)blog.Content)</p>
                 </div>
             </div>
