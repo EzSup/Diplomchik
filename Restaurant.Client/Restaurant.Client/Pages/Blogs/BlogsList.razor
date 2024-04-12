@@ -3,7 +3,6 @@
 @using Restaurant.Client.Services.Interfaces
 @using Restaurant.Client.Contracts.Blogs
 @inject IBlogsService blogsService
-<div class="Main-Content">
     <div class="Title">
         <div class="Title content">
             <h1>BlogsList</h1>
@@ -20,7 +19,6 @@
         <BlogListItem blog="blog"></BlogListItem>
     }
 }
-</div>
 </div>
 @code {
     private List<BlogResponse> blogs;    

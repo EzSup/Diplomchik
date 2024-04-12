@@ -19,6 +19,14 @@
     src: url('../fonts/Aleo/Aleo-Bold.ttf')
 }
 
+html, body {
+    min-height: 100vh;
+}
+
+.row {
+    justify-content: center;
+}
+
 html, body, button {
     font-family: 'Inter';
     font-style: normal;
@@ -157,8 +165,9 @@ button, a {
     row-gap: 0px;
     width: 100vw;
     overflow: hidden;
-    /*    min-height: 80vh;*/
+    /* min-height: 80vh; */
     margin: 200px 0;
+    justify-content: center;
 }
 
 .Main-Content .Title {
