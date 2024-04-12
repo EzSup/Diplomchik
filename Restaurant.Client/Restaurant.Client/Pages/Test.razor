@@ -17,7 +17,6 @@
         margin: 0 auto;
     }
 </style>
-<div class="Main-Content">
     <div class="forms">
         <h3>Articles</h3>
         <EditForm Model="request" OnValidSubmit="post">
@@ -51,7 +50,6 @@
         @* <p  style="color: white;"> @value </p>
         @((MarkupString)value)   *@
     </div>
-</div>
 @code {
     BlogsCreateRequest request = new();
     string[] allowedExtenstions = new string[] { ".png", ".jpg", ".jpeg", ".gif" };

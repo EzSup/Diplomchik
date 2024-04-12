@@ -6,6 +6,7 @@
     justify-content: center;
     flex-wrap: wrap;
     flex-direction: column;
+    margin: -200px 0 100px;
 }
 
 .Header .Content {
@@ -91,12 +92,13 @@ button:focus-visible {
     background: rgba(30, 30, 30, 0.8);
 }
 
-.Main-Content {
-    margin: 100px 0;
-}
-
 .wrap-col{
     padding: 2em 0 0;
+    height:auto;
+}
+
+.Content-wrap{
+    align-items: normal;
 }
 
 .mid-col {
@@ -250,6 +252,7 @@ button:focus-visible {
     height: 800px;
     display: flex;
     justify-content: flex-start;
+    align-items: center;
 }
 
 .Container {
