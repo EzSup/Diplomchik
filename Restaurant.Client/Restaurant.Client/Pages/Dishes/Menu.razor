@@ -6,8 +6,6 @@
 @inject IDishesService dishesService
 @inject ICategoriesService categoriesService
 @inject ICuisinesService cuisinesService
-
-<div class="Main-Content">
     <!-- Вікно зі стравами -->
     <div class="menu-container">
         <!-- Приклад однієї картки страви -->
@@ -96,7 +94,6 @@
             <button @onclick="() => GoToPage(currentPageIndex + 1)">Next</button>
         }
     </div>
-</div>
 @code {
     DishPaginationRequest filter;
     ICollection<DishPaginationResponse> dishes;
