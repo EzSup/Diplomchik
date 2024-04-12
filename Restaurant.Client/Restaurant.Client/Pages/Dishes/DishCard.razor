@@ -1,9 +1,8 @@
 ﻿@using Restaurant.Client.Contracts.Dishes
 <div class="dish-card">
     <img src="@Dish.PhotoLink" alt="Страва 1">
-    <h2>@Dish.Name</h2>
-    <p></p>
-    <p>
+    <p style="font-size: 20px;">@Dish.Name</p>
+    <p style="font-size: 16px;">
         Ціна: <span style="color: yellow;">@Dish.OriginalPrice</span>
         @if (Dish.OriginalPrice != Dish.ResultingPrice)
         {

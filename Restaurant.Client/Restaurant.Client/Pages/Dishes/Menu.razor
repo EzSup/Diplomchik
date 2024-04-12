@@ -18,8 +18,7 @@
                 <DishCard Dish="dish" />
             }
         }
-        <!-- Додайте інші картки страв за необхідності -->
-    </div>
+    </div>    
 
     <!-- Вікно з фільтрами -->
     <EditForm Model="@filter" OnSubmit="Filter" class="filters-container">
@@ -54,8 +53,9 @@
         <div class="filter">
             <label for="cuisine">Кухня:</label>
             <InputRadioGroup id="cuisine" @bind-Value="@filter.Cuisine">
+                <br />
                 <InputRadio Value="@string.Empty" id="allcuisine" ></InputRadio>
-                <label for="allcuisine">Усі</label>
+                <label for="allcuisine">Усі</label><br />
                 @foreach(var cuisine in cuisines)
                 {
                     <InputRadio Value="@cuisine.Name" id="@(cuisine.Name + "cuisine")">
@@ -71,8 +71,9 @@
         <div class="filter">
             <label for="category">Категорія:</label>
             <InputRadioGroup id="category" @bind-Value="@filter.Category">
+                <br />
                 <InputRadio Value="@string.Empty" id="allcategory"></InputRadio>
-                <label for="allcategory">Усі</label>
+                <label for="allcategory">Усі</label><br />
                 @foreach (var category in categories)
                 {
                     <InputRadio Value="@category.Name" id="@(category.Name + "category")">
@@ -84,22 +85,46 @@
         <!-- Додайте інші фільтри за необхідності -->
         <button class="apply-btn">Застосувати фільтри</button>
     </EditForm>
+    <div class="pagination-buttons">
+        @if (currentPageIndex > 1)
+        {
+            <button @onclick="() => GoToPage(currentPageIndex - 1)">Previous</button>
+        }
+
+        @if (currentPageIndex < totalPages)
+        {
+            <button @onclick="() => GoToPage(currentPageIndex + 1)">Next</button>
+        }
+    </div>
 </div>
 @code {
-    DishPaginationRequest filter = new() { pageIndex = 1, pageSize = 12 };
+    DishPaginationRequest filter;
     ICollection<DishPaginationResponse> dishes;
     IEnumerable<CategoryResponse> categories = [];
     IEnumerable<CuisineResponse> cuisines = [];
+    int currentPageIndex = 1;
+    const int pageSize = 12;
+    int totalPages = 1;
+
 
     protected async override Task OnInitializedAsync()
     {
+        filter = new() { pageIndex = currentPageIndex, pageSize = pageSize };
         await Filter();
         categories = (await categoriesService.GetAll()).ToArray();
         cuisines = (await cuisinesService.GetAll()).ToArray();
     }
 
-    private async Task Filter()
+    private async Task GoToPage(int page)
     {
+        currentPageIndex = page;
+        await Filter();
+    }
+
+    private async Task Filter()
+    {       
+        
+        totalPages = await dishesService.GetPagesCount(filter);
         dishes = await dishesService.GetByFilter(filter);
     }
 }

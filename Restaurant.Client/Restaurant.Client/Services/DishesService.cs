@@ -25,7 +25,7 @@ namespace Restaurant.Client.Services
             {
                 results = (await _photoService.AddPhotosAsync(files)).Select(x => x.Uri.ToString()).ToList();
             }
-
+            request.PhotoLinks = results;
             var response = await _httpClient.PostAsJsonAsync($"api/Dishes/Post", request);
             response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadAsStringAsync();
@@ -39,7 +39,7 @@ namespace Restaurant.Client.Services
             List<string> photoIds = new();
             if(imageLinks.Count > 0)
             {
-                photoIds = imageLinks.Select(x =>  Path.GetFileNameWithoutExtension(x.Split("/")[-1])).ToList();
+                photoIds = imageLinks.Select(x =>  Path.GetFileNameWithoutExtension(x.Split("/").Last())).ToList();
             }
             foreach (var photoid in photoIds)
             {
@@ -74,6 +74,14 @@ namespace Restaurant.Client.Services
             var responseBody = await response.Content.ReadAsStringAsync();
             var dishes = JsonConvert.DeserializeObject<List<DishPaginationResponse>>(responseBody);
             return dishes;
+        }
+
+        public async Task<int> GetPagesCount(DishPaginationRequest request)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"api/Dishes/GetPagesCount", request);
+            response.EnsureSuccessStatusCode();
+            var pageCount = await response.Content.ReadFromJsonAsync<int>();
+            return pageCount;
         }
 
         public async Task<bool> Update(DishRequest request)

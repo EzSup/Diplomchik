@@ -9,6 +9,7 @@
 @inject IDishesService dishesService
 @inject ICuisinesService cuisinesService
 @inject ICategoriesService categoriesService
+@inject ISnackbar snackbar
 @layout AdminLayout
 
 <div style="justify-content: center; display: flex; margin-top: 50px; ">
@@ -63,9 +64,16 @@
 
     private async void OnValidSubmit(EditContext context)
     {
-        dishEditingObj.IngredientsList = ingredients?.Split(", ") ?? [];
-        await dishesService.Add(uploadedPhotos, dishEditingObj);
-        NavManager.NavigateTo("/dishesManage");
+        try
+        {
+            dishEditingObj.IngredientsList = ingredients?.Split(", ") ?? [];
+            await dishesService.Add(uploadedPhotos, dishEditingObj);
+            NavManager.NavigateTo("/dishesManage");
+        }
+        catch(Exception ex)
+        {
+            snackbar.Add(ex.Message, Severity.Error);
+        }
     }
 
     private async Task HandleFileChange(InputFileChangeEventArgs e)

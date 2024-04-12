@@ -12,5 +12,6 @@ namespace Restaurant.Client.Services.Interfaces
         Task<bool> Update(DishRequest request);
         Task<bool> Delete(Guid id);
         Task<ICollection<DishPaginationResponse>> GetByFilter(DishPaginationRequest request);
+        Task<int> GetPagesCount(DishPaginationRequest request);
     } 
 }

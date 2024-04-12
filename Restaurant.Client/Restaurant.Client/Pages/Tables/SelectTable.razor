@@ -10,7 +10,7 @@
     </div>
     <div class="Container">
         <div class="Content-wrap">
-            <InputRadioGroup @bind-Value="table">
+        <InputRadioGroup @bind-Value="table" @onchange="TableClicked">
                 <div class="wrap-col" style="width: 40%">
                     <div class="wrap-col-content content-flex-start">
                         <TwoSeatsTable Value="1" />
@@ -58,4 +58,9 @@
     </div>
 @code {
     int table = 0;
+
+    private async Task TableClicked()
+    {
+        
+    }
 }
