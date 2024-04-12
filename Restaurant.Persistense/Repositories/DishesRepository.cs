@@ -48,6 +48,8 @@ namespace Restaurant.Persistense.Repositories
                 .ExecuteDeleteAsync() == 1;
         }
 
+
+
         public async Task<ICollection<Dish>> GetAll()
         {
             return await _context.Dishes.AsNoTracking()

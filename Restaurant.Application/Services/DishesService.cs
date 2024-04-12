@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Restaurant.Application.Interfaces.Services;
 using Restaurant.Core.Dtos;
 using Restaurant.Core.Interfaces;
@@ -32,6 +33,25 @@ namespace Restaurant.Application.Services
             => await _dishesRepository.Delete(id);
         public async Task<int> Purge(IEnumerable<Guid> values)
             => await _dishesRepository.Purge(values);
+
+        public async Task<int> PagesCount(int pageSize, string? Name = null,
+            double MinWeight = 0,
+            double MaxWeight = double.MaxValue,
+            IEnumerable<string>? Ingredients = null,
+            bool? Available = null,
+            decimal MinPrice = 0,
+            decimal MaxPrice = decimal.MaxValue,
+            string? Category = null,
+            string? Cuisine = null,
+            double discountPercentsMin = 0)
+        {
+            var dishes = await _dishesRepository.GetByFilter(Name, MinWeight, MaxWeight,
+                Ingredients, Available, MinPrice, MaxPrice,
+                Category, Cuisine, discountPercentsMin);
+            if (dishes.Count() == 0)
+                return 0;
+            return dishes.Count()/pageSize + 1;
+        }
 
         public async Task<ICollection<DishPaginationResponse>> GetByFilter(string? Name = null,
             double MinWeight = 0,

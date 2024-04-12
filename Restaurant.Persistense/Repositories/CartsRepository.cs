@@ -55,7 +55,30 @@ namespace Restaurant.Persistense.Repositories
                 .Include(x => x.DishCarts)
                 .Include(x => x.Customer)
                 .Include(x => x.Bill)
-                .FirstOrDefaultAsync(x => x.Id == id) ?? throw new KeyNotFoundException("Cuisine not found!");
+                .Select(x => new Cart
+                {
+                    Id = x.Id,
+                    Bill = x.Bill,
+                    DishCarts = x.DishCarts,
+                    Customer = x.Customer,
+                })
+                .FirstOrDefaultAsync(x => x.Id == id) ?? throw new KeyNotFoundException("Cart not found!");
+        }
+
+        public async Task<Cart> GetByCustomerId(Guid id)
+        {
+            return await _context.Carts.AsNoTracking()
+                .Include(x => x.DishCarts)
+                .Include(x => x.Customer)
+                .Include(x => x.Bill)
+                .Select(x => new Cart
+                {
+                    Id = x.Id,
+                    Bill = x.Bill,
+                    DishCarts = x.DishCarts,
+                    Customer = x.Customer,
+                })
+                .FirstOrDefaultAsync(x => x.Customer.Id == id) ?? throw new KeyNotFoundException("Cart not found!");
         }
 
         public async Task<ICollection<Cart>> GetByPage(int page, int pageSize)

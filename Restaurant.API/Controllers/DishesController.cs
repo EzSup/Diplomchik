@@ -63,6 +63,22 @@ namespace Restaurant.API.Controllers
             return Ok(dishes);
         }
 
+        [HttpPut]
+        public async Task<ActionResult<int>> GetPagesCount([FromBody] DishPaginationRequest request)
+        {
+            var dishes = await _dishesService.PagesCount(
+                request.pageSize,
+                request.Name, request.MinWeight, request.MaxWeight,
+                request.Ingredients, request.Available,
+                request.MinPrice, request.MaxPrice,
+                request.Category, request.Cuisine,
+                request.MinDiscountsPercents);
+
+            //List<DishPaginationResponse> response = ToPaginationResponse(dishes);
+
+            return Ok(dishes);
+        }
+
         [HttpPost]
         [Authorize(Policy = "AdminPolicy")]
         public async Task<ActionResult<Guid>> Post([FromBody] DishCreateRequest request)
@@ -75,6 +91,8 @@ namespace Restaurant.API.Controllers
             try
             {
                 var dish = request.Adapt<Dish>();
+                dish.CategoryId = Guid.Empty == request.CategoryId ? null : request.CategoryId;
+                dish.CuisineId = Guid.Empty == request.CuisineId ? null : request.CuisineId;
                 return Ok(await _dishesService.Add(dish));
             }
             catch (Exception ex)
