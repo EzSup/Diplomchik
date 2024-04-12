@@ -1,10 +1,10 @@
-﻿namespace Restaurant.API.Contracts.Dishes
+﻿namespace Restaurant.Core.Dtos
 {
     public record DishPaginationResponse(
         Guid Id,
         string Name,
         string PhotoLink,
-        string OriginalPrice,
-        string ResultingPrice
+        decimal OriginalPrice,
+        decimal ResultingPrice
         );
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restaurant.Application.Interfaces.Services;
+using Restaurant.Core.Dtos;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
 using System;
@@ -32,7 +33,7 @@ namespace Restaurant.Application.Services
         public async Task<int> Purge(IEnumerable<Guid> values)
             => await _dishesRepository.Purge(values);
 
-        public async Task<ICollection<Dish>> GetByFilter(string? Name = null,
+        public async Task<ICollection<DishPaginationResponse>> GetByFilter(string? Name = null,
             double MinWeight = 0,
             double MaxWeight = double.MaxValue,
             IEnumerable<string>? Ingredients = null,
@@ -52,7 +53,7 @@ namespace Restaurant.Application.Services
         public async Task<ICollection<Dish>> GetByPageAvailable(int page, int pageSize)
             => await _dishesRepository.GetByPageAvailable(page, pageSize);
 
-        public async Task<ICollection<Dish>> GetByFilterPage(int page, int pageSize, string? Name = null,
+        public async Task<ICollection<DishPaginationResponse>> GetByFilterPage(int page, int pageSize, string? Name = null,
             double MinWeight = 0,
             double MaxWeight = double.MaxValue,
             IEnumerable<string>? Ingredients = null,

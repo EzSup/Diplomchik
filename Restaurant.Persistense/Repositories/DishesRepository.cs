@@ -1,11 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Restaurant.Core.Dtos;
 
 namespace Restaurant.Persistense.Repositories
 {
@@ -65,29 +69,31 @@ namespace Restaurant.Persistense.Repositories
                 .ToListAsync();
         }
 
-        public async Task<ICollection<Dish>> GetByFilter(string? Name = null, 
-            double MinWeight = 0, 
-            double MaxWeight = double.MaxValue, 
-            IEnumerable<string>? Ingredients = null, 
-            bool? Available = null, 
-            decimal MinPrice = 0, 
-            decimal MaxPrice = decimal.MaxValue, 
-            string? Category = null, 
-            string? Cuisine = null, 
+        public async Task<ICollection<DishPaginationResponse>> GetByFilter(string? Name = null,
+            double MinWeight = 0,
+            double MaxWeight = double.MaxValue,
+            IEnumerable<string>? Ingredients = null,
+            bool? Available = null,
+            decimal MinPrice = 0,
+            decimal MaxPrice = decimal.MaxValue,
+            string? Category = null,
+            string? Cuisine = null,
             double MinDiscountsPercents = 0)
         {
-            var query = _context.Dishes.AsNoTracking();
-
-            if(!string.IsNullOrWhiteSpace(Name))
+            IQueryable<Dish> query = _context.Dishes.AsNoTracking()
+                .Include(x => x.Discount)
+                .Include(x => x.Category)
+                .Include(x => x.Cuisine);
+            if (!string.IsNullOrWhiteSpace(Name))
                 query = query.Where(x => x.Name.Contains(Name));
 
-            if(MinWeight < MaxWeight && MinWeight >= 0)
+            if (MinWeight < MaxWeight && MinWeight >= 0)
                 query = query.Where(x => x.Weight > MinWeight && x.Weight < MaxWeight);
 
-            if(Ingredients != null && Ingredients.Count() > 0)
+            if (Ingredients != null && Ingredients.Count() > 0)
                 query = query.Where(x => Ingredients.All(c => x.IngredientsList.Contains(c)));
 
-            if(Available != null)
+            if (Available != null)
                 query = query.Where(x => x.Available == Available);
 
             if (MinPrice < MaxPrice && MinPrice >= 0)
@@ -99,21 +105,41 @@ namespace Restaurant.Persistense.Repositories
             if (!string.IsNullOrWhiteSpace(Cuisine))
                 query = query.Where(x => x.Cuisine.Name.Contains(Cuisine));
 
-            if(MinDiscountsPercents > 0)
+            if (MinDiscountsPercents > 0)
                 query = query.Where(x => x.Discount.PecentsAmount > MinDiscountsPercents);
-
-            return await query.ToListAsync();
+            var s = await query
+                .Select(x => new DishPaginationResponse(
+                    x.Id, x.Name, x.PhotoLinks.FirstOrDefault(),
+                    x.Price, (x.Price * (decimal)(x.Discount.PecentsAmount != null && x.Discount.PecentsAmount > 0 ? x.Discount.PecentsAmount : 100) * 0.01m))).ToListAsync(); //розібратись чому tolistasync викликає помилку
+            return s;
         }
 
         public async Task<Dish> GetById(Guid id)
         {
             var dish =  await _context.Dishes
                 .AsNoTracking()
-                //.Include(x => x.DishCarts)
-                //.Include(x => x.Reviews)
-                //.Include(x => x.Cuisine)
-                //.Include(x => x.Category)
-                //.Include(x => x.Discount)
+                .Include(x => x.DishCarts)
+                .Include(x => x.Reviews)
+                .Include(x => x.Cuisine)
+                .Include(x => x.Category)
+                .Include(x => x.Discount)
+                .Select(x => new Dish()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Weight = x.Weight,
+                    IngredientsList = x.IngredientsList,
+                    Available = x.Available,
+                    Price = x.Price,
+                    PhotoLinks = x.PhotoLinks,
+                    DiscountId = x.DiscountId,
+                    CategoryId = x.CategoryId,
+                    CuisineId = x.CuisineId,
+                    Discount = x.Discount,
+                    Category = x.Category,
+                    Cuisine = x.Cuisine,
+                    Reviews = x.Reviews,
+                })
                 .FirstOrDefaultAsync(x => x.Id == id)
                 ?? throw new KeyNotFoundException("Dish not found!");
             return dish;

@@ -6,6 +6,7 @@ using Restaurant.API.Contracts.Categories;
 using Restaurant.API.Contracts.Dishes;
 using Restaurant.Application.Interfaces.Services;
 using Restaurant.Application.Services;
+using Restaurant.Core.Dtos;
 using Restaurant.Core.Models;
 
 namespace Restaurant.API.Controllers
@@ -37,16 +38,17 @@ namespace Restaurant.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet("{id:guid}")] // ПОДИВИТИСЬ ЯК ВИПРАВИТИ
+        [HttpGet("{id:guid}")]
         public async Task<ActionResult<DishResponse>> Get(Guid id)
         {
-            var dish = (await _dishesService.GetAll()).FirstOrDefault(x => x.Id == id);
+            //var dish = (await _dishesService.GetAll()).FirstOrDefault(x => x.Id == id);
+            var dish = await _dishesService.GetById(id);
             var response = dish.Adapt<DishResponse>();
             return Ok(response);
         }
 
-        [HttpGet]
-        public async Task<ActionResult<ICollection<DishResponse>>> GetByFilerPage([FromBody] DishPaginationRequest request)
+        [HttpPut]
+        public async Task<ActionResult<ICollection<DishPaginationResponse>>> GetByFilerPage([FromBody] DishPaginationRequest request)
         {
             var dishes = await _dishesService.GetByFilterPage(
                 request.pageIndex, request.pageSize,
@@ -56,9 +58,9 @@ namespace Restaurant.API.Controllers
                 request.Category, request.Cuisine,
                 request.MinDiscountsPercents);
 
-            List<DishPaginationResponse> response = ToPaginationResponse(dishes);
+            //List<DishPaginationResponse> response = ToPaginationResponse(dishes);
 
-            return Ok(response);
+            return Ok(dishes);
         }
 
         [HttpPost]
@@ -145,8 +147,8 @@ namespace Restaurant.API.Controllers
                 response.Add(new(dish.Id,
                     dish.Name!,
                     dish.PhotoLinks.First() ?? "",
-                    dish.Price.ToString(),
-                    (dish.Price * 0.01m * (decimal)dish.Discount.PecentsAmount).ToString()));
+                    dish.Price,
+                    (dish.Price * 0.01m * (decimal)dish.Discount.PecentsAmount)));
             }
             return response;
         }
