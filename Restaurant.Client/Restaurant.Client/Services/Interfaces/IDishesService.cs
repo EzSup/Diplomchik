@@ -11,5 +11,6 @@ namespace Restaurant.Client.Services.Interfaces
         Task<string> Add(IEnumerable<IBrowserFile> files, DishCreateRequest request);
         Task<bool> Update(DishRequest request);
         Task<bool> Delete(Guid id);
+        Task<ICollection<DishPaginationResponse>> GetByFilter(DishPaginationRequest request);
     } 
 }

@@ -1,0 +1,21 @@
+﻿@using Restaurant.Client.Contracts.Dishes
+<div class="dish-card">
+    <img src="@Dish.PhotoLink" alt="Страва 1">
+    <h2>@Dish.Name</h2>
+    <p></p>
+    <p>
+        Ціна: <span style="color: yellow;">@Dish.OriginalPrice</span>
+        @if (Dish.OriginalPrice != Dish.ResultingPrice)
+        {
+            <del style="color: gray;">$12</del>
+
+            <span class="promotion-label">Знижка</span>
+        }
+    </p>
+    <!-- Додаткові дані та кнопки можна додати тут -->
+</div>
+
+@code {
+    [Parameter]
+    public DishPaginationResponse Dish { get; set; }
+}

@@ -67,6 +67,15 @@ namespace Restaurant.Client.Services
             return dishes;
         }
 
+        public async Task<ICollection<DishPaginationResponse>> GetByFilter(DishPaginationRequest request)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"api/Dishes/GetByFilerPage", request);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var dishes = JsonConvert.DeserializeObject<List<DishPaginationResponse>>(responseBody);
+            return dishes;
+        }
+
         public async Task<bool> Update(DishRequest request)
         {
             //if(files != null && files.Count() > 0) 

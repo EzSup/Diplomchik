@@ -1,3 +1,60 @@
 ﻿all: initial; * {
     all: unset;
 }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+/* Контейнер для вікна зі стравами */
+.menu-container {
+    width: 70%;
+    padding: 20px;
+    display: flex; /* Використовуємо flexbox */
+    flex-wrap: wrap; /* Розбиваємо на рядки, якщо не вміщається */
+    justify-content: space-between; /* Рівномірне розподілення між карточками */
+}
+
+/* Контейнер для вікна з фільтрами */
+.filters-container {
+    width: 30%;
+    padding: 20px;
+}
+
+/* Стилі для карток страв */
+.dish-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Стилі для фільтрів */
+.filter {
+    margin-bottom: 10px;
+}
+
+    .filter label {
+        font-weight: bold;
+    }
+
+    .filter select {
+        width: 100%;
+        padding: 5px;
+    }
+
+/* Кнопка для застосування фільтрів */
+.apply-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

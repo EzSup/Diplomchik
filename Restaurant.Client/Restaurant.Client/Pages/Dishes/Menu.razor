@@ -1,45 +1,105 @@
 ﻿@page "/menu"
 @using Restaurant.Client.Services.Interfaces
+@using Restaurant.Client.Contracts.Dishes
+@using Restaurant.Client.Contracts.Cuisines
+@using Restaurant.Client.Contracts.Categories
 @inject IDishesService dishesService
-<h3>Dishes list</h3>
-<body >
+@inject ICategoriesService categoriesService
+@inject ICuisinesService cuisinesService
+
+<div class="Main-Content">
     <!-- Вікно зі стравами -->
     <div class="menu-container">
         <!-- Приклад однієї картки страви -->
-        <div class="dish-card">
-            <h2>Страва 1</h2>
-            <p>Опис страви 1</p>
-            <p>Ціна: $10</p>
-            <!-- Додаткові дані та кнопки можна додати тут -->
-        </div>
+        @if (dishes != null)
+        {
+            @foreach (var dish in dishes)
+            {
+                <DishCard Dish="dish" />
+            }
+        }
         <!-- Додайте інші картки страв за необхідності -->
     </div>
 
     <!-- Вікно з фільтрами -->
-    <div class="filters-container">
+    <EditForm Model="@filter" OnSubmit="Filter" class="filters-container">
         <div class="filter">
-            <label for="category">Категорія:</label>
-            <select id="category">
-                <option value="all">Усі</option>
-                <option value="main">Основні страви</option>
-                <option value="dessert">Десерти</option>
-                <!-- Додайте інші категорії за необхідності -->
-            </select>
+            <InputText placeholder="Назва" @bind-Value="filter.Name"></InputText>
+        </div>@*
+        <div class="filter">
+        <label for="category">Категорія:</label>
+        <select id="category">
+        <option value="all">Усі</option>
+        <option value="main">Основні страви</option>
+        <option value="dessert">Десерти</option>
+        <!-- Додайте інші категорії за необхідності -->
+        </select>
+        </div> *@
+        <div class="filter">
+            <label for="minPrice">Ціна від:</label>
+            <InputNumber id="minPrice" @bind-Value="@filter.MinPrice"></InputNumber>
         </div>
         <div class="filter">
-            <label for="price">Ціна:</label>
-            <select id="price">
-                <option value="all">Усі</option>
-                <option value="0-10">$0 - $10</option>
-                <option value="10-20">$10 - $20</option>
-                <!-- Додайте інші діапазони цін за необхідності -->
-            </select>
+            <label for="maxPrice">Ціна до:</label>
+            <InputNumber id="maxPrice" @bind-Value="@filter.MaxPrice"></InputNumber>
+        </div>
+        <div class="filter">
+            <label for="minWeight">Вага від:</label>
+            <InputNumber id="minWeight" @bind-Value="@filter.MinWeight"></InputNumber>
+        </div>
+        <div class="filter">
+            <label for="maxWeight">Вага до:</label>
+            <InputNumber id="maxWeight" @bind-Value="@filter.MaxWeight"></InputNumber>
+        </div>
+        <div class="filter">
+            <label for="cuisine">Кухня:</label>
+            <InputRadioGroup id="cuisine" @bind-Value="@filter.Cuisine">
+                <InputRadio Value="@string.Empty" id="allcuisine" ></InputRadio>
+                <label for="allcuisine">Усі</label>
+                @foreach(var cuisine in cuisines)
+                {
+                    <InputRadio Value="@cuisine.Name" id="@(cuisine.Name + "cuisine")">
+
+                    </InputRadio>
+
+                    <label for="@(cuisine.Name +"cuisine")">@cuisine.Name</label>
+
+                    <br />
+                }
+            </InputRadioGroup>
+        </div>
+        <div class="filter">
+            <label for="category">Категорія:</label>
+            <InputRadioGroup id="category" @bind-Value="@filter.Category">
+                <InputRadio Value="@string.Empty" id="allcategory"></InputRadio>
+                <label for="allcategory">Усі</label>
+                @foreach (var category in categories)
+                {
+                    <InputRadio Value="@category.Name" id="@(category.Name + "category")">
+                    </InputRadio>
+                    <label for="@(category.Name +"category")">@category.Name</label> <br />
+                }
+            </InputRadioGroup>
         </div>
         <!-- Додайте інші фільтри за необхідності -->
         <button class="apply-btn">Застосувати фільтри</button>
-    </div>
-</body>
-@code
-{
+    </EditForm>
+</div>
+@code {
+    DishPaginationRequest filter = new() { pageIndex = 1, pageSize = 12 };
+    ICollection<DishPaginationResponse> dishes;
+    IEnumerable<CategoryResponse> categories = [];
+    IEnumerable<CuisineResponse> cuisines = [];
 
+    protected async override Task OnInitializedAsync()
+    {
+        await Filter();
+        categories = (await categoriesService.GetAll()).ToArray();
+        cuisines = (await cuisinesService.GetAll()).ToArray();
+    }
+
+    private async Task Filter()
+    {
+        dishes = await dishesService.GetByFilter(filter);
+    }
 }
