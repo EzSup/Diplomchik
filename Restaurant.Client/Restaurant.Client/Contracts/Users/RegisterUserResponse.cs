@@ -2,5 +2,6 @@
 {
     public record RegisterUserResponse(
         bool Flag = false, 
-        string Message = null!);
+        string Message = null!,
+        Guid? Id = null);
 }

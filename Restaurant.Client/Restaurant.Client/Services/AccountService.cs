@@ -5,6 +5,7 @@ using Microsoft.JSInterop;
 using Mapster;
 using Microsoft.AspNetCore.Components;
 using Restaurant.Client.Services.Interfaces;
+using Restaurant.Client.Contracts.Customers;
 
 namespace Restaurant.Client.Services
 {
@@ -14,19 +15,22 @@ namespace Restaurant.Client.Services
         private readonly CustomAuthenticationStateProvider _authStateProv;
         private readonly IJSRuntime _jsruntime;
         private readonly NavigationManager _navManager;
+        private readonly ICustomersService _customersService;
         private readonly ICookiesService _cookiesService;
 
         public AccountService(IHttpClientFactory factory, 
             AuthenticationStateProvider authstateprov,
             IJSRuntime jsRuntime, 
             NavigationManager navManager,
-            ICookiesService cookiesService)
+            ICookiesService cookiesService,
+            ICustomersService customersService)
         {
             _httpClient = factory.CreateClient("API");
             _authStateProv = (CustomAuthenticationStateProvider)authstateprov;
             _jsruntime = jsRuntime;
             _navManager = navManager;
             _cookiesService = cookiesService;
+            _customersService = customersService;
         }
 
         public async Task LoginAsync(LoginUserRequest model)
@@ -54,7 +58,13 @@ namespace Restaurant.Client.Services
             string message = String.Concat(result.Flag ? "Успіх!" : "Помилка!",
                 result.Message);
             await _jsruntime.InvokeVoidAsync("alert", message);
-            if (result.Flag)
+            var id = result.Id;
+            CustomerCreateRequest customerCreateRequest = new CustomerCreateRequest()
+            {
+                Name = model.Name,
+                UserId = (Guid)id
+            };
+            if (result.Flag && await _customersService.Add(customerCreateRequest))
             {
                 _navManager.NavigateTo("/login", forceLoad: true);
             }

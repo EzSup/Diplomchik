@@ -24,5 +24,14 @@ namespace Restaurant.Client.Services
             var result = JsonConvert.DeserializeObject<CustomerResponse>(responseBody);
             return result;
         }
+
+        public async Task<bool> Add(CustomerCreateRequest request)
+        {
+            var response = await _httpClient.PostAsJsonAsync($"/api/Customers/Post", request);
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<Guid>(responseBody);
+            return result != Guid.Empty;
+        }
     }
 }
