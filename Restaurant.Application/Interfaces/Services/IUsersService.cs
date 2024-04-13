@@ -8,7 +8,7 @@ namespace Restaurant.Application.Interfaces.Services
 {
     public interface IUsersService
     {
-        Task Register(string email, string password, string phoneNum);
+        Task<Guid> Register(string email, string password, string phoneNum);
         Task<string> Login(string email, string password);
     }
 }

@@ -16,7 +16,7 @@ namespace Restaurant.API.Controllers
         private readonly IUsersService _usersService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UsersController(IUsersService usersService, IHttpContextAccessor httpContextAccessor)
+        public UsersController(IUsersService usersService, IHttpContextAccessor httpContextAccessor, ICustomersService customersService)
         {
             _usersService = usersService;
             _httpContextAccessor = httpContextAccessor;
@@ -31,9 +31,10 @@ namespace Restaurant.API.Controllers
             }
             try
             {
-                await _usersService.Register(request.email, request.password, request.phoneNumber);
+                var response = new RegisterUserResponse(true, "Успішно зареєстровано!", 
+                    await _usersService.Register(request.email, request.password, request.phoneNumber));
 
-                return Ok(new RegisterUserResponse(true, "Успішно зареєстровано!"));
+                return Ok(response);
             }
             catch (Exception ex)
             {

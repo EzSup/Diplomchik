@@ -20,7 +20,7 @@ namespace Restaurant.Persistense.Repositories
             _context = context;
         }
 
-        public async Task Add(User user)
+        public async Task<Guid> Add(User user)
         {
             if (_context.Users.Any(x => x.Email == user.Email || x.PhoneNum == user.PhoneNum))
             {
@@ -38,6 +38,7 @@ namespace Restaurant.Persistense.Repositories
             await _context.Users.AddAsync(user);            
             await _context.UserRoles.AddAsync(new() { RoleId = role.Id, UserId = user.Id });
             await _context.SaveChangesAsync();
+            return user.Id;
         }
 
         public async Task<User> GetByEmail(string email)

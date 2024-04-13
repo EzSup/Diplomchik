@@ -25,13 +25,13 @@ namespace Restaurant.Application.Services
 
         }
 
-        public async Task Register(string email, string password, string phoneNum)
+        public async Task<Guid> Register(string email, string password, string phoneNum)
         {
             var hashedPassword = _passwordHasher.Generate(password);
 
             var user = User.Create(Guid.NewGuid(), email, hashedPassword, phoneNum);
 
-            await _usersRepository.Add(user);
+            return await _usersRepository.Add(user);
         }
 
         public async Task<string> Login(string email, string password)

@@ -1,4 +1,4 @@
 ﻿namespace Restaurant.API.Contracts.Users
 {
-    public record RegisterUserResponse(bool Flag = false, string Message = null!);
+    public record RegisterUserResponse(bool Flag = false, string Message = null!, Guid? Id = null);
 }
