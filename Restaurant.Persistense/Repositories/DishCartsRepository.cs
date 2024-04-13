@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Restaurant.Core.Dtos;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
 using System;
@@ -31,11 +32,11 @@ namespace Restaurant.Persistense.Repositories
             return model.CartId;
         }
 
-        public async Task<bool> Delete(Guid id)
+        public async Task<bool> Delete(Guid cartId, Guid dishId)
         {
             return await _context.DishCarts
-                .Where(x => x.CartId == id)
-                .ExecuteDeleteAsync() == 1;
+                .Where(x => x.CartId == cartId && x.DishId == dishId)
+                .ExecuteDeleteAsync() > -1;
         }
 
         public async Task<ICollection<DishCart>> GetAll()
@@ -46,7 +47,7 @@ namespace Restaurant.Persistense.Repositories
                 .ToListAsync();
         }
 
-        public async Task<ICollection<DishCart>> GetByFilter(Guid? CartId = null, Guid? DishId = null)
+        public async Task<ICollection<DishCart>> GetByFilter(Guid? CartId = null, Guid? DishId = null, int minCount = 1, int maxCount = int.MaxValue)
         {
             var query = _context.DishCarts.AsNoTracking();
             if(CartId != null)
@@ -57,16 +58,17 @@ namespace Restaurant.Persistense.Repositories
             {
                 query = query.Where(x => x.DishId == DishId);
             }
+            query = query.Where(x => x.Count >= minCount && x.Count <= maxCount);
             return await query.ToListAsync();
         }
 
-        public async Task<DishCart> GetById(Guid cartId)
+        public async Task<DishCart> GetById(DishCartId Id)
         {
             return await _context.DishCarts
                 .AsNoTracking()
                 .Include(x => x.Cart)
                 .Include(x => x.Dish)
-                .FirstOrDefaultAsync(x => x.CartId == cartId) 
+                .FirstOrDefaultAsync(x => x.CartId == Id.CartId && x.DishId == Id.DishId) 
                     ?? throw new KeyNotFoundException("DishCart not found!");
         }
 
@@ -80,10 +82,11 @@ namespace Restaurant.Persistense.Repositories
             throw new ArgumentException("Page size and number has to be greater than 0!");
         }
 
-        public async Task<int> Purge(IEnumerable<Guid> values)
+        public async Task<int> Purge(IEnumerable<DishCartId> values)
         {
             return await _context.DishCarts
-                .Where(x => values.Contains(x.CartId))
+                .Where(x => values.Select(v => v.CartId).Contains(x.CartId)
+                    && values.Select(v => v.DishId).Contains(x.DishId))
                 .ExecuteDeleteAsync();
         }
 

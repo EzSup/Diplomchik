@@ -1,4 +1,5 @@
-﻿using Restaurant.Application.Interfaces.Services;
+﻿using CloudinaryDotNet.Actions;
+using Restaurant.Application.Interfaces.Services;
 using Restaurant.Core.Dtos;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
@@ -27,6 +28,7 @@ namespace Restaurant.Application.Services
 
         public async Task<CartResponse> AddDishToUsersCart(Guid customerId, Guid dishId, int count)
         {
+
             CartResponse cart;
             try
             {
@@ -37,7 +39,12 @@ namespace Restaurant.Application.Services
                 var cartId = await _cartsRepository.Add(new Cart());
                 cart = await _cartsRepository.GetById(cartId);
             }
-            if (!(await _dishCartsRepository.Update(new DishCart() { CartId = cart.Id, DishId = dishId, Count = count })))
+            if (count <= 0)
+            {
+                var dishes = await _dishCartsRepository.GetByFilter(DishId: dishId);
+                await _dishCartsRepository.Purge(dishes.Select(x => new DishCartId(x.CartId, x.DishId)));
+            }
+            else if (!(await _dishCartsRepository.Update(new DishCart() { CartId = cart.Id, DishId = dishId, Count = count })))
             {
                 var dishCartId = await _dishCartsRepository.Add(new DishCart() { CartId = cart.Id, DishId = dishId, Count = count });
             }
@@ -45,11 +52,14 @@ namespace Restaurant.Application.Services
             return await _cartsRepository.GetByCustomerId(customerId);
         }
 
-        public async Task<CartResponse> GetByCustomerId(Guid CustomerId){
+
+
+        public async Task<CartResponse> GetByCustomerId(Guid CustomerId)
+        {
 
             return await _cartsRepository.GetByCustomerId(CustomerId);
-            
-        }        
+
+        }
 
         public async Task<bool> Delete(Guid id) => await _cartsRepository.Delete(id);
 
@@ -58,7 +68,7 @@ namespace Restaurant.Application.Services
         public async Task<int> Purge(IEnumerable<Guid> values) => await _cartsRepository.Purge(values);
 
         public async Task<bool> Update(Cart entity) => await _cartsRepository.Update(entity);
-        
+
         private CartResponse ConvertCartToResponse(Cart cart)
         {
             CartResponse cartResponse = new CartResponse()
