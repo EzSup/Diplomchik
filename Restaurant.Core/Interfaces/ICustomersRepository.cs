@@ -9,5 +9,7 @@ namespace Restaurant.Core.Interfaces
             Guid? CartId,
             Guid? ReviewId,
             Guid? BillId);
+
+        Task<Customer> GetByUser(Guid userId);
     }
 }

@@ -22,11 +22,14 @@ namespace Restaurant.Persistense.Repositories
         {
             if (!_context.Users.Any(x => x.Id == entity.UserId))
                 throw new KeyNotFoundException("You have to create user first!");
-
+            if (!_context.Carts.Any(x => x.Id == entity.CartId)){
+                var cart = new Cart();
+                await _context.Carts.AddAsync(cart);
+                entity.CartId = cart.Id;
+            }
             var model = new Customer()
             {
                 Name = entity.Name,
-                PhotoLink = entity.PhotoLink,
                 CartId = entity.CartId,
                 UserId = entity.UserId,
             };
@@ -106,6 +109,12 @@ namespace Restaurant.Persistense.Repositories
                     .SetProperty(r => r.PhotoLink, entity.PhotoLink)
                     .SetProperty(r => r.CartId, entity.CartId)
                     .SetProperty(r => r.UserId, entity.UserId)) == 1;
+        }
+
+        public async Task<Customer> GetByUser(Guid userId)
+        {
+            return await _context.Customers.FirstOrDefaultAsync(
+                x=> x.UserId == userId) ?? throw new KeyNotFoundException("Покупця за таким користувачем не знайдено!");
         }
     }
 }

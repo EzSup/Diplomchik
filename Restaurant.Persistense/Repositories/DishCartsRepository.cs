@@ -89,10 +89,16 @@ namespace Restaurant.Persistense.Repositories
 
         public async Task<bool> Update(DishCart entity)
         {
-            return await _context.DishCarts
-                .Where(x => x.DishId == entity.DishId && x.CartId == entity.CartId)
-                .ExecuteUpdateAsync(s => s
-                .SetProperty(x => x.Count, entity.Count)) > 0;
+            try
+            {
+                return await _context.DishCarts
+                    .Where(x => x.DishId == entity.DishId && x.CartId == entity.CartId)
+                    .ExecuteUpdateAsync(s => s
+                    .SetProperty(x => x.Count, entity.Count)) > 0;
+            }
+            catch {
+                return false;
+            }
         }
     }
 }

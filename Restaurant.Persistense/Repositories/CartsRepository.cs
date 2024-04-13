@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Restaurant.Core.Dtos;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
 using System;
@@ -42,50 +43,63 @@ namespace Restaurant.Persistense.Repositories
                 .Where(x => x.Id == id).ExecuteDeleteAsync() > 0;
         }
 
-        public async Task<ICollection<Cart>> GetAll()
+        public async Task<ICollection<CartResponse>> GetAll()
         {
             return await _context.Carts
                 .AsNoTracking()
+                .Select(x => new CartResponse
+                {
+                    Id = x.Id,
+                    Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(), dc.Count)).ToList()
+                })
                 .ToListAsync();
         }
 
-        public async Task<Cart> GetById(Guid id)
+        public async Task<CartResponse> GetById(Guid id)
         {
-            return await _context.Carts.AsNoTracking()
-                .Include(x => x.DishCarts)
+            var cart = await _context.Carts.AsNoTracking()                
                 .Include(x => x.Customer)
                 .Include(x => x.Bill)
-                .Select(x => new Cart
+                .Include(x => x.DishCarts)
+                .ThenInclude(dc => dc.Dish)
+                .Where(x => x.Customer.Id == id)
+                .Select(x => new CartResponse
                 {
                     Id = x.Id,
-                    Bill = x.Bill,
-                    DishCarts = x.DishCarts,
-                    Customer = x.Customer,
+                    Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(), dc.Count)).ToList()
                 })
-                .FirstOrDefaultAsync(x => x.Id == id) ?? throw new KeyNotFoundException("Cart not found!");
+                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Cart not found!");
+            return cart;
         }
 
-        public async Task<Cart> GetByCustomerId(Guid id)
+        public async Task<CartResponse> GetByCustomerId(Guid id)
         {
-            return await _context.Carts.AsNoTracking()
-                .Include(x => x.DishCarts)
+            var cart = await _context.Carts.AsNoTracking()                
                 .Include(x => x.Customer)
                 .Include(x => x.Bill)
-                .Select(x => new Cart
+                .Include(x => x.DishCarts)
+                .ThenInclude(dc => dc.Dish)
+                .Where(x => x.Customer.Id == id)
+                .Select(x => new CartResponse
                 {
                     Id = x.Id,
-                    Bill = x.Bill,
-                    DishCarts = x.DishCarts,
-                    Customer = x.Customer,
+                    Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(),dc.Count)).ToList()
                 })
-                .FirstOrDefaultAsync(x => x.Customer.Id == id) ?? throw new KeyNotFoundException("Cart not found!");
+                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Cart not found!");
+
+            return cart;
         }
 
-        public async Task<ICollection<Cart>> GetByPage(int page, int pageSize)
+        public async Task<ICollection<CartResponse>> GetByPage(int page, int pageSize)
         {
             if (pageSize > 0 && page > 0)
             {
                 return await _context.Carts.AsNoTracking()
+                    .Select(x => new CartResponse
+                    {
+                        Id = x.Id,
+                        Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(), dc.Count)).ToList()
+                    })
                     .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             }
             throw new ArgumentException("Page size and number has to be greater than 0!");
@@ -110,6 +124,19 @@ namespace Restaurant.Persistense.Repositories
                     .SetProperty(r => r.DishCarts, entity.DishCarts)
                     .SetProperty(r => r.Customer, entity.Customer)
                     .SetProperty(r => r.Bill, entity.Bill)) == 1;
+        }
+
+        private CartResponse ConvertCartToResponse(Cart cart)
+        {
+            CartResponse cartResponse = new CartResponse()
+            {
+                Id = cart.Id,
+            };
+            foreach (var dish in cart.DishCarts)
+            {
+                cartResponse.Dishes.Add(new DishOfCart(dish.Dish.Id, dish.Dish.Name, dish.Dish.PhotoLinks.First(), dish.Count));
+            }
+            return cartResponse;
         }
     }
 }

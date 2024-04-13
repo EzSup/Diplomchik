@@ -1,4 +1,5 @@
 ﻿using Restaurant.Application.Interfaces.Services;
+using Restaurant.Core.Dtos;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
 using System;
@@ -24,9 +25,9 @@ namespace Restaurant.Application.Services
 
         public async Task<Guid> Add(Cart entity) => await _cartsRepository.Add(entity);
 
-        public async Task<Cart> AddDishToUsersCart(Guid customerId, Guid dishId, int count)
+        public async Task<CartResponse> AddDishToUsersCart(Guid customerId, Guid dishId, int count)
         {
-            Cart cart;
+            CartResponse cart;
             try
             {
                 cart = await _cartsRepository.GetByCustomerId(customerId);
@@ -41,15 +42,34 @@ namespace Restaurant.Application.Services
                 var dishCartId = await _dishCartsRepository.Add(new DishCart() { CartId = cart.Id, DishId = dishId, Count = count });
             }
 
-            return cart;
+            return await _cartsRepository.GetByCustomerId(customerId);
         }
+
+        public async Task<CartResponse> GetByCustomerId(Guid CustomerId){
+
+            return await _cartsRepository.GetByCustomerId(CustomerId);
+            
+        }        
 
         public async Task<bool> Delete(Guid id) => await _cartsRepository.Delete(id);
 
-        public async Task<Cart> GetById(Guid id) => await _cartsRepository.GetById(id);
+        public async Task<CartResponse> GetById(Guid id) => await _cartsRepository.GetById(id);
 
         public async Task<int> Purge(IEnumerable<Guid> values) => await _cartsRepository.Purge(values);
 
         public async Task<bool> Update(Cart entity) => await _cartsRepository.Update(entity);
+        
+        private CartResponse ConvertCartToResponse(Cart cart)
+        {
+            CartResponse cartResponse = new CartResponse()
+            {
+                Id = cart.Id,
+            };
+            foreach (var dish in cart.DishCarts)
+            {
+                cartResponse.Dishes.Add(new DishOfCart(dish.Dish.Id, dish.Dish.Name, dish.Dish.PhotoLinks.First(), dish.Count));
+            }
+            return cartResponse;
+        }
     }
 }
