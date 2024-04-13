@@ -1,14 +1,6 @@
 ﻿all: initial; * {
     all: unset;
 }
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-}
 
 /* Контейнер для вікна зі стравами */
 .menu-container {
@@ -16,7 +8,7 @@ body {
     padding: 20px;
     display: flex; /* Використовуємо flexbox */
     flex-wrap: wrap; /* Розбиваємо на рядки, якщо не вміщається */
-    justify-content: space-between; /* Рівномірне розподілення між карточками */
+    justify-content: space-around; /* Рівномірне розподілення між карточками */
 }
 
 /* Контейнер для вікна з фільтрами */
