@@ -1,0 +1,32 @@
+﻿@using Restaurant.Client.Contracts.Carts
+
+<div class="item-row">
+    <img src="@Dish.PhotoLink" alt="Image" class="item-image">
+    <div class="item-details">
+        <h3 class="item-name">@Dish.Name</h3>
+        <input min="1" max="100" type="number" class="item-input" value="@Dish.count" readonly>
+    </div>
+    <div class="item-buttons">
+        <button class="increment-button" @onclick="Add">+</button>
+        <button class="decrement-button" @onclick="Substract">-</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public DishOfCart Dish { get; set; }
+    [Parameter]
+    public Action OnButtonClick { get; set; }
+
+
+    private void Add()
+    {
+        Dish.count++;
+        OnButtonClick.Invoke();
+    }
+    private void Substract()
+    {
+        Dish.count--;
+        OnButtonClick.Invoke();
+    }
+}

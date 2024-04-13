@@ -4,6 +4,7 @@
 @using Restaurant.Client.Contracts.Categories
 @inject ICategoriesService categoriesService
 @layout AdminLayout
+@attribute [Authorize(Roles = "Admin")]
 
 <div style="justify-content: center; display: flex; margin-top: 50px; ">
     <EditForm Model="@category" OnValidSubmit="OnValidSubmit" style="width: 550px;">

@@ -1,0 +1,32 @@
+﻿@page "/cart/{userId:guid}"
+@using Restaurant.Client.Contracts.Carts
+@using Restaurant.Client.Contracts.Customers
+@inject ICartsService cartService
+@inject ICustomersService customersService
+
+@if(cart != null)
+{
+    foreach(var dish in cart.Dishes)
+    {
+        <DishRowOfCart Dish="dish" OnButtonClick="() => Update(dish.Id, dish.count)"></DishRowOfCart>
+    }
+}
+
+@code {
+    [Parameter]
+    public Guid userId { get; set; }
+
+    private Guid customerId;
+
+    CartResponse cart;
+
+    protected override async Task OnInitializedAsync()
+    {
+        customerId = (await customersService.GetByUserId(userId)).Id;
+        cart = await cartService.GetByCustomer(customerId);
+    }
+    private async Task Update(Guid dishId, int count)
+    {
+        cart = await cartService.AddDishToCartOfCustomerByCustomerId(customerId, dishId, count);
+    }
+}

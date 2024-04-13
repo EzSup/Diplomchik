@@ -1,0 +1,35 @@
+﻿.item-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.item-image {
+    width: 100px; /* Розмір зображення */
+    height: auto; /* Автоматична висота для збереження пропорцій */
+    margin-right: 10px; /* Відступ відправа для зображення */
+}
+
+.item-details {
+    flex: 1; /* Займає всю доступну ширину */
+}
+
+.item-name {
+    margin: 0; /* Видалити зовнішні відступи */
+}
+
+.item-input {
+    width: 50px; /* Ширина поля введення */
+}
+
+.item-buttons {
+    display: flex;
+    flex-direction: column; /* Кнопки в стовпці */
+    margin-left: 10px; /* Відступ ліворуч */
+}
+
+.increment-button,
+.decrement-button {
+    width: 30px; /* Ширина кнопок */
+    margin-bottom: 5px; /* Відступ між кнопками */
+}

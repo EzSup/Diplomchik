@@ -1,6 +1,6 @@
 ﻿using Restaurant.Client.Contracts.Users;
 
-namespace Restaurant.Core.Services.Interfaces
+namespace Restaurant.Client.Services.Interfaces
 {
     public interface IAccountService
     {

@@ -1,5 +1,4 @@
-﻿using Restaurant.Core;
-using Restaurant.Client.Services;
+﻿using Restaurant.Client.Services;
 
 namespace Restaurant.Client.Extensions
 {

@@ -9,11 +9,11 @@ namespace Restaurant.Client.Services
     public class BlogsService : IBlogsService
     {
         private readonly HttpClient _httpClient;
-        private readonly IPhotoService _fileUploadService;
+        private readonly IPhotoService _photoService;
 
-        public BlogsService(IHttpClientFactory factory, IPhotoService fileUploadService)
+        public BlogsService(IHttpClientFactory factory, IPhotoService photoService)
         {
-            _fileUploadService = fileUploadService;
+            _photoService = photoService;
             _httpClient = factory.CreateClient("API");
         }
 
@@ -22,7 +22,7 @@ namespace Restaurant.Client.Services
             if (file != null)
             {
                 //var formFile = await _fileUploadService.ConvertToFormFile(file);
-                var uploadResult = await _fileUploadService.AddPhotoAsync(file);
+                var uploadResult = await _photoService.AddPhotoAsync(file);
                 blog.ImageLink = uploadResult.Uri.ToString();
             }
             var response = await _httpClient.PostAsJsonAsync("api/Blogs/Post", blog);

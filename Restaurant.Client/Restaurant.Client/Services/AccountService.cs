@@ -1,5 +1,4 @@
-﻿using Restaurant.Core.Services.Interfaces;
-using Restaurant.Client.Contracts.Users;
+﻿using Restaurant.Client.Contracts.Users;
 using Restaurant.Client.Auth;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
@@ -7,7 +6,7 @@ using Mapster;
 using Microsoft.AspNetCore.Components;
 using Restaurant.Client.Services.Interfaces;
 
-namespace Restaurant.Core.Services
+namespace Restaurant.Client.Services
 {
     public class AccountService : IAccountService
     {

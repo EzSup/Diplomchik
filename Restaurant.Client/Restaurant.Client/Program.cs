@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Restaurant.Client.Services;
 using Restaurant.Client.Services.Interfaces;
-using Restaurant.Core.Services;
-using Restaurant.Core.Services.Interfaces;
 using Restaurant.Client.Auth;
 using System.Globalization;
 using Restaurant.Client.Extensions;
@@ -58,6 +56,8 @@ namespace Restaurant.Client
             builder.Services.AddScoped<ICuisinesService, CuisinesService>();
             builder.Services.AddScoped<IAccountService, AccountService>();
             builder.Services.AddScoped<IBlogsService, BlogsService>();
+            builder.Services.AddScoped<ICartsService, CartsService>();
+            builder.Services.AddScoped<ICustomersService, CustomersService>();
 
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 

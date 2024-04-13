@@ -1,5 +1,5 @@
 ﻿@using Restaurant.Client.Contracts.Dishes
-<div class="dish-card">
+<div @onclick="OnClick.Invoke" class="dish-card">
     <img src="@Dish.PhotoLink" alt="Страва 1">
     <p style="font-size: 20px;">@Dish.Name</p>
     <p style="font-size: 16px;">
@@ -17,4 +17,6 @@
 @code {
     [Parameter]
     public DishPaginationResponse Dish { get; set; }
+    [Parameter]
+    public Action OnClick { get; set; }
 }
