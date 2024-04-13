@@ -3,12 +3,13 @@
 <div class="item-row">
     <img src="@Dish.PhotoLink" alt="Image" class="item-image">
     <div class="item-details">
-        <h3 class="item-name">@Dish.Name</h3>
-        <input min="1" max="100" type="number" class="item-input" value="@Dish.count" readonly>
+        <h3 class="item-name">@Dish.Name</h3>        
     </div>
     <div class="item-buttons">
         <button class="increment-button" @onclick="Add">+</button>
+        <input min="1" max="100" type="number" class="item-input" value="@Dish.count" readonly>
         <button class="decrement-button" @onclick="Substract">-</button>
+        <button class="remove-button" @onclick="Remove">X</button>
     </div>
 </div>
 
@@ -21,12 +22,25 @@
 
     private void Add()
     {
-        Dish.count++;
-        OnButtonClick.Invoke();
+        if (Dish.count < 100)
+        {
+            Dish.count++;
+            OnButtonClick.Invoke();
+        }
     }
     private void Substract()
     {
-        Dish.count--;
+        if (Dish.count > 1)
+        {
+            Dish.count--;
+            OnButtonClick.Invoke();
+        }
+    }
+
+    private void Remove()
+    {
+        Dish.count = -1;
         OnButtonClick.Invoke();
+        NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
     }
 }

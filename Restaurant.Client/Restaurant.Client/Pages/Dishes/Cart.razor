@@ -4,12 +4,13 @@
 @inject ICartsService cartService
 @inject ICustomersService customersService
 
-@if(cart != null)
+@if (cart != null)
 {
-    foreach(var dish in cart.Dishes)
+    @foreach (var dish in cart.Dishes)
     {
         <DishRowOfCart Dish="dish" OnButtonClick="() => Update(dish.Id, dish.count)"></DishRowOfCart>
     }
+
 }
 
 @code {
@@ -27,6 +28,6 @@
     }
     private async Task Update(Guid dishId, int count)
     {
-        cart = await cartService.AddDishToCartOfCustomerByCustomerId(customerId, dishId, count);
+        cart = await cartService.AddDishToCartOfCustomerByCustomerId(customerId, dishId, count);        
     }
 }

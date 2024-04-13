@@ -5,31 +5,38 @@
 }
 
 .item-image {
-    width: 100px; /* Розмір зображення */
-    height: auto; /* Автоматична висота для збереження пропорцій */
-    margin-right: 10px; /* Відступ відправа для зображення */
+    width: 100px;
+    height: auto;
+    margin-right: 10px;
 }
 
 .item-details {
-    flex: 1; /* Займає всю доступну ширину */
+    flex: 1;
+    display: flex; /* Додайте це, щоб назва і поле введення були в одному рядку */
+    align-items: center; /* Центруємо елементи в рядку */
 }
 
 .item-name {
-    margin: 0; /* Видалити зовнішні відступи */
+    margin: 0;
+    flex: 1; /* Розтягуємо назву, щоб зайняти доступну ширину */
 }
 
 .item-input {
-    width: 50px; /* Ширина поля введення */
+    width: 50px;
+    margin-right: 10px; /* Відступ між назвою і полем введення */
 }
 
 .item-buttons {
     display: flex;
-    flex-direction: column; /* Кнопки в стовпці */
-    margin-left: 10px; /* Відступ ліворуч */
+    flex-direction: column;
+    margin-left: 10px;
+    justify-content: center; /* Центруємо кнопки по вертикалі */
 }
 
 .increment-button,
-.decrement-button {
-    width: 30px; /* Ширина кнопок */
-    margin-bottom: 5px; /* Відступ між кнопками */
+.decrement-button,
+.remove-button {
+    color: black;
+    width: 30px;
+    margin-bottom: 5px;
 }
