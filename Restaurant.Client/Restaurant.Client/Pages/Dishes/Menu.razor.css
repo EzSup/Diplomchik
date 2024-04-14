@@ -13,8 +13,13 @@
 
 /* Контейнер для вікна з фільтрами */
 .filters-container {
-    width: 30%;
+    width: 100%;
     padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 }
 
 /* Стилі для карток страв */
@@ -28,12 +33,89 @@
 
 /* Стилі для фільтрів */
 .filter {
-    margin-bottom: 10px;
+    margin: 0 1% 1em;
 }
 
-    .filter label {
-        font-weight: bold;
+::deep .filter input {
+    width: 200px;
+    background: #FFF8E0;
+}
+
+    .filter.radio {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
     }
+
+    ::deep .filter.radio input{
+        width: auto;
+        outline: none;
+    }
+
+    .filter.radio label {
+        margin: 0 0.5em;
+        position: relative;
+        border: 1px solid;
+        border-radius: 5px;
+        border-color: #FFF8E0;
+        width: 150px;
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s;
+        z-index: 1;
+    }
+
+    .filter.radio label .on-checked::after {
+        content: " ";
+        position: absolute;
+        bottom: 0;
+        border-radius: 3px;
+        left: 0;
+        width: 100%;
+        height: 0px;
+        opacity: 0;
+        background: #878477;
+        transition: all 0.3s;
+        z-index: 0;
+    }
+
+    .filter.radio label[for="cuisine"], .filter.radio label[for="category"] {
+        width: auto;
+        border: 0;
+    }
+
+    .filter.radio > label > .on-checked {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+
+    .filter.radio label:hover {
+        border-color: #878477;
+    }
+
+    .filter.radio label:hover .on-checked::after{
+        opacity: 1;
+        height: 100%;
+    }
+
+    .filters-container > .filter.radio > label > .hidden:checked ~ .on-checked::after {
+        opacity: 0.5;
+        height: 100%;
+    }
+
+.filter label {
+    font-weight: bold;
+}
 
     .filter select {
         width: 100%;

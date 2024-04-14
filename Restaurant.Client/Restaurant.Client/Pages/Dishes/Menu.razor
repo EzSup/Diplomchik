@@ -10,6 +10,80 @@
 @inject AuthenticationStateProvider provider
 
 <Title Min>Menu</Title>
+
+<!-- Вікно з фільтрами -->
+<EditForm Model="@filter" OnSubmit="Filter" class="filters-container">
+    <div class="filters-container">
+    <div class="filter">
+        <InputText placeholder="Назва" @bind-Value="filter.Name"></InputText>
+    </div>@*
+    <div class="filter">
+    <label for="category">Категорія:</label>
+    <select id="category">
+    <option value="all">Усі</option>
+    <option value="main">Основні страви</option>
+    <option value="dessert">Десерти</option>
+    <!-- Додайте інші категорії за необхідності -->
+    </select>
+    </div> *@
+    <div class="filter">
+        <label for="minPrice">Ціна від:</label>
+        <InputNumber id="minPrice" @bind-Value="@filter.MinPrice"></InputNumber>
+    </div>
+    <div class="filter">
+        <label for="maxPrice">Ціна до:</label>
+        <InputNumber id="maxPrice" @bind-Value="@filter.MaxPrice"></InputNumber>
+    </div>
+    <div class="filter">
+        <label for="minWeight">Вага від:</label>
+        <InputNumber id="minWeight" @bind-Value="@filter.MinWeight"></InputNumber>
+    </div>
+    <div class="filter">
+        <label for="maxWeight">Вага до:</label>
+        <InputNumber id="maxWeight" @bind-Value="@filter.MaxWeight"></InputNumber>
+    </div>
+        <div class="filter radio">
+        <label for="cuisine">Кухня:</label>
+        <InputRadioGroup id="cuisine" @bind-Value="@filter.Cuisine">
+            <label for="allcuisine">
+            <InputRadio Value="@string.Empty" id="allcuisine" class="hidden"></InputRadio>
+            Усі
+            <div class="on-checked"></div>
+            </label>
+            @foreach (var cuisine in cuisines)
+            {
+                <label for="@(cuisine.Name +"cuisine")">
+                    <InputRadio Value="@cuisine.Name" id="@(cuisine.Name + "cuisine")" class="hidden"></InputRadio>
+                    @cuisine.Name
+                    <div class="on-checked"></div>
+                </label>
+
+            }
+        </InputRadioGroup>
+    </div>
+    <div class="filter radio">
+        <label for="category">Категорія:</label>
+        <InputRadioGroup id="category" @bind-Value="@filter.Category">
+            <label for="allcategory">
+            <InputRadio Value="@string.Empty" id="allcategory" class="hidden"></InputRadio>
+            Усі
+            <div class="on-checked"></div>
+            </label>
+            @foreach (var category in categories)
+            {
+                <label for="@(category.Name +"category")">
+                    <InputRadio Value="@category.Name" id="@(category.Name + "category")" class="hidden"></InputRadio>
+                    @category.Name
+                        <div class="on-checked"></div>
+                </label> 
+            }
+        </InputRadioGroup>
+    </div>
+    <!-- Додайте інші фільтри за необхідності -->
+    <button type="submit" style="width: 100%; height: 60px;">Застосувати фільтри</button>
+    </div>
+</EditForm>
+
     <!-- Вікно зі стравами -->
     <div class="menu-container">
         <!-- Приклад однієї картки страви -->
@@ -22,71 +96,7 @@
         }
     </div>    
 
-    <!-- Вікно з фільтрами -->
-    <EditForm Model="@filter" OnSubmit="Filter" class="filters-container">
-        <div class="filter">
-            <InputText placeholder="Назва" @bind-Value="filter.Name"></InputText>
-        </div>@*
-        <div class="filter">
-        <label for="category">Категорія:</label>
-        <select id="category">
-        <option value="all">Усі</option>
-        <option value="main">Основні страви</option>
-        <option value="dessert">Десерти</option>
-        <!-- Додайте інші категорії за необхідності -->
-        </select>
-        </div> *@
-        <div class="filter">
-            <label for="minPrice">Ціна від:</label>
-            <InputNumber id="minPrice" @bind-Value="@filter.MinPrice"></InputNumber>
-        </div>
-        <div class="filter">
-            <label for="maxPrice">Ціна до:</label>
-            <InputNumber id="maxPrice" @bind-Value="@filter.MaxPrice"></InputNumber>
-        </div>
-        <div class="filter">
-            <label for="minWeight">Вага від:</label>
-            <InputNumber id="minWeight" @bind-Value="@filter.MinWeight"></InputNumber>
-        </div>
-        <div class="filter">
-            <label for="maxWeight">Вага до:</label>
-            <InputNumber id="maxWeight" @bind-Value="@filter.MaxWeight"></InputNumber>
-        </div>
-        <div class="filter">
-            <label for="cuisine">Кухня:</label>
-            <InputRadioGroup id="cuisine" @bind-Value="@filter.Cuisine">
-                <br />
-                <InputRadio Value="@string.Empty" id="allcuisine" ></InputRadio>
-                <label for="allcuisine">Усі</label><br />
-                @foreach(var cuisine in cuisines)
-                {
-                    <InputRadio Value="@cuisine.Name" id="@(cuisine.Name + "cuisine")">
-
-                    </InputRadio>
-
-                    <label for="@(cuisine.Name +"cuisine")">@cuisine.Name</label>
-
-                    <br />
-                }
-            </InputRadioGroup>
-        </div>
-        <div class="filter">
-            <label for="category">Категорія:</label>
-            <InputRadioGroup id="category" @bind-Value="@filter.Category">
-                <br />
-                <InputRadio Value="@string.Empty" id="allcategory"></InputRadio>
-                <label for="allcategory">Усі</label><br />
-                @foreach (var category in categories)
-                {
-                    <InputRadio Value="@category.Name" id="@(category.Name + "category")">
-                    </InputRadio>
-                    <label for="@(category.Name +"category")">@category.Name</label> <br />
-                }
-            </InputRadioGroup>
-        </div>
-        <!-- Додайте інші фільтри за необхідності -->
-        <button class="apply-btn">Застосувати фільтри</button>
-    </EditForm>
+    
     <div class="pagination-buttons">
         @if (currentPageIndex > 1)
         {
