@@ -45,6 +45,21 @@ namespace Restaurant.API.Controllers
             return Ok(response);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<ICollection<TableResponse>>> GetTablesOfTime(DateTime dateTime)
+        {
+            var tables = await _tablesService.GetTablesOfTime(dateTime);
+            var response = tables.Adapt<List<TableResponse>>();
+            return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Guid>> ReserveTable([FromBody]ReserveRequest request)
+        {
+            var response = await _tablesService.ReserveTable(request.tableId, request.start);
+            return Ok(response);
+        }
+
         // GET api/<BlogsController>/5
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<TableResponse>> Get(Guid id)

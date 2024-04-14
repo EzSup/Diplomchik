@@ -11,6 +11,7 @@ namespace Restaurant.Application.Interfaces.Repositories
     public interface ITablesRepository : ICrudRepository<Table>
     {
         Task<ICollection<Table>> GetWithBills();
-        Task<ICollection<Table>> GetByFilter(bool? available, decimal minPrice = 0, decimal maxPrice = decimal.MaxValue);        
+        Task<ICollection<Table>> GetByFilter(bool? available, decimal minPrice = 0, decimal maxPrice = decimal.MaxValue);
+        Task<ICollection<Table>> GetAllWithReservations();
     }
 }

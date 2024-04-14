@@ -26,15 +26,20 @@ namespace Restaurant.Persistense.Configurations
                 .HasForeignKey(b => b.CustomerId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            builder.HasOne(b => b.Table)
-                .WithMany(t => t.Bills)
-                .HasForeignKey(b => b.TableId)
-                .OnDelete(DeleteBehavior.NoAction);
-
             builder.HasOne(b => b.Cart)
                 .WithOne(c => c.Bill)
                 .HasForeignKey<Bill>(b => b.CartId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.HasOne(b => b.Reservation)
+                .WithOne(r => r.Bill)
+                .HasForeignKey<Bill>(b => b.ReservationId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasOne(b => b.DeliveryData)
+               .WithOne(r => r.Bill)
+               .HasForeignKey<Bill>(b => b.DeliveryId)
+               .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

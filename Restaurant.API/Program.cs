@@ -40,7 +40,8 @@ namespace Restaurant.API
                 configuration.GetSection("AuthorizationOptions"));
 
             builder.Services.AddHttpContextAccessor();
-
+            
+            builder.Services.AddScoped<IBillsRepository, BillsRepository>();
             builder.Services.AddScoped<IBlogsRepository, BlogsRepository>();
             builder.Services.AddScoped<ITablesRepository, TablesRepository>();
             builder.Services.AddScoped<IUsersRepository, UsersRepository>();
@@ -50,7 +51,9 @@ namespace Restaurant.API
             builder.Services.AddScoped<IDishCartsRepository, DishCartsRepository>();
             builder.Services.AddScoped<ICartsRepository, CartsRepository>();
             builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
-
+            builder.Services.AddScoped<IReservationsRepository, ReservationsRepository>();
+            builder.Services.AddScoped<IDeliveryDatasRepository, DeliveryDatasRepository>();
+            
             builder.Services.AddScoped<IBlogsService, BlogsService>();
             builder.Services.AddScoped<ITablesService, TablesService>();
             builder.Services.AddScoped<IUsersService, UsersService>();

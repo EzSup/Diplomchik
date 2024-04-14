@@ -2,5 +2,5 @@
 {
     public record TableRequest(
         decimal PriceForHour,
-        bool Free);
+        int Persons);
 }

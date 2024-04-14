@@ -4,6 +4,7 @@
     (
         Guid Id,
         decimal PriceForHour,
+        int Persons,
         bool Free
         );
 }

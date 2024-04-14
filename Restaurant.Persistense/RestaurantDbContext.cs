@@ -28,6 +28,8 @@ namespace Restaurant.Persistense
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Table> Tables { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<DeliveryData> DeliveryDatas { get; set; }
 
         public DbSet<Role> Roles { get; set; }
         public DbSet<Permission> Permissions { get; set; }
@@ -50,6 +52,8 @@ namespace Restaurant.Persistense
             modelBuilder.ApplyConfiguration(new UserConfiguration());
             modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.ApplyConfiguration(new PermissionConfiguration());
+            modelBuilder.ApplyConfiguration(new DeliveryDataConfiguration());
+            modelBuilder.ApplyConfiguration(new ReservationConfiguration());
 
             modelBuilder.ApplyConfiguration(new UserRoleConfiguration());
             modelBuilder.ApplyConfiguration(new RolePermissionConfiguration(_authOptions.Value));

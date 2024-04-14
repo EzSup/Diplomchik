@@ -22,7 +22,16 @@ namespace Restaurant.Persistense.Repositories
         {
             return await _context.Tables
                 .AsNoTracking()
-                .OrderBy(t => t.PriceForHour)
+                .OrderBy(t => t.Persons)
+                .ToListAsync();
+        }
+
+        public async Task<ICollection<Table>> GetAllWithReservations()
+        {
+            return await _context.Tables
+                .AsNoTracking()
+                .Include(t => t.Reservations)
+                .OrderBy(t => t.Persons)
                 .ToListAsync();
         }
 
@@ -30,15 +39,23 @@ namespace Restaurant.Persistense.Repositories
         {
             return await _context.Tables
                 .AsNoTracking()
-                .Include(t => t.Bills)
+                .Include(t => t.Reservations)
+                .Select(x => new Table
+                {
+                    Id = x.Id,
+                    Free = x.Free,
+                    PriceForHour = x.PriceForHour,
+                    Persons = x.Persons,
+                    Reservations = x.Reservations
+                })
                 .ToListAsync();
         }
 
         public async Task<Table> GetById(Guid id)
         {
             return await _context.Tables
-                .AsNoTracking()
-                .Include(t => t.Bills)                
+                .AsNoTracking()      
+                .Include(t => t.Reservations)
                 .FirstOrDefaultAsync(t => t.Id == id) ?? throw new KeyNotFoundException("Table not found!");
         }
 
@@ -59,7 +76,14 @@ namespace Restaurant.Persistense.Repositories
                 query = query.Where(t => t.PriceForHour  < maxPrice);
             }
 
-            return await query.ToListAsync();
+            return await query
+                .Select(x => new Table
+                {
+                    Id = x.Id,
+                    Free = x.Free,
+                    PriceForHour = x.PriceForHour,
+                    Persons = x.Persons                    
+                }).OrderBy(x => x.Persons).ToListAsync();
         }
 
         public async Task<ICollection<Table>> GetByPage(int page, int pageSize)
@@ -77,7 +101,8 @@ namespace Restaurant.Persistense.Repositories
             var table = new Table
             {
                 PriceForHour = obj.PriceForHour,
-                Free = obj.Free
+                Free = obj.Free,
+                Persons = obj.Persons
             };
             _context.Tables.Add(table);
             await _context.SaveChangesAsync();
@@ -90,7 +115,8 @@ namespace Restaurant.Persistense.Repositories
                 .Where(t => t.Id == obj.Id)
                 .ExecuteUpdateAsync(s =>s
                     .SetProperty(t => t.PriceForHour, obj.PriceForHour)
-                    .SetProperty(t => t.Free, obj.Free)) == 1;
+                    .SetProperty(t => t.Free, obj.Free)
+                    .SetProperty(t => t.Persons, obj.Persons)) == 1;
         }
 
         public async Task<bool> Delete(Guid id)
