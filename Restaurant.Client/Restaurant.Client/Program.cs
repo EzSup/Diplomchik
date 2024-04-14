@@ -51,6 +51,7 @@ namespace Restaurant.Client
             builder.Services.AddTransient<ICookiesService, CookiesService>();
             builder.Services.AddTransient<IPhotoService, PhotoService>();
 
+            builder.Services.AddScoped<ITablesService, TablesService>();
             builder.Services.AddScoped<IDishesService, DishesService>();
             builder.Services.AddScoped<ICategoriesService, CategoriesService>();
             builder.Services.AddScoped<ICuisinesService, CuisinesService>();

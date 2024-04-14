@@ -1,59 +1,65 @@
 ﻿@using Restaurant.Client.Pages.Tables
-@page "/SelectTable"
+@using Restaurant.Client.Contracts.Tables
+@inject ITablesService tablesService
+@page "/selectTable"
 <Title>Choose the table</Title>
-    <div class="Container">
-        <div class="Content-wrap">
-        <InputRadioGroup @bind-Value="table" @onchange="TableClicked">
+<div class="Container">
+    <InputSelect @bind-Value="date" @onclose="() => TimePicked()">
+        @for(int i = 8; i <= 20; i++)
+        {
+            <option value="@(new DateTime(date.Year, date.Month, date.Day, i, 1, 1))">
+                @((new DateTime(date.Year, date.Month, date.Day, i, 1, 1)).ToString("hh")):00</option>
+        }
+    </InputSelect>
+    <div class="Content-wrap">
+        @if (tables != null && tables.Length >= 8)
+        {
+            <InputRadioGroup @bind-Value="table" @onchange="TableClicked">
                 <div class="wrap-col" style="width: 40%">
                     <div class="wrap-col-content content-flex-start">
-                        <TwoSeatsTable Value="1" />
-                        <TwoSeatsTable Value="2" />
-                        <TwoSeatsTable Value="3" />
-                        <TwoSeatsTable Value="4" />
-                        <TwoSeatsTable Value="5" />
-                        <TwoSeatsTable Value="6" />
+                        <TwoSeatsTable Value="@tables[0].Id" Disabled="@(!tables[0].Free)" />
                     </div>
                     <div class="wrap-col-content flex-row mid">
-                        <SixSeatsTable Value="7" />
-                        <SixSeatsTable Value="8" />
-                        <SixSeatsTable Value="9" />
-                        <SixSeatsTable Value="10" />
+                        <SixSeatsTable Value="@tables[4].Id" Disabled="@(!tables[4].Free)" />
+                        <SixSeatsTable Value="@tables[5].Id" Disabled="@(!tables[5].Free)" />
                     </div>
                 </div>
                 <div class="wrap-col" style="width: 60%">
                     <div class="wrap-col-content flex-row justify-center">
-                        <EightSeatsTable Value="11" />
-                        <EightSeatsTable Value="12" />
-                        <EightSeatsTable Value="13" />
-                        <EightSeatsTable Value="14" />
+                        <EightSeatsTable Value="@tables[6].Id" Disabled="@(!tables[6].Free)" />
+                        <EightSeatsTable Value="@tables[7].Id" Disabled="@(!tables[7].Free)" />
                     </div>
                     <div class="wrap-col-content flex-row mid">
-                        <FourSeatsTable Value="15" />
-                        <FourSeatsTable Value="16" />
-                        <FourSeatsTable Value="17" />
-                        <FourSeatsTable Value="18" />
-                        <FourSeatsTable Value="19" />
-                        <FourSeatsTable Value="20" />
+                        <FourSeatsTable Value="@tables[2].Id" Disabled="@(!tables[2].Free)" />
+                        <FourSeatsTable Value="@tables[3].Id" Disabled="@(!tables[3].Free)" />
                     </div>
                     <div class="wrap-col-content flex-row justify-end content-flex-end">
-                        <TwoSeatsTableHorizontal Value="21"/>
-                        <TwoSeatsTableHorizontal Value="22" />
-                        <TwoSeatsTableHorizontal Value="23" />
-                        <TwoSeatsTableHorizontal Value="24" />
-                        <TwoSeatsTableHorizontal Value="25" />
-                        <TwoSeatsTableHorizontal Value="26" />
-                        <TwoSeatsTableHorizontal Value="27" />
-                        <TwoSeatsTableHorizontal Value="28" />
+                        <TwoSeatsTableHorizontal Value="@tables[1].Id" />
                     </div>
                 </div>
             </InputRadioGroup>
-        </div>
+        }
     </div>
+</div>
 @code {
+    DateTime date;
     int table = 0;
+    TableResponse[] tables;
+
+    protected override async Task OnInitializedAsync()
+    {
+        DateTime dateNow = DateTime.Now;
+        date = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, dateNow.Hour + 1, 1, 1);
+        tables = (await tablesService.GetTablesOfTime(date)).ToArray();
+    }
+
+    private async Task TimePicked()
+    {
+        tables = (await tablesService.GetTablesOfTime(date)).ToArray();
+    }
 
     private async Task TableClicked()
     {
-        
+
     }
 }
