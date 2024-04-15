@@ -4,17 +4,20 @@
 @page "/selectTable"
 <Title>Choose the table</Title>
 <div class="Container">
-    <InputSelect @bind-Value="date" @onclose="() => TimePicked()">
-        @for(int i = 8; i <= 20; i++)
+    <select @onchange="TimePicked">
+        @for (int i = 8; i <= 20; i++)
         {
-            <option value="@(new DateTime(date.Year, date.Month, date.Day, i, 1, 1))">
-                @((new DateTime(date.Year, date.Month, date.Day, i, 1, 1)).ToString("hh")):00</option>
+
+            DateTime dateValue = new DateTime(date.Year, date.Month, date.Day, i, 1, 1);
+            <option value="@dateValue">
+                @dateValue.ToString("hh"):00
+            </option>
         }
-    </InputSelect>
+    </select>
     <div class="Content-wrap">
         @if (tables != null && tables.Length >= 8)
         {
-            <InputRadioGroup @bind-Value="table" @onchange="TableClicked">
+            <InputRadioGroup @bind-Value="table">
                 <div class="wrap-col" style="width: 40%">
                     <div class="wrap-col-content content-flex-start">
                         <TwoSeatsTable Value="@tables[0].Id" Disabled="@(!tables[0].Free)" />
@@ -40,10 +43,18 @@
             </InputRadioGroup>
         }
     </div>
+    <AuthorizeView>
+        <Authorized>
+            @if (table != Guid.Empty)
+            {
+                <button @onclick="ReserveTable">Reserve</button>
+            }
+        </Authorized>
+    </AuthorizeView>
 </div>
 @code {
     DateTime date;
-    int table = 0;
+    Guid table = Guid.Empty;
     TableResponse[] tables;
 
     protected override async Task OnInitializedAsync()
@@ -53,9 +64,25 @@
         tables = (await tablesService.GetTablesOfTime(date)).ToArray();
     }
 
-    private async Task TimePicked()
+    private async Task TimePicked(ChangeEventArgs e)
     {
+        string selectedTime = e.Value.ToString();
+        date = DateTime.Parse(selectedTime);
         tables = (await tablesService.GetTablesOfTime(date)).ToArray();
+    }
+
+    private async Task ReserveTable()
+    {
+        var request = new ReserveRequest()
+            {
+                tableId = table,
+                start = date
+            };
+        var result = await tablesService.Reserve(request);
+        if (result != Guid.Empty)
+        {
+            NavManager.NavigateTo("/");
+        }
     }
 
     private async Task TableClicked()

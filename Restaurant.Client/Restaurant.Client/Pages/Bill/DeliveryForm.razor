@@ -1,0 +1,39 @@
+﻿@using Restaurant.Client.Contracts.Deliveries
+@inject IDeliveriesService deliveriesService
+@page "/deliveryForm"
+
+<EditForm Model="@delivery" OnValidSubmit="PostDelivery">
+    <DataAnnotationsValidator/>
+    <div class="form-group">
+        <lable class="form-Label">Region</lable>
+        <InputText @bind-Value="delivery.Region" class="form-control"></InputText>
+    </div>
+    <div class="form-group">
+        <lable class="form-Label">Settlement Name</lable>
+        <InputText @bind-Value="delivery.SettlementName" class="form-control"></InputText>
+    </div>
+    <div class="form-group">
+        <lable class="form-Label">Street Name</lable>
+        <InputText @bind-Value="delivery.StreetName" class="form-control"></InputText>
+    </div>
+    <div class="form-group">
+        <lable class="form-Label">Street Num</lable>
+        <InputText @bind-Value="delivery.StreetNum" class="form-control"></InputText>
+    </div>    
+    <div class="form-group mt-3">
+        <button class="btn btn-primary" type="submit">Confirm</button>
+    </div>
+    <ValidationSummary />
+</EditForm>
+
+@code {
+    private DeliveryAddRequest delivery = new();
+
+    private async Task PostDelivery()
+    {
+        if(await deliveriesService.RegisterDelivery(delivery) != Guid.Empty)
+        {
+            NavManager.NavigateTo("/");
+        }
+    }
+}

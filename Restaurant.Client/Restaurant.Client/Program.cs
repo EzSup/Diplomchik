@@ -59,6 +59,7 @@ namespace Restaurant.Client
             builder.Services.AddScoped<IBlogsService, BlogsService>();
             builder.Services.AddScoped<ICartsService, CartsService>();
             builder.Services.AddScoped<ICustomersService, CustomersService>();
+            builder.Services.AddScoped<IDeliveriesService, DeliveriesService>();
 
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 

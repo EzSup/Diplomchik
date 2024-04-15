@@ -26,7 +26,7 @@ namespace Restaurant.Client.Services
 
         public async Task<Guid> Reserve(ReserveRequest request)
         {
-            var response = await _httpClient.PostAsJsonAsync($"/api/Tables/Reserve", request);
+            var response = await _httpClient.PostAsJsonAsync($"/api/Tables/ReserveTable", request);
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<Guid>(responseBody);
