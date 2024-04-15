@@ -64,6 +64,30 @@ namespace Restaurant.Persistense.Repositories
             }
             throw new ArgumentException("Page size and number has to be greater than 0!");
         }
+        public async Task<ICollection<DeliveryData>> GetByFilter(int page, int pageSize, Guid? customerId = null)
+        {
+            var query = _context.DeliveryDatas.Include(d => d.Bill).AsNoTracking();
+
+            if (customerId != null)
+            {
+                query = query.Where(x => x.Bill.CustomerId == customerId);
+            }
+
+            if (page > 0 && pageSize > 0)
+            {
+                return await query
+                    .Skip(pageSize * page - 1)
+                    .Take(pageSize)
+                    .Select(x => new DeliveryData()
+                    {
+                        Region = x.Region,
+                        SettlementName = x.SettlementName,
+                        StreetName = x.StreetName,
+                        StreetNum = x.StreetNum
+                    }).ToListAsync();
+            }
+            throw new ArgumentException("Page size and number has to be greater than 0!");
+        }
 
         public async Task<int> Purge(IEnumerable<Guid> values)
         {

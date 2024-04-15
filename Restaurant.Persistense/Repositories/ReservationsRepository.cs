@@ -25,6 +25,8 @@ namespace Restaurant.Persistense.Repositories
                 entity.Start.Month, entity.Start.Day,
                 entity.Start.Hour, 1, 1);
 
+            entity.Start = DateTime.SpecifyKind(entity.Start, DateTimeKind.Utc);
+
             var reservation = new Reservation()
             {
                 TableId = entity.TableId,

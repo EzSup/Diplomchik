@@ -9,5 +9,6 @@ namespace Restaurant.Core.Interfaces
 {
     public interface IDeliveryDatasRepository : ICrudRepository<DeliveryData>
     {
+        Task<ICollection<DeliveryData>> GetByFilter(int page, int pageSize, Guid? customerId = null);
     }
 }

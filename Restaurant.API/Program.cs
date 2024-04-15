@@ -62,6 +62,7 @@ namespace Restaurant.API
             builder.Services.AddScoped<IDishesService, DishesService>();
             builder.Services.AddScoped<ICartsService, CartsService>();
             builder.Services.AddScoped<ICustomersService, CustomersService>();
+            builder.Services.AddScoped<IDeliveriesService, DeliveriesService>();
 
             builder.Services.AddScoped<IJwtProvider, JwtProvider>();
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
