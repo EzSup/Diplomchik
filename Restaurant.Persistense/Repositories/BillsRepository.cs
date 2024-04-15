@@ -30,7 +30,7 @@ namespace Restaurant.Persistense.Repositories
             return await _context.Bills.AsNoTracking().ToListAsync();
         }
 
-        public async Task<ICollection<Bill>> GetByFilter(decimal MinPrice = 0, decimal MaxPrice = decimal.MaxValue, 
+        public async Task<ICollection<Bill>> GetByFilter(int pageIndex, int pageSize,decimal MinPrice = 0, decimal MaxPrice = decimal.MaxValue, 
             DateTime? minOrderDateTime = null, DateTime? maxOrderDateTime = null, 
             Bill.OrderType? orderType = null, int minTipsPercents = 0, int maxTipsPercents = 100,
             Guid? customerId = null, Guid? reservationId = null, Guid? deliveryId = null)
@@ -65,7 +65,27 @@ namespace Restaurant.Persistense.Repositories
                 query = query.Where(x => x.DeliveryId == deliveryId);
             }
 
-            return await query.ToListAsync();
+            if (pageIndex > 0 && pageSize > 0)
+            {
+                return await query
+                    .Skip(pageSize * pageIndex - 1)
+                    .Take(pageSize)
+                    .Select(x => new Bill()
+                    {
+                        Id = x.Id,
+                        TotalPrice = x.TotalPrice,
+                        PaidAmount  = x.PaidAmount,
+                        OrderDateAndTime = x.OrderDateAndTime,
+                        TipsPercents = x.TipsPercents,
+                        Type = x.Type,
+                        CustomerId = x.CustomerId,
+                        CartId = x.CartId,
+                        ReservationId = x.ReservationId,
+                        DeliveryId = x.DeliveryId
+                    }).ToListAsync();
+            }
+
+            throw new ArgumentException("Page size and number has to be greater than 0!");
 
         }
 
@@ -74,7 +94,7 @@ namespace Restaurant.Persistense.Repositories
             return await _context.Bills
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id)
-                ?? throw new KeyNotFoundException("No reservation with this id!");
+                ?? throw new KeyNotFoundException("No bills with this id!");
         }
 
         public async Task<ICollection<Bill>> GetByPage(int page, int pageSize)
@@ -127,20 +147,28 @@ namespace Restaurant.Persistense.Repositories
             var totalPrice = await CalcPrice(entity.CartId);
             var sum = totalPrice + totalPrice * entity.TipsPercents;
 
-            if(sum < entity.PaidAmount)
+            if(sum > entity.PaidAmount)
             {
-                throw new ArgumentException("Resulting sum is less than paid amount!");
+                throw new ArgumentException("Resulting sum is more than paid amount!");
+            }
+
+            Guid CartId = (await _context.Customers
+                .FirstOrDefaultAsync(x => x.Id == entity.CustomerId)).Id;
+
+            if(CartId == Guid.Empty)
+            {
+                throw new KeyNotFoundException("Cart not found");
             }
 
             var bill = new Bill()
             {
                 TotalPrice = totalPrice,
                 PaidAmount = entity.PaidAmount,
-                OrderDateAndTime = DateTime.Now,
+                OrderDateAndTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
                 TipsPercents = entity.TipsPercents,
                 Type = entity.Type,
                 CustomerId = entity.CustomerId,
-                CartId = entity.CartId,
+                CartId = CartId,
                 ReservationId = entity.ReservationId,
                 DeliveryId = entity.DeliveryId
             };
