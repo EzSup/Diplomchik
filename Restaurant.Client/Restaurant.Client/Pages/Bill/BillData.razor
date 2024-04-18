@@ -1,0 +1,81 @@
+﻿@page "/billData/{billId:guid}"
+@using Restaurant.Client.Contracts.Bill
+@inject IBillsService billsService
+@inject ISnackbar snackbar
+<h3>Bill Data</h3>
+
+@if (bill != null)
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Bill ID: @bill.Id</h5>
+            <p class="card-text">Type: @bill.Type</p>
+            <p class="card-text">Reservation ID: @bill.ReservationOrDeliveryId</p>
+            <p class="card-text">Date: @bill.OrderDateAndTime</p>
+            <p class="card-text">Total Price: @bill.TotalPrice</p>
+            <p class="card-text">Paid: @bill.IsPaid</p>
+            <hr />
+            <h5 class="card-title">Cart</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Count</th>
+                        <th>Price</th>
+                        <th>Summary Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var dish in bill.Dishes)
+                    {
+                        <tr>
+                            <td>@dish.Name</td>
+                            <td>@dish.Count</td>
+                            <td>@dish.Price</td>
+                            <td>@dish.SumPrice</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div style="margin-top: 20px; padding: 10px;">
+        @if (!bill.IsPaid)
+        {
+            <div>
+                <label>The amount you pay:</label>
+                <InputNumber @bind-Value="paid"></InputNumber>
+            </div>
+            <div>
+                <label>Tipping, percentage of the cost:</label>
+                <InputNumber @bind-Value="tipsPercents"></InputNumber>
+            </div>
+            <div>
+                <button class="btn btn-primary" @onclick="PayForBill">Pay for it</button>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    [Parameter]
+    public Guid billId { get; set; }
+    private BillResponse bill;
+    private decimal paid = 0;
+    private int tipsPercents = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        bill = await billsService.Get(billId);
+    }
+
+    private async Task PayForBill()
+    {
+        var payRequest = new BillPayRequest() { BillId = billId, Amount = paid, TipsPercents = tipsPercents };
+        await billsService.PayBill(payRequest);
+    }
+}

@@ -1,6 +1,7 @@
 ﻿@page "/cart/{userId:guid}"
 @using Restaurant.Client.Contracts.Carts
 @using Restaurant.Client.Contracts.Customers
+@using Restaurant.Client.Contracts.Enums
 @inject ICartsService cartService
 @inject ICustomersService customersService
 
@@ -35,11 +36,13 @@
     protected override async Task OnInitializedAsync()
     {
         customerId = (await customersService.GetByUserId(userId)).Id;
+        localStorage.AddItem("customerId", customerId.ToString());
         cart = await cartService.GetByCustomer(customerId);
     }
     private async Task Update(Guid dishId, int count)
     {
         cart = await cartService.AddDishToCartOfCustomerByCustomerId(customerId, dishId, count);
+        
     }
 
     private void Continue()
@@ -49,15 +52,9 @@
             case OrderType.InRestaurant:
                 NavManager.NavigateTo("/selectTable");
                 break;
-            case OrderType.Delivery:
+            case OrderType.Delivery:                
                 NavManager.NavigateTo("/deliveryForm");
                 break;
         }
-    }
-
-    enum OrderType
-    {
-        InRestaurant,
-        Delivery
-    }
+    }    
 }

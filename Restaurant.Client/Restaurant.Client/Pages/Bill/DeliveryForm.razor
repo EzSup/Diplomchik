@@ -1,5 +1,7 @@
 ﻿@using Restaurant.Client.Contracts.Deliveries
+@using Restaurant.Client.Contracts.Enums
 @inject IDeliveriesService deliveriesService
+@inject IBillsService billsService
 @page "/deliveryForm"
 
 <EditForm Model="@delivery" OnValidSubmit="PostDelivery">
@@ -29,11 +31,18 @@
 @code {
     private DeliveryAddRequest delivery = new();
 
+    protected override void OnInitialized()
+    {
+        localStorage.AddItem("orderType", ((int)OrderType.Delivery).ToString());
+    }
+
     private async Task PostDelivery()
     {
-        if(await deliveriesService.RegisterDelivery(delivery) != Guid.Empty)
+        var deliveryId = await deliveriesService.RegisterDelivery(delivery);
+        if(deliveryId != Guid.Empty)
         {
-            NavManager.NavigateTo("/");
+            var billId = await billsService.AddBill(deliveryId, OrderType.Delivery);
+            NavManager.NavigateTo($"/billData/{billId}");
         }
     }
 }

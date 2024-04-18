@@ -1,0 +1,56 @@
+﻿@using Restaurant.Client.Contracts.Bill
+@using Restaurant.Client.Contracts.Enums
+@if (Bill != null)
+{
+    <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 20px;">
+        <h4>Bill Details</h4>
+        <hr />
+        <div>
+            <p><strong>Bill ID:</strong> @Bill.Id</p>
+            <p><strong>Total Price:</strong> @Bill.TotalPrice</p>
+            <p><strong>Order Date and Time:</strong> @Bill.OrderDateAndTime</p>
+            <p><strong>Tips:</strong> @Bill.Tips</p>
+            <p><strong>Order Type:</strong> @Bill.Type</p>
+            <p><strong>Is Paid:</strong> @Bill.IsPaid</p>
+            @if (Bill.Type == OrderType.InRestaurant)
+            {
+                <p><strong>Reservation ID:</strong> @Bill.ReservationOrDeliveryId</p>
+            }
+            else if (Bill.Type == OrderType.Delivery)
+            {
+                <p><strong>Delivery ID:</strong> @Bill.ReservationOrDeliveryId</p>
+            }
+        </div>
+        <hr />
+        <div>
+            <h5>Dishes:</h5>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Count</th>
+                        <th>Price</th>
+                        <th>Sum Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var dish in Bill.Dishes)
+                    {
+                        <tr>
+                            <td>@dish.Name</td>
+                            <td>@dish.Count</td>
+                            <td>@dish.Price</td>
+                            <td>@dish.SumPrice</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public BillResponse Bill { get; set; }
+}

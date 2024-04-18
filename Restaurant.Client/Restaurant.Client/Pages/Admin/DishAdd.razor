@@ -22,7 +22,7 @@
                         <MudText Style="font-weight: bolder"><MudIcon Icon="@Icons.Material.Outlined.CreateNewFolder" />  Creating dish form</MudText>
                         <MudTextField Label="Name" HelperText="Enter an dish name" @bind-Value="dishEditingObj.Name" />
                         <MudNumericField Label="Price" @bind-Value="dishEditingObj.Price" />
-                        <MudSwitch Label="Available" @bind-Checked="dishEditingObj.Available" Color="Color.Success" UnCheckedColor="Color.Error" />
+                        <MudSwitch Label="Available" @bind-Value="dishEditingObj.Available" Color="Color.Success" UnCheckedColor="Color.Error" />
                         <MudNumericField Label="Weight" @bind-Value="dishEditingObj.Weight" />
                         <MudTextField AutoGrow Label="Ingredients" @bind-Value="ingredients" />
                         <InputFile accept=".png,.jpg,.jpeg,.gif" OnChange="HandleFileChange" class="form-control" multiple />
@@ -76,7 +76,7 @@
         }
     }
 
-    private async Task HandleFileChange(InputFileChangeEventArgs e)
+    private void HandleFileChange(InputFileChangeEventArgs e)
     {
         uploadedPhotos = e.GetMultipleFiles().ToList();
     }

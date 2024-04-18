@@ -1,19 +1,23 @@
 ﻿@using Restaurant.Client.Pages.Tables
 @using Restaurant.Client.Contracts.Tables
+@using Restaurant.Client.Contracts.Enums
 @inject ITablesService tablesService
+@inject IBillsService billsService
 @page "/selectTable"
 <Title>Choose the table</Title>
 <div class="Container">
-    <select @onchange="TimePicked">
-        @for (int i = 8; i <= 20; i++)
-        {
-
-            DateTime dateValue = new DateTime(date.Year, date.Month, date.Day, i, 1, 1);
-            <option value="@dateValue">
-                @dateValue.ToString("hh"):00
-            </option>
-        }
-    </select>
+    <div style="display: flex;">
+        <InputDate @oninput="DatePicked" @bind-Value="date"></InputDate>
+        <select @onchange="TimePicked">
+            @for (int i = 8; i <= 20; i++)
+            {
+                TimeOnly time = new TimeOnly(i, 1, 1);
+                <option value="@time">
+                    @time.ToString("hh"):00
+                </option>
+            }
+        </select>
+    </div>
     <div class="Content-wrap">
         @if (tables != null && tables.Length >= 8)
         {
@@ -47,18 +51,20 @@
         <Authorized>
             @if (table != Guid.Empty)
             {
-                <button @onclick="ReserveTable">Reserve</button>
+                <button style="color: black;" @onclick="ReserveTable">Reserve</button>
             }
         </Authorized>
     </AuthorizeView>
 </div>
 @code {
     DateTime date;
+    TimeOnly time;
     Guid table = Guid.Empty;
     TableResponse[] tables;
 
     protected override async Task OnInitializedAsync()
     {
+        await localStorage.AddItem("orderType", ((int)OrderType.InRestaurant).ToString());
         DateTime dateNow = DateTime.Now;
         date = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, dateNow.Hour + 1, 1, 1);
         tables = (await tablesService.GetTablesOfTime(date)).ToArray();
@@ -67,7 +73,17 @@
     private async Task TimePicked(ChangeEventArgs e)
     {
         string selectedTime = e.Value.ToString();
-        date = DateTime.Parse(selectedTime);
+        time = TimeOnly.Parse(selectedTime);
+        date = new DateTime(date.Year, date.Month, date.Day,
+            time.Hour, time.Minute, time.Second);
+        tables = (await tablesService.GetTablesOfTime(date)).ToArray();
+    }
+
+    private async Task DatePicked(ChangeEventArgs e)
+    {
+        var enteredDate = DateTime.Parse(e.Value.ToString());
+        date = new DateTime(enteredDate.Year, enteredDate.Month, enteredDate.Day,
+            time.Hour, time.Minute, time.Second);
         tables = (await tablesService.GetTablesOfTime(date)).ToArray();
     }
 
@@ -81,7 +97,8 @@
         var result = await tablesService.Reserve(request);
         if (result != Guid.Empty)
         {
-            NavManager.NavigateTo("/");
+            var billId = await billsService.AddBill(result, OrderType.InRestaurant);
+            NavManager.NavigateTo($"/billData/{billId}");
         }
     }
 

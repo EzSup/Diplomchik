@@ -17,7 +17,7 @@ namespace Restaurant.Client.Services
             _httpClient = factory.CreateClient("API");
         }
 
-        public async Task<string> PostBlogAsync(IBrowserFile file, BlogsCreateRequest blog)
+        public async Task<bool> PostBlogAsync(IBrowserFile file, BlogsCreateRequest blog)
         {
             if (file != null)
             {
@@ -27,7 +27,9 @@ namespace Restaurant.Client.Services
             }
             var response = await _httpClient.PostAsJsonAsync("api/Blogs/Post", blog);
             var result =  await response.Content.ReadAsStringAsync();
-            return result;
+            result = result.Trim('\"');
+            Guid value;
+            return Guid.TryParse(result,out value);
         }
 
         public async Task<IEnumerable<BlogResponse>> GetBlogsByPage(int pageNum, int pageSize)

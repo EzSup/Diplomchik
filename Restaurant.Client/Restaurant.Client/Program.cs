@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 using Restaurant.Client.Contracts;
 using System.Configuration;
 using MudBlazor.Services;
+using Blazored.Toast;
 
 namespace Restaurant.Client
 {
@@ -30,6 +31,7 @@ namespace Restaurant.Client
             builder.Services.AddAuthorizationCore();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddMudServices();
+            builder.Services.AddBlazoredToast();
 
             builder.Services.Configure<CloudinarySettings>(
                 configuration.GetSection("CloudinarySettings"));
@@ -47,7 +49,7 @@ namespace Restaurant.Client
                 config.JsonSerializerOptions.WriteIndented = false;
             });
 
-            //builder.Services.AddTransient<Services.Interfaces.ILocalStorageService, LocalStorageService>();
+            builder.Services.AddTransient<Services.Interfaces.ILocalStorageService, LocalStorageService>();
             builder.Services.AddTransient<ICookiesService, CookiesService>();
             builder.Services.AddTransient<IPhotoService, PhotoService>();
 
@@ -60,6 +62,7 @@ namespace Restaurant.Client
             builder.Services.AddScoped<ICartsService, CartsService>();
             builder.Services.AddScoped<ICustomersService, CustomersService>();
             builder.Services.AddScoped<IDeliveriesService, DeliveriesService>();
+            builder.Services.AddScoped<IBillsService, BillsService>();
 
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 

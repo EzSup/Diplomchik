@@ -1,0 +1,28 @@
+﻿
+
+.user-data {
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+.bills {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 80vw;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Відступ між елементами */
+}
+
+.bill-card {
+    /* Стилі для кожного окремого чека */
+    flex-basis: calc(33.33% - 20px); /* Ширина елемента на 33.33% мінус відступ */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box; /* Щоб padding не збільшував ширину */
+    text-align: center; /* Центруємо текст всередині елемента */
+}
