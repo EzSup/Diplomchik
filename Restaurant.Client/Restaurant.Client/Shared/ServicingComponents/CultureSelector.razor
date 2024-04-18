@@ -21,8 +21,12 @@
     .LangSwitch button:hover{
             color: #FFF8E0;
     }
+
+    .Switch{
+        display:flex;
+    }
 </style>
-<div>
+<div class="Switch">
     @foreach (var culture in _cultures)
     {
         <button class="button" @onclick="() => SetCulture(new CultureInfo(culture.Value))">@culture.Value</button>
