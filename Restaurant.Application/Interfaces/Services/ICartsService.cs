@@ -17,5 +17,7 @@ namespace Restaurant.Application.Interfaces.Services
         Task<int> Purge(IEnumerable<Guid> values);
         Task<CartResponse> AddDishToUsersCart(Guid userId, Guid dishId, int count);
         Task<CartResponse> GetByCustomerId(Guid CustomerId);
+        Task<decimal> GetSumByCustomerId(Guid CustomerId);
+        Task<decimal> GetSumById(Guid CartId);
     }
 }

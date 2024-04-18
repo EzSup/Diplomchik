@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Restaurant.Persistense;
@@ -11,13 +12,15 @@ using Restaurant.Persistense;
 namespace Restaurant.Persistense.Migrations
 {
     [DbContext(typeof(RestaurantDbContext))]
-    partial class RestaurantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240416101902_BillUpdate")]
+    partial class BillUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -164,7 +167,7 @@ namespace Restaurant.Persistense.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("CartId")
+                    b.Property<Guid>("CartId")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -475,12 +478,12 @@ namespace Restaurant.Persistense.Migrations
                     b.HasOne("Restaurant.Core.Models.DeliveryData", "DeliveryData")
                         .WithOne("Bill")
                         .HasForeignKey("Restaurant.Core.Models.Bill", "DeliveryId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Restaurant.Core.Models.Reservation", "Reservation")
                         .WithOne("Bill")
                         .HasForeignKey("Restaurant.Core.Models.Bill", "ReservationId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Cart");
 
@@ -516,7 +519,8 @@ namespace Restaurant.Persistense.Migrations
                     b.HasOne("Restaurant.Core.Models.Cart", "Cart")
                         .WithOne("Customer")
                         .HasForeignKey("Restaurant.Core.Models.Customer", "CartId")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("Restaurant.Core.Models.User", "User")
                         .WithOne("Customer")

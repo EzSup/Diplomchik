@@ -50,7 +50,7 @@ namespace Restaurant.Persistense.Repositories
                 .Select(x => new CartResponse
                 {
                     Id = x.Id,
-                    Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(), dc.Count)).ToList()
+                    Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(), dc.Count, dc.Dish.Price * dc.Count)).ToList()
                 })
                 .ToListAsync();
         }
@@ -62,11 +62,11 @@ namespace Restaurant.Persistense.Repositories
                 .Include(x => x.Bill)
                 .Include(x => x.DishCarts)
                 .ThenInclude(dc => dc.Dish)
-                .Where(x => x.Customer.Id == id)
+                .Where(x => x.Id == id)
                 .Select(x => new CartResponse
                 {
                     Id = x.Id,
-                    Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(), dc.Count)).ToList()
+                    Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(), dc.Count, dc.Dish.Price*dc.Count)).ToList()
                 })
                 .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Cart not found!");
             return cart;
@@ -83,7 +83,7 @@ namespace Restaurant.Persistense.Repositories
                 .Select(x => new CartResponse
                 {
                     Id = x.Id,
-                    Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(),dc.Count)).ToList()
+                    Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(),dc.Count, dc.Dish.Price * dc.Count)).ToList()
                 })
                 .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Cart not found!");
 
@@ -98,7 +98,7 @@ namespace Restaurant.Persistense.Repositories
                     .Select(x => new CartResponse
                     {
                         Id = x.Id,
-                        Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(), dc.Count)).ToList()
+                        Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(), dc.Count, dc.Dish.Price * dc.Count)).ToList()
                     })
                     .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             }
@@ -132,9 +132,9 @@ namespace Restaurant.Persistense.Repositories
             {
                 Id = cart.Id,
             };
-            foreach (var dish in cart.DishCarts)
+            foreach (var dishCart in cart.DishCarts)
             {
-                cartResponse.Dishes.Add(new DishOfCart(dish.Dish.Id, dish.Dish.Name, dish.Dish.PhotoLinks.First(), dish.Count));
+                cartResponse.Dishes.Add(new DishOfCart(dishCart.Dish.Id, dishCart.Dish.Name, dishCart.Dish.PhotoLinks.First(), dishCart.Count, dishCart.Dish.Price * dishCart.Count));
             }
             return cartResponse;
         }

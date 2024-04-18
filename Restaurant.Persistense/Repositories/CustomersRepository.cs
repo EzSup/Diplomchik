@@ -107,7 +107,7 @@ namespace Restaurant.Persistense.Repositories
                 .ExecuteUpdateAsync(s => s
                     .SetProperty(r => r.Name, entity.Name)
                     .SetProperty(r => r.PhotoLink, entity.PhotoLink)
-                    .SetProperty(r => r.CartId, entity.CartId)
+                    .SetProperty(r => r.CartId, entity.CartId == Guid.Empty ? null : entity.CartId)
                     .SetProperty(r => r.UserId, entity.UserId)) == 1;
         }
 

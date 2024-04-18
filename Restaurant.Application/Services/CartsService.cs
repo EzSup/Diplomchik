@@ -1,4 +1,5 @@
 ﻿using CloudinaryDotNet.Actions;
+using Microsoft.EntityFrameworkCore;
 using Restaurant.Application.Interfaces.Services;
 using Restaurant.Core.Dtos;
 using Restaurant.Core.Interfaces;
@@ -52,7 +53,17 @@ namespace Restaurant.Application.Services
             return await _cartsRepository.GetByCustomerId(customerId);
         }
 
+        public async Task<decimal> GetSumByCustomerId(Guid CustomerId)
+        {
+            var cart = await GetByCustomerId(CustomerId);
+            return cart.Dishes.Sum(x => x.sumPrice);
+        }
 
+        public async Task<decimal> GetSumById(Guid CartId)
+        {
+            var cart = await GetById(CartId);
+            return cart.Dishes.Sum(x => x.sumPrice);
+        }
 
         public async Task<CartResponse> GetByCustomerId(Guid CustomerId)
         {
@@ -77,9 +88,9 @@ namespace Restaurant.Application.Services
             };
             foreach (var dish in cart.DishCarts)
             {
-                cartResponse.Dishes.Add(new DishOfCart(dish.Dish.Id, dish.Dish.Name, dish.Dish.PhotoLinks.First(), dish.Count));
+                cartResponse.Dishes.Add(new DishOfCart(dish.Dish.Id, dish.Dish.Name, dish.Dish.PhotoLinks.First(), dish.Count, dish.Dish.Price * dish.Count));
             }
             return cartResponse;
-        }
+        }        
     }
 }

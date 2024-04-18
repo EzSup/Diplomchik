@@ -6,6 +6,7 @@ using Restaurant.Application.Interfaces.Services;
 using Restaurant.Application.Services;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
+using Restaurant.Core.Dtos;
 using Mapster;
 using Restaurant.API.Contracts.Bills;
 
@@ -42,9 +43,14 @@ namespace Restaurant.API.Controllers
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<BillResponse>> Get(Guid id)
         {
-            var blog = await _billsService.GetById(id);
-            var response = blog.Adapt<BillResponse>();
-            return Ok(response);
+            var bill = await _billsService.GetResponseById(id);
+            return Ok(bill);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<BillResponse>> GetBillsOfCustomer(int pageIndex, int pageSize, Guid customerId)
+        {
+            return Ok(await _billsService.GetBillsOfCustomer(pageIndex, pageSize, customerId));
         }
 
         // POST api/<BlogsController>
@@ -60,14 +66,61 @@ namespace Restaurant.API.Controllers
             {
                 var blog = new Bill()
                 {
-                    PaidAmount = request.PaidAmount,
-                    TipsPercents = request.TipsPercents,
                     CustomerId = request.CustomerId,
                     Type = request.Type,
                     ReservationId = request.Type == Bill.OrderType.InRestaurant ? request.ReservationOrDeliveryId : Guid.Empty,
                     DeliveryId = request.Type == Bill.OrderType.Delivery ? request.ReservationOrDeliveryId : Guid.Empty,
                 };
                 return Ok(await _billsService.Add(blog));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<ActionResult<BillResponse>> RegisterBill(BillAddRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                var blog = new Bill()
+                {
+                    CustomerId = request.CustomerId,
+                    Type = request.Type,
+                    ReservationId = request.Type == Bill.OrderType.InRestaurant ? request.ReservationOrDeliveryId : Guid.Empty,
+                    DeliveryId = request.Type == Bill.OrderType.Delivery ? request.ReservationOrDeliveryId : Guid.Empty,
+                };
+                return Ok(await _billsService.RegisterBill(blog));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut]
+        [Authorize]
+        public async Task<ActionResult<decimal>> Pay(BillPayRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            try
+            {
+                var result = await _billsService.Pay(request.BillId, request.Amount, request.TipsPercents);
+                if (result.flag)
+                {
+                    return Ok(result.rest);
+                }
+                return BadRequest(result.message);
+                
             }
             catch (Exception ex)
             {

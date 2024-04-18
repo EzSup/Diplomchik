@@ -1,4 +1,6 @@
-﻿namespace Restaurant.Core.Models;
+﻿using System.Runtime.CompilerServices;
+
+namespace Restaurant.Core.Models;
 
 public class Bill
 {
@@ -7,8 +9,9 @@ public class Bill
     public decimal TotalPrice { get; set; }
     public decimal PaidAmount { get; set; } = 0;
     public DateTime OrderDateAndTime { get; set; }
-    public int TipsPercents { get; set; } = 0;
+    public decimal Tips { get; set; } = 0;
     public OrderType Type { get; set; }
+    public bool IsPaid { get; set; } = false;
 
     public Guid CustomerId { get; set; }
     public Guid CartId { get; set; }

@@ -34,12 +34,12 @@ namespace Restaurant.Persistense.Configurations
             builder.HasOne(b => b.Reservation)
                 .WithOne(r => r.Bill)
                 .HasForeignKey<Bill>(b => b.ReservationId)
-                .OnDelete(DeleteBehavior.SetNull);
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder.HasOne(b => b.DeliveryData)
                .WithOne(r => r.Bill)
                .HasForeignKey<Bill>(b => b.DeliveryId)
-               .OnDelete(DeleteBehavior.SetNull);
+               .OnDelete(DeleteBehavior.NoAction);
         }
     }
 }
