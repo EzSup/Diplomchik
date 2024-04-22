@@ -11,9 +11,9 @@
         <select @onchange="TimePicked">
             @for (int i = 8; i <= 20; i++)
             {
-                TimeOnly time = new TimeOnly(i, 1, 1);
+                TimeOnly time = new TimeOnly(i, 0, 0);
                 <option value="@time">
-                    @time.ToString("hh"):00
+                    @time.Hour:00
                 </option>
             }
         </select>
@@ -47,7 +47,7 @@
             </InputRadioGroup>
         }
     </div>
-    <AuthorizeView>
+    <AuthorizeView Roles="User">
         <Authorized>
             @if (table != Guid.Empty)
             {
@@ -64,9 +64,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await localStorage.AddItem("orderType", ((int)OrderType.InRestaurant).ToString());
+        //await localStorage.AddItem("orderType", ((int)OrderType.InRestaurant).ToString());
         DateTime dateNow = DateTime.Now;
-        date = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, dateNow.Hour + 1, 1, 1);
+        date = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, dateNow.Hour + 1, 0, 0);
         tables = (await tablesService.GetTablesOfTime(date)).ToArray();
     }
 

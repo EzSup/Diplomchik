@@ -1,7 +1,10 @@
-﻿namespace Restaurant.Client.Contracts.Dishes
+﻿using Restaurant.Client.Contracts.Enums;
+
+namespace Restaurant.Client.Contracts.Dishes
 {
     public class DishPaginationRequest
     {
+        public DishSortingOrder order { get; set; } = DishSortingOrder.Name;
         public int pageIndex {  get; set; }
         public int pageSize { get; set; }
         public string? Name { get; set; } = string.Empty;

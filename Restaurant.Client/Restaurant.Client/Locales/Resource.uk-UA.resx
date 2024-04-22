@@ -126,4 +126,7 @@
   <data name="menuNavLink" xml:space="preserve">
     <value>Меню</value>
   </data>
+  <data name="tablesNavLink" xml:space="preserve">
+    <value>Столики</value>
+  </data>
 </root>
