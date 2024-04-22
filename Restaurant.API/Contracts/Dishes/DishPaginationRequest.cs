@@ -1,6 +1,8 @@
-﻿namespace Restaurant.API.Contracts.Dishes
+﻿using Restaurant.Core.Enums;
+
+namespace Restaurant.API.Contracts.Dishes
 {
-    public record DishPaginationRequest(
+    public record DishPaginationRequest(DishSortingOrder order,
         int pageIndex,
         int pageSize,
         string? Name = null,

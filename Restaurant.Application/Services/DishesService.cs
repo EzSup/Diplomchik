@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata;
 using Restaurant.Application.Interfaces.Services;
 using Restaurant.Core.Dtos;
+using Restaurant.Core.Enums;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
 using System;
@@ -45,7 +46,7 @@ namespace Restaurant.Application.Services
             string? Cuisine = null,
             double discountPercentsMin = 0)
         {
-            var dishes = await _dishesRepository.GetByFilter(Name, MinWeight, MaxWeight,
+            var dishes = await _dishesRepository.GetByFilter(DishSortingOrder.Name, Name, MinWeight, MaxWeight,
                 Ingredients, Available, MinPrice, MaxPrice,
                 Category, Cuisine, discountPercentsMin);
             if (dishes.Count() == 0)
@@ -53,7 +54,7 @@ namespace Restaurant.Application.Services
             return dishes.Count()/pageSize + 1;
         }
 
-        public async Task<ICollection<DishPaginationResponse>> GetByFilter(string? Name = null,
+        public async Task<ICollection<DishPaginationResponse>> GetByFilter(DishSortingOrder order, string? Name = null,
             double MinWeight = 0,
             double MaxWeight = double.MaxValue,
             IEnumerable<string>? Ingredients = null,
@@ -63,7 +64,7 @@ namespace Restaurant.Application.Services
             string? Category = null,
             string? Cuisine = null,
             double discountPercentsMin = 0)
-            => await _dishesRepository.GetByFilter(Name, MinWeight, MaxWeight,
+            => await _dishesRepository.GetByFilter(order, Name, MinWeight, MaxWeight,
                 Ingredients, Available, MinPrice, MaxPrice,
                 Category, Cuisine, discountPercentsMin);
 
@@ -73,7 +74,7 @@ namespace Restaurant.Application.Services
         public async Task<ICollection<Dish>> GetByPageAvailable(int page, int pageSize)
             => await _dishesRepository.GetByPageAvailable(page, pageSize);
 
-        public async Task<ICollection<DishPaginationResponse>> GetByFilterPage(int page, int pageSize, string? Name = null,
+        public async Task<ICollection<DishPaginationResponse>> GetByFilterPage(DishSortingOrder order, int page, int pageSize, string? Name = null,
             double MinWeight = 0,
             double MaxWeight = double.MaxValue,
             IEnumerable<string>? Ingredients = null,
@@ -84,7 +85,7 @@ namespace Restaurant.Application.Services
             string? Cuisine = null,
             double discountPercentsMin = 0)
         {
-            var filtered = await _dishesRepository.GetByFilter(Name, MinWeight, MaxWeight,
+            var filtered = await _dishesRepository.GetByFilter(order, Name, MinWeight, MaxWeight,
                 Ingredients, Available, MinPrice, MaxPrice,
                 Category, Cuisine, discountPercentsMin);
 

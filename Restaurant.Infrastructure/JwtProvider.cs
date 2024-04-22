@@ -38,8 +38,7 @@ namespace Restaurant.Infrastructure
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                signingCredentials: signingCredentials,
-                expires: DateTime.UtcNow.AddHours(_options.ExpiresHours));
+                signingCredentials: signingCredentials);
 
             var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
 

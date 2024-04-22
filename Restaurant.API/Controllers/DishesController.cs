@@ -50,7 +50,7 @@ namespace Restaurant.API.Controllers
         [HttpPut]
         public async Task<ActionResult<ICollection<DishPaginationResponse>>> GetByFilerPage([FromBody] DishPaginationRequest request)
         {
-            var dishes = await _dishesService.GetByFilterPage(
+            var dishes = await _dishesService.GetByFilterPage(request.order,
                 request.pageIndex, request.pageSize,
                 request.Name, request.MinWeight, request.MaxWeight,
                 request.Ingredients, request.Available,

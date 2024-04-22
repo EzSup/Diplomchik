@@ -23,7 +23,7 @@ namespace Restaurant.Persistense.Repositories
         {
             entity.Start = new DateTime(entity.Start.Year,
                 entity.Start.Month, entity.Start.Day,
-                entity.Start.Hour, 1, 1);
+                entity.Start.Hour, 0, 0);
 
             entity.Start = DateTime.SpecifyKind(entity.Start, DateTimeKind.Utc);
 

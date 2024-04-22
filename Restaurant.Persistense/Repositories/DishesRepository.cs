@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Restaurant.Core.Dtos;
+using Restaurant.Core.Enums;
 
 namespace Restaurant.Persistense.Repositories
 {
@@ -71,7 +72,7 @@ namespace Restaurant.Persistense.Repositories
                 .ToListAsync();
         }
 
-        public async Task<ICollection<DishPaginationResponse>> GetByFilter(string? Name = null,
+        public async Task<ICollection<DishPaginationResponse>> GetByFilter(DishSortingOrder order, string? Name = null,
             double MinWeight = 0,
             double MaxWeight = double.MaxValue,
             IEnumerable<string>? Ingredients = null,
@@ -87,7 +88,10 @@ namespace Restaurant.Persistense.Repositories
                 .Include(x => x.Category)
                 .Include(x => x.Cuisine);
             if (!string.IsNullOrWhiteSpace(Name))
-                query = query.Where(x => x.Name.Contains(Name));
+            {
+                Name = Name.ToLower();
+                query = query.Where(x => x.Name.ToLower().Contains(Name));
+            }
 
             if (MinWeight < MaxWeight && MinWeight >= 0)
                 query = query.Where(x => x.Weight > MinWeight && x.Weight < MaxWeight);
@@ -109,6 +113,23 @@ namespace Restaurant.Persistense.Repositories
 
             if (MinDiscountsPercents > 0)
                 query = query.Where(x => x.Discount.PecentsAmount > MinDiscountsPercents);
+
+            switch (order)
+            {
+                case DishSortingOrder.Name:
+                    query = query.OrderBy(x => x.Name);
+                    break;
+                case DishSortingOrder.PriceFromCheap:
+                    query = query.OrderBy(x => x.Price);
+                    break;
+                case DishSortingOrder.PriceFromExpensive:
+                    query = query.OrderByDescending(x => x.Price);
+                    break;
+                default:
+                    query = query.OrderBy(x => x.Name);
+                    break;
+            }
+
             var s = await query
                 .Select(x => new DishPaginationResponse(
                     x.Id, x.Name, x.PhotoLinks.FirstOrDefault(),

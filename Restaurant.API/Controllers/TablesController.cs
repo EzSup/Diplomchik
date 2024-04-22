@@ -45,7 +45,7 @@ namespace Restaurant.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet]
+        [HttpGet("{dateTime:datetime}")]
         public async Task<ActionResult<ICollection<TableResponse>>> GetTablesOfTime(DateTime dateTime)
         {
             var tables = await _tablesService.GetTablesOfTime(dateTime);
