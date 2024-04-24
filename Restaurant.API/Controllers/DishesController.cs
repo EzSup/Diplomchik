@@ -6,7 +6,7 @@ using Restaurant.API.Contracts.Categories;
 using Restaurant.API.Contracts.Dishes;
 using Restaurant.Application.Interfaces.Services;
 using Restaurant.Application.Services;
-using Restaurant.Core.Dtos;
+using Restaurant.Core.Dtos.Dish;
 using Restaurant.Core.Models;
 
 namespace Restaurant.API.Controllers
@@ -23,6 +23,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<DishResponse>?>> GetAll()
         {
             var dishes = (await _dishesService.GetAll()) ?? new List<Dish>();
@@ -31,6 +32,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<DishResponse>>> GetByPage(int page, int pageSize)
         {
             var dishes = await _dishesService.GetByPage(page, pageSize);
@@ -39,6 +41,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [AllowAnonymous]
         public async Task<ActionResult<DishResponse>> Get(Guid id)
         {
             //var dish = (await _dishesService.GetAll()).FirstOrDefault(x => x.Id == id);
@@ -48,15 +51,10 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpPut]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<DishPaginationResponse>>> GetByFilerPage([FromBody] DishPaginationRequest request)
         {
-            var dishes = await _dishesService.GetByFilterPage(request.order,
-                request.pageIndex, request.pageSize,
-                request.Name, request.MinWeight, request.MaxWeight,
-                request.Ingredients, request.Available,
-                request.MinPrice, request.MaxPrice,
-                request.Category, request.Cuisine,
-                request.MinDiscountsPercents);
+            var dishes = await _dishesService.GetByFilter(request);
 
             //List<DishPaginationResponse> response = ToPaginationResponse(dishes);
 
@@ -64,15 +62,10 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpPut]
+        [AllowAnonymous]
         public async Task<ActionResult<int>> GetPagesCount([FromBody] DishPaginationRequest request)
         {
-            var dishes = await _dishesService.PagesCount(
-                request.pageSize,
-                request.Name, request.MinWeight, request.MaxWeight,
-                request.Ingredients, request.Available,
-                request.MinPrice, request.MaxPrice,
-                request.Category, request.Cuisine,
-                request.MinDiscountsPercents);
+            var dishes = await _dishesService.PagesCount(request);
 
             //List<DishPaginationResponse> response = ToPaginationResponse(dishes);
 
@@ -155,20 +148,6 @@ namespace Restaurant.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }
-
-        private List<DishPaginationResponse> ToPaginationResponse(ICollection<Dish> dishes)
-        {
-            List<DishPaginationResponse> response = new();
-            foreach (var dish in dishes)
-            {
-                response.Add(new(dish.Id,
-                    dish.Name!,
-                    dish.PhotoLinks.First() ?? "",
-                    dish.Price,
-                    (dish.Price * 0.01m * (decimal)dish.Discount.PecentsAmount)));
-            }
-            return response;
         }
     }
 }

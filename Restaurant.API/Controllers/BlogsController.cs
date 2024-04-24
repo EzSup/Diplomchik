@@ -25,6 +25,7 @@ namespace Restaurant.API.Controllers
 
         // GET: api/<BlogsController>
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<BlogResponse>>> GetAll()
         {
             var blogs =  await _blogsService.GetAll();
@@ -33,6 +34,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<BlogResponse>>> GetByPage(int page, int pageSize)
         {
             var blogs = await _blogsService.GetByPage(page, pageSize);
@@ -41,6 +43,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<BlogResponse>>> GetByFilter(DateTime? createdAfter, string? authorName, string? titleContains)
         {
             if(createdAfter == null)
@@ -52,6 +55,7 @@ namespace Restaurant.API.Controllers
 
         // GET api/<BlogsController>/5
         [HttpGet("{id:guid}")]
+        [AllowAnonymous]
         public async Task<ActionResult<BlogResponse>> Get(Guid id)
         {
             var blog = await _blogsService.GetById(id);

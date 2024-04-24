@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Restaurant.Core.Models.Bill;
 
-namespace Restaurant.Core.Dtos
+namespace Restaurant.Core.Dtos.Bill
 {
     public class BillResponse
     {

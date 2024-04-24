@@ -1,4 +1,4 @@
-﻿namespace Restaurant.Core.Dtos
+﻿namespace Restaurant.Core.Dtos.Сart
 {
     public class CartResponse
     {

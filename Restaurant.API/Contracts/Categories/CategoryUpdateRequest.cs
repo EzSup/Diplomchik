@@ -1,8 +1,8 @@
 ﻿using Restaurant.Core.Models;
 
-namespace Restaurant.API.Contracts.Cuisines
+namespace Restaurant.API.Contracts.Categories
 {
-    public record CuisineRequest(
+    public record CategoryUpdateRequest(
         Guid Id,
         string Name,
         Guid DiscountId);

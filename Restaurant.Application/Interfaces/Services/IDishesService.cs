@@ -1,4 +1,4 @@
-﻿using Restaurant.Core.Dtos;
+﻿using Restaurant.Core.Dtos.Dish;
 using Restaurant.Core.Enums;
 using Restaurant.Core.Models;
 using System;
@@ -18,37 +18,10 @@ namespace Restaurant.Application.Interfaces.Services
         Task<bool> Delete(Guid id);
         Task<int> Purge(IEnumerable<Guid> values);
         Task<ICollection<Dish>> GetByPage(int page, int pageSize);
-        Task<ICollection<DishPaginationResponse>> GetByFilter(DishSortingOrder order, string? Name = null,
-            double MinWeight = 0,
-            double MaxWeight = double.MaxValue,
-            IEnumerable<string>? Ingredients = null,
-            bool? Available = null,
-            decimal MinPrice = 0,
-            decimal MaxPrice = decimal.MaxValue,
-            string? Category = null,
-            string? Cuisine = null,
-            double discountPercentsMin = 0);
+        Task<ICollection<DishPaginationResponse>> GetByFilter(DishPaginationRequest request);
 
-        Task<ICollection<DishPaginationResponse>> GetByFilterPage(DishSortingOrder order, int page, int pageSize, string? Name = null,
-            double MinWeight = 0,
-            double MaxWeight = double.MaxValue,
-            IEnumerable<string>? Ingredients = null,
-            bool? Available = null,
-            decimal MinPrice = 0,
-            decimal MaxPrice = decimal.MaxValue,
-            string? Category = null,
-            string? Cuisine = null,
-            double discountPercentsMin = 0);
+        //Task<ICollection<DishPaginationResponse>> GetByFilterPage(DishPaginationRequest request);
 
-        Task<int> PagesCount(int pageSize, string? Name = null,
-            double MinWeight = 0,
-            double MaxWeight = double.MaxValue,
-            IEnumerable<string>? Ingredients = null,
-            bool? Available = null,
-            decimal MinPrice = 0,
-            decimal MaxPrice = decimal.MaxValue,
-            string? Category = null,
-            string? Cuisine = null,
-            double discountPercentsMin = 0);
+        Task<int> PagesCount(DishPaginationRequest request);
     }
 }

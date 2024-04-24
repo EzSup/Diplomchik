@@ -22,6 +22,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<CuisineResponse>>> GetAll()
         {
             var cuisines = await _cuisinesService.GetAll();
@@ -30,6 +31,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<CuisineResponse>>> GetByPage(int page, int pageSize)
         {
             var cuisines = await _cuisinesService.GetByPage(page, pageSize);
@@ -38,6 +40,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [AllowAnonymous]
         public async Task<ActionResult<CuisineResponse>> Get(Guid id)
         {
             var cuisine = await _cuisinesService.GetById(id);
@@ -70,7 +73,7 @@ namespace Restaurant.API.Controllers
         // PUT api/<BlogsController>/5
         [HttpPut("{id:guid}")]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] CuisineRequest request)
+        public async Task<ActionResult> Put(Guid id, [FromBody] CuisineUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {

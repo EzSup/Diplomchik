@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Restaurant.Application.Interfaces.Services;
-using Restaurant.Core.Dtos;
+using Restaurant.Core.Dtos.Dish;
 using Restaurant.Core.Enums;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
@@ -35,38 +35,20 @@ namespace Restaurant.Application.Services
         public async Task<int> Purge(IEnumerable<Guid> values)
             => await _dishesRepository.Purge(values);
 
-        public async Task<int> PagesCount(int pageSize, string? Name = null,
-            double MinWeight = 0,
-            double MaxWeight = double.MaxValue,
-            IEnumerable<string>? Ingredients = null,
-            bool? Available = null,
-            decimal MinPrice = 0,
-            decimal MaxPrice = decimal.MaxValue,
-            string? Category = null,
-            string? Cuisine = null,
-            double discountPercentsMin = 0)
+        public async Task<int> PagesCount(DishPaginationRequest request)
         {
-            var dishes = await _dishesRepository.GetByFilter(DishSortingOrder.Name, Name, MinWeight, MaxWeight,
-                Ingredients, Available, MinPrice, MaxPrice,
-                Category, Cuisine, discountPercentsMin);
+            var dishes = await _dishesRepository.GetByFilter(DishSortingOrder.Name, request.Name, request.MinWeight, request.MaxWeight,
+                request.Ingredients, request.Available, request.MinPrice, request.MaxPrice,
+                request.Category, request.Cuisine, request.MinDiscountsPercents);
             if (dishes.Count() == 0)
                 return 0;
-            return dishes.Count()/pageSize + 1;
+            return dishes.Count()/request.pageSize + 1;
         }
 
-        public async Task<ICollection<DishPaginationResponse>> GetByFilter(DishSortingOrder order, string? Name = null,
-            double MinWeight = 0,
-            double MaxWeight = double.MaxValue,
-            IEnumerable<string>? Ingredients = null,
-            bool? Available = null,
-            decimal MinPrice = 0,
-            decimal MaxPrice = decimal.MaxValue,
-            string? Category = null,
-            string? Cuisine = null,
-            double discountPercentsMin = 0)
-            => await _dishesRepository.GetByFilter(order, Name, MinWeight, MaxWeight,
-                Ingredients, Available, MinPrice, MaxPrice,
-                Category, Cuisine, discountPercentsMin);
+        //public async Task<ICollection<DishPaginationResponse>> GetByFilter(DishPaginationRequest request)
+        //    => await _dishesRepository.GetByFilter(request.order, request.Name, request.MinWeight, request.MaxWeight,
+        //        request.Ingredients, request.Available, request.MinPrice, request.MaxPrice,
+        //        request.Category, request.Cuisine, request.MinDiscountsPercents);
 
         public async Task<ICollection<Dish>> GetByPage(int page, int pageSize)
             => await _dishesRepository.GetByPage(page, pageSize);
@@ -74,26 +56,17 @@ namespace Restaurant.Application.Services
         public async Task<ICollection<Dish>> GetByPageAvailable(int page, int pageSize)
             => await _dishesRepository.GetByPageAvailable(page, pageSize);
 
-        public async Task<ICollection<DishPaginationResponse>> GetByFilterPage(DishSortingOrder order, int page, int pageSize, string? Name = null,
-            double MinWeight = 0,
-            double MaxWeight = double.MaxValue,
-            IEnumerable<string>? Ingredients = null,
-            bool? Available = null,
-            decimal MinPrice = 0,
-            decimal MaxPrice = decimal.MaxValue,
-            string? Category = null,
-            string? Cuisine = null,
-            double discountPercentsMin = 0)
+        public async Task<ICollection<DishPaginationResponse>> GetByFilter(DishPaginationRequest request)
         {
-            var filtered = await _dishesRepository.GetByFilter(order, Name, MinWeight, MaxWeight,
-                Ingredients, Available, MinPrice, MaxPrice,
-                Category, Cuisine, discountPercentsMin);
+            var filtered = await _dishesRepository.GetByFilter(request.order, request.Name, request.MinWeight, request.MaxWeight,
+                request.Ingredients, request.Available, request.MinPrice, request.MaxPrice,
+                request.Category, request.Cuisine, request.MinDiscountsPercents);
 
-            if (pageSize > 0 && page > 0)
+            if (request.pageSize > 0 && request.pageIndex > 0)
             {
                 return filtered
-                    .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
+                    .Skip((request.pageIndex - 1) * request.pageSize)
+                    .Take(request.pageSize)
                     .ToList();
             }
             throw new ArgumentException("Page size and number has to be greater than 0!");

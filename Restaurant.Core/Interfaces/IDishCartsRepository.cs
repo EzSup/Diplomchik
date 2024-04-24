@@ -1,4 +1,4 @@
-﻿using Restaurant.Core.Dtos;
+﻿using Restaurant.Core.Dtos.Сart;
 using Restaurant.Core.Models;
 
 namespace Restaurant.Core.Interfaces

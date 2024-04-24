@@ -22,8 +22,8 @@ namespace Restaurant.API.Controllers
             _customersService = customersService;
         }
 
-
         [HttpGet]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<ActionResult<IEnumerable<CustomerResponse>>> GetAll()
         {
             var customers = await _customersService.GetAll();
@@ -32,6 +32,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [Authorize]
         public async Task<ActionResult<CustomerResponse>> Get(Guid id)
         {
             var customer = await _customersService.GetById(id);
@@ -40,6 +41,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [AllowAnonymous]
         public async Task<ActionResult<CustomerResponse>> GetByUser(Guid id)
         {
             var customer = await _customersService.GetByUser(id);
@@ -48,6 +50,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<ActionResult<Guid>> Post([FromBody]CustomerCreateRequest request)
         {
             if (!ModelState.IsValid)

@@ -1,4 +1,4 @@
-﻿using Restaurant.Core.Dtos;
+﻿using Restaurant.Core.Dtos.Bill;
 using Restaurant.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -12,11 +12,11 @@ namespace Restaurant.Application.Interfaces.Services
     {
         Task<ICollection<Bill>> GetAll();
         Task<Bill> GetById(Guid id);
-        Task<Guid> Add(Bill entity);
+        Task<Guid> Add(BillAddRequest entity);
         Task<bool> Update(Bill entity);
         Task<bool> Delete(Guid id);
         Task<int> Purge(IEnumerable<Guid> values);
-        Task<BillResponse> RegisterBill(Bill obj);
+        Task<BillResponse> RegisterBill(BillAddRequest obj);
         Task<BillResponse> GetResponseById(Guid Id);
         Task<ICollection<Bill>> GetByPage(int page, int pageSize);
         Task<ICollection<BillResponse>> GetBillsOfCustomer(int pageIndex, int pageSize, Guid CustomerId);

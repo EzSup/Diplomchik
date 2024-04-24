@@ -6,6 +6,7 @@ using Restaurant.Application.Interfaces.Services;
 using Restaurant.Application.Services;
 using Restaurant.Core.Models;
 using Restaurant.API.Contracts.Deliveries;
+using Restaurant.Core.Dtos.Delivery;
 using Mapster;
 
 namespace Restaurant.API.Controllers
@@ -22,6 +23,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<ICollection<DeliveryResponse>>> GetAll()
         {
             var blogs = await _deliveriesService.GetAll();
@@ -30,6 +32,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<ICollection<DeliveryResponse>>> GetByPage(int page, int pageSize)
         {
             var blogs = await _deliveriesService.GetByPage(page, pageSize);
@@ -38,6 +41,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<ICollection<DeliveryResponse>>> GetByCustomerId(int pageIndex, int pageSize, Guid customerId)
         {
             var blogs = await _deliveriesService.GetByCustomerId(pageIndex, pageSize, customerId);
@@ -47,6 +51,7 @@ namespace Restaurant.API.Controllers
 
         // GET api/<BlogsController>/5
         [HttpGet("{id:guid}")]
+        [Authorize]
         public async Task<ActionResult<DeliveryResponse>> Get(Guid id)
         {
             var blog = await _deliveriesService.GetById(id);
@@ -66,14 +71,7 @@ namespace Restaurant.API.Controllers
             }
             try
             {
-                var delivery = new DeliveryData()
-                {
-                    Region = request.Region,
-                    SettlementName = request.SettlementName,
-                    StreetName = request.StreetName,
-                    StreetNum = request.StreetNum
-                };
-                return Ok(await _deliveriesService.Add(delivery));
+                return Ok(await _deliveriesService.Add(request));
             }
             catch (Exception ex)
             {

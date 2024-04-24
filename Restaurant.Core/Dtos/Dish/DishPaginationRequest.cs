@@ -1,6 +1,11 @@
 ﻿using Restaurant.Core.Enums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Restaurant.API.Contracts.Dishes
+namespace Restaurant.Core.Dtos.Dish
 {
     public record DishPaginationRequest(DishSortingOrder order,
         int pageIndex,

@@ -20,7 +20,8 @@ namespace Restaurant.API.Controllers
         }
 
         // GET: api/<BlogsController>
-        [HttpGet]        
+        [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<TableResponse>>> GetAll()
         {
             var tables = await _tablesService.GetAll();
@@ -29,7 +30,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "UserPolicy")]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<TableResponse>>> GetByPage(int page, int pageSize)
         {
             var tables = await _tablesService.GetByPage(page, pageSize);
@@ -37,7 +38,8 @@ namespace Restaurant.API.Controllers
             return Ok(response);
         }
 
-        [HttpGet]       
+        [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<TableResponse>>> GetByFilter(bool? available, decimal minPrice, decimal maxPrice)
         {
             var tables = await _tablesService.GetByFilter(available, minPrice, maxPrice);
@@ -46,6 +48,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet("{dateTime:datetime}")]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<TableResponse>>> GetTablesOfTime(DateTime dateTime)
         {
             var tables = await _tablesService.GetTablesOfTime(dateTime);
@@ -54,6 +57,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpPost]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<ActionResult<Guid>> ReserveTable([FromBody]ReserveRequest request)
         {
             var response = await _tablesService.ReserveTable(request.tableId, request.start);
@@ -62,6 +66,7 @@ namespace Restaurant.API.Controllers
 
         // GET api/<BlogsController>/5
         [HttpGet("{id:guid}")]
+        [AllowAnonymous]
         public async Task<ActionResult<TableResponse>> Get(Guid id)
         {
             var table = await _tablesService.GetById(id);

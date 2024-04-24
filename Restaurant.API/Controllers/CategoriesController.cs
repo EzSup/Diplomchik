@@ -23,6 +23,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<CategoryResponse>>> GetAll()
         {
             var categories = await _categoriesService.GetAll();
@@ -31,6 +32,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<ICollection<CategoryResponse>>> GetByPage(int page, int pageSize)
         {
             var categories = await _categoriesService.GetByPage(page, pageSize);
@@ -39,6 +41,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [AllowAnonymous]
         public async Task<ActionResult<CategoryResponse>> Get(Guid id)
         {
             var categories = await _categoriesService.GetById(id);
@@ -73,7 +76,7 @@ namespace Restaurant.API.Controllers
         // PUT api/<BlogsController>/5
         [HttpPut("{id:guid}")]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<ActionResult> Put(Guid id, [FromBody] CategoryRequest request)
+        public async Task<ActionResult> Put(Guid id, [FromBody] CategoryUpdateRequest request)
         {
             if (!ModelState.IsValid)
             {

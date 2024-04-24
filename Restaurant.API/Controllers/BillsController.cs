@@ -6,9 +6,9 @@ using Restaurant.Application.Interfaces.Services;
 using Restaurant.Application.Services;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
-using Restaurant.Core.Dtos;
 using Mapster;
 using Restaurant.API.Contracts.Bills;
+using Restaurant.Core.Dtos.Bill;
 
 namespace Restaurant.API.Controllers
 {
@@ -24,6 +24,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy ="AdminPolicy")]
         public async Task<ActionResult<ICollection<BillResponse>>> GetAll()
         {
             var blogs = await _billsService.GetAll();
@@ -32,6 +33,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [Authorize(Policy = "AdminPolicy")]
         public async Task<ActionResult<ICollection<BillResponse>>> GetByPage(int page, int pageSize)
         {
             var blogs = await _billsService.GetByPage(page, pageSize);
@@ -41,6 +43,7 @@ namespace Restaurant.API.Controllers
 
         // GET api/<BlogsController>/5
         [HttpGet("{id:guid}")]
+        [Authorize]
         public async Task<ActionResult<BillResponse>> Get(Guid id)
         {
             var bill = await _billsService.GetResponseById(id);
@@ -48,6 +51,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<BillResponse>> GetBillsOfCustomer(int pageIndex, int pageSize, Guid customerId)
         {
             return Ok(await _billsService.GetBillsOfCustomer(pageIndex, pageSize, customerId));
@@ -63,15 +67,8 @@ namespace Restaurant.API.Controllers
                 return BadRequest();
             }
             try
-            {
-                var blog = new Bill()
-                {
-                    CustomerId = request.CustomerId,
-                    Type = request.Type,
-                    ReservationId = request.Type == Bill.OrderType.InRestaurant ? request.ReservationOrDeliveryId : Guid.Empty,
-                    DeliveryId = request.Type == Bill.OrderType.Delivery ? request.ReservationOrDeliveryId : Guid.Empty,
-                };
-                return Ok(await _billsService.Add(blog));
+            {                
+                return Ok(await _billsService.Add(request));
             }
             catch (Exception ex)
             {
@@ -80,7 +77,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<ActionResult<BillResponse>> RegisterBill(BillAddRequest request)
         {
             if (!ModelState.IsValid)
@@ -89,14 +86,7 @@ namespace Restaurant.API.Controllers
             }
             try
             {
-                var blog = new Bill()
-                {
-                    CustomerId = request.CustomerId,
-                    Type = request.Type,
-                    ReservationId = request.Type == Bill.OrderType.InRestaurant ? request.ReservationOrDeliveryId : Guid.Empty,
-                    DeliveryId = request.Type == Bill.OrderType.Delivery ? request.ReservationOrDeliveryId : Guid.Empty,
-                };
-                return Ok(await _billsService.RegisterBill(blog));
+                return Ok(await _billsService.RegisterBill(request));
             }
             catch (Exception ex)
             {
@@ -105,7 +95,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpPut]
-        [Authorize]
+        [Authorize(Policy = "UserPolicy")]
         public async Task<ActionResult<decimal>> Pay(BillPayRequest request)
         {
             if (!ModelState.IsValid)

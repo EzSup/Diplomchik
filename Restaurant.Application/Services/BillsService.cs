@@ -1,5 +1,6 @@
-﻿using Restaurant.Application.Interfaces.Services;
-using Restaurant.Core.Dtos;
+﻿using Azure.Core;
+using Restaurant.Application.Interfaces.Services;
+using Restaurant.Core.Dtos.Bill;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
 using System;
@@ -53,13 +54,26 @@ namespace Restaurant.Application.Services
             orderType, minTipsPercents, maxTipsPercents,
             customerId,reservationId ,deliveryId );
 
-        public async Task<Guid> Add(Bill obj) 
+        private Bill RequestToBill(BillAddRequest obj)
         {
-            var customer = await _customersService.GetById(obj.CustomerId);
-            obj.CartId = (Guid)customer.CartId;
+            var bill = new Bill()
+            {
+                CustomerId = obj.CustomerId,
+                Type = obj.Type,
+                ReservationId = obj.Type == Bill.OrderType.InRestaurant ? obj.ReservationOrDeliveryId : Guid.Empty,
+                DeliveryId = obj.Type == Bill.OrderType.Delivery ? obj.ReservationOrDeliveryId : Guid.Empty,
+            };
+            return bill;
+        }
+
+        public async Task<Guid> Add(BillAddRequest obj) 
+        {
+            var bill = RequestToBill(obj);
+            var customer = await _customersService.GetById(bill.CustomerId);
+            bill.CartId = (Guid)customer.CartId;
             customer.CartId = await _cartsService.Add(new());
             await _customersService.Update(customer);
-            return await _billsRepository.Add(obj);         
+            return await _billsRepository.Add(bill);         
         }
 
         public async Task<ICollection<BillResponse>> GetBillsOfCustomer(int pageIndex, int pageSize,Guid CustomerId)
@@ -73,7 +87,7 @@ namespace Restaurant.Application.Services
             return responses;
         }
 
-        public async Task<BillResponse> RegisterBill(Bill obj)
+        public async Task<BillResponse> RegisterBill(BillAddRequest obj)
         {            
             var billId = await Add(obj);
             return await GetResponseById(billId);
@@ -97,7 +111,7 @@ namespace Restaurant.Application.Services
             if(Amount >= sumWithTips)
             {                
                 bill.PaidAmount = sum;
-                bill.Tips = TipsPercents*sum;
+                bill.Tips = TipsPercents*sum * 0.01m;
                 bill.IsPaid = true;
                 await Update(bill);
                 return (true, "Successfully paid, full tips", Amount - sumWithTips);

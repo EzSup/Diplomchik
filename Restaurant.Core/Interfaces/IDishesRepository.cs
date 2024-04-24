@@ -1,4 +1,4 @@
-﻿using Restaurant.Core.Dtos;
+﻿using Restaurant.Core.Dtos.Dish;
 using Restaurant.Core.Enums;
 using Restaurant.Core.Models;
 using System;

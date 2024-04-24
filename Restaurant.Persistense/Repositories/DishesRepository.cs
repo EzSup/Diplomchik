@@ -9,8 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Restaurant.Core.Dtos;
 using Restaurant.Core.Enums;
+using Restaurant.Core.Dtos.Dish;
 
 namespace Restaurant.Persistense.Repositories
 {

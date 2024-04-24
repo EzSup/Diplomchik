@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.API.Contracts.Blogs;
 using Restaurant.API.Contracts.Carts;
 using Restaurant.Application.Interfaces.Services;
 using Restaurant.Application.Services;
-using Restaurant.Core.Dtos;
+using Restaurant.Core.Dtos.Сart;
 using Restaurant.Core.Interfaces;
 
 namespace Restaurant.API.Controllers
@@ -22,6 +23,7 @@ namespace Restaurant.API.Controllers
 
 
         [HttpGet("{customerId:guid}")]
+        [Authorize]
         public async Task<ActionResult<CartResponse>> GetByCustomer(Guid customerId)
         {
             var cart = await _cartService.GetByCustomerId(customerId);
@@ -29,6 +31,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [Authorize]
         public async Task<ActionResult<CartResponse>> Get(Guid id)
         {
             var cart = await _cartService.GetById(id);
@@ -36,6 +39,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<CartResponse>> AddDishToCartOfUser([FromBody] AddDishRequest request)
         {
             var cart = await _cartService.AddDishToUsersCart(request.customerId, request.dishId, request.count);

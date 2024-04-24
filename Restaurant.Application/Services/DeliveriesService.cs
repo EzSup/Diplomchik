@@ -1,4 +1,5 @@
 ﻿using Restaurant.Application.Interfaces.Services;
+using Restaurant.Core.Dtos.Delivery;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
 using System;
@@ -24,9 +25,25 @@ namespace Restaurant.Application.Services
         public async Task<ICollection<DeliveryData>> GetByCustomerId(int page, int pageSize, Guid customerId)
             => await _repository.GetByFilter(page, pageSize, customerId);
 
-        public async Task<Guid> Add(DeliveryData obj) => await _repository.Add(obj);
+        public async Task<Guid> Add(DeliveryAddRequest obj){
+            var delivery = AddRequestToDelivery(obj);
+            return await _repository.Add(delivery);         
+        }
         public async Task<bool> Update(DeliveryData obj) => await _repository.Update(obj);
         public async Task<bool> Delete(Guid id) => await _repository.Delete(id);
         public async Task<int> Purge(IEnumerable<Guid> ids) => await _repository.Purge(ids);
+
+        private DeliveryData AddRequestToDelivery(DeliveryAddRequest request)
+        {
+            var delivery = new DeliveryData()
+            {
+                Region = request.Region,
+                SettlementName = request.SettlementName,
+                StreetName = request.StreetName,
+                StreetNum = request.StreetNum
+            };
+
+            return delivery;
+        }
     }
 }

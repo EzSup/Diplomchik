@@ -24,7 +24,7 @@ namespace Restaurant.API.Extensions
                     {
                         ValidateIssuer = false,
                         ValidateAudience = false,
-                        ValidateLifetime = true,
+                        ValidateLifetime = false,
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(
                             Encoding.UTF8.GetBytes(jwtOptions.Value.SecretKey))
