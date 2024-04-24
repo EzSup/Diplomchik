@@ -6,6 +6,7 @@ using Mapster;
 using Microsoft.AspNetCore.Components;
 using Restaurant.Client.Services.Interfaces;
 using Restaurant.Client.Contracts.Customers;
+using Blazored.Toast.Services;
 
 namespace Restaurant.Client.Services
 {
@@ -17,13 +18,15 @@ namespace Restaurant.Client.Services
         private readonly NavigationManager _navManager;
         private readonly ICustomersService _customersService;
         private readonly ICookiesService _cookiesService;
+        private readonly IToastService _toastService;
 
-        public AccountService(IHttpClientFactory factory, 
+        public AccountService(IHttpClientFactory factory,
             AuthenticationStateProvider authstateprov,
-            IJSRuntime jsRuntime, 
+            IJSRuntime jsRuntime,
             NavigationManager navManager,
             ICookiesService cookiesService,
-            ICustomersService customersService)
+            ICustomersService customersService,
+            IToastService toastService)
         {
             _httpClient = factory.CreateClient("API");
             _authStateProv = (CustomAuthenticationStateProvider)authstateprov;
@@ -31,6 +34,7 @@ namespace Restaurant.Client.Services
             _navManager = navManager;
             _cookiesService = cookiesService;
             _customersService = customersService;
+            _toastService = toastService;
         }
 
         public async Task LoginAsync(LoginUserRequest model)
@@ -39,13 +43,14 @@ namespace Restaurant.Client.Services
             var result = await response.Content.ReadFromJsonAsync<LoginUserResponse>();
             if (!result!.Flag)
             {
-                await _jsruntime.InvokeVoidAsync("alert", result.Message);
+                _toastService.ShowError("An error occured while logging in!");
                 return;
             }
             await _authStateProv.UpdateAuthenticationState(result.JWTToken);
             if (result.Flag)
             {
-                _navManager.NavigateTo("/", forceLoad: true);
+                _toastService.ShowSuccess("Successfully logged in!");
+                _navManager.NavigateTo("/");
             }
         }
 
@@ -55,9 +60,7 @@ namespace Restaurant.Client.Services
             RegisterUserRequest request = new(model.Email, model.Password, model.PhoneNum);
             var response = await _httpClient.PostAsJsonAsync("api/Users/Register", request);
             var result = await response.Content.ReadFromJsonAsync<RegisterUserResponse>();
-            string message = String.Concat(result.Flag ? "Успіх!" : "Помилка!",
-                result.Message);
-            await _jsruntime.InvokeVoidAsync("alert", message);
+
             var id = result.Id;
             CustomerCreateRequest customerCreateRequest = new CustomerCreateRequest()
             {
@@ -66,15 +69,20 @@ namespace Restaurant.Client.Services
             };
             if (result.Flag && await _customersService.Add(customerCreateRequest))
             {
-                _navManager.NavigateTo("/login", forceLoad: true);
+                _navManager.NavigateTo("/login");
+                _toastService.ShowSuccess("Registered Successfully!");
+            }
+            else { 
+                _toastService.ShowError("An error occured while registration!"); 
             }
         }
 
         public async Task LogoutAsync()
         {
             var response = await _httpClient.DeleteAsync("api/Users/Logout");
-            //_cookiesService.DeleteCookie("tasty-cookies");
-            await _authStateProv.UpdateAuthenticationState(null);
+            await _authStateProv.UpdateAuthenticationState(null);            
+            _toastService.ShowInfo("Successfully logged out!");
+            _navManager.NavigateTo("/");
         }
     }
 }

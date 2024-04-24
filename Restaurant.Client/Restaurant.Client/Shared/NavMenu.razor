@@ -50,7 +50,7 @@
             </AuthorizeView>
             <AuthorizeView>@*Коли хтось зерганий незалежно від ролі*@
                 <Authorized>
-                    <button style="color: black" @onclick="LogoutClicked">
+                    <button style="color: black" @onclick="accountService.LogoutAsync">
                         розлогін
                     </button>
                 </Authorized>               
@@ -60,14 +60,6 @@
 
 </div>
 
-@{
-    void LogoutClicked()
-    {
-        accountService.LogoutAsync();
-        NavManager.NavigateTo("/", forceLoad: true);
-    }
-
-}
 
 @* <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">

@@ -25,10 +25,6 @@
             <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
                 <MudTable T="DishResponse" Items="@dishes" Hover="true"
                           @bind-SelectedItem="dish" OnRowClick="@OnRowClickHandler">
-                    @* <ToolBarContent>
-                    <MudText Typo="Typo.h6">Dishes</MudText>
-                    <MudSpacer />
-                    </ToolBarContent> *@
                     <HeaderContent>
                         <MudTh>Name</MudTh>
                         <MudTh>Available</MudTh>
@@ -99,7 +95,6 @@
     CategoryResponse[] categories;
     CuisineResponse[] cuisines;
     Dish dishEditingObject;
-    //List<IBrowserFile> photos;
     string ingredients;
 
     private class Dish()

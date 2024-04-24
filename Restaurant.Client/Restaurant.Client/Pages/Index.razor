@@ -1,5 +1,5 @@
 ﻿@page "/"
-
+@inject IToastService toastService
 <PageTitle>Index</PageTitle>
 <body id="index">
 <div class="Header">
@@ -184,4 +184,10 @@
 	public async Task abc(){
 		await JS.InvokeVoidAsync("","");
 	}
+
+	// protected override void OnInitialized(){
+	// 	toastService.ShowInfo("Hello");
+	// 	toastService.ShowSuccess("Hello");
+	// 	toastService.ShowError("Hello");
+	// }
 }
