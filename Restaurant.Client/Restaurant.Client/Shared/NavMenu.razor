@@ -2,7 +2,7 @@
 @using Restaurant.Client.Auth
 @using Restaurant.Client.Shared.ServicingComponents
 @using Microsoft.AspNetCore.Authorization
-<div class="navbar navbar-wrap">
+<div class="navbar navbar-wrap" id="fade-in">
     <div class="navbar-content">
         <NavLink href="/#index" style="text-decoration: none">
             <h1>Restaurant</h1>
@@ -57,9 +57,16 @@
             </AuthorizeView>
         </div>
     </div>
-
 </div>
-
+@code{
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (!firstRender)
+        {
+            await JS.InvokeVoidAsync("fadeInElement", "fade-in");
+        }
+    }
+}
 
 @* <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">

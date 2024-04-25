@@ -188,17 +188,25 @@ button, a {
     width: 100vw;
     overflow: hidden;
     /* min-height: 80vh; */
-    margin: 200px 0;
+    margin-bottom: 200px;
     justify-content: center;
 }
 
-.Main-Content .Title {
-    width: 100%;
-    max-height: 150px;
-    padding: 4px 0;
-    background: linear-gradient(90deg, rgba(36, 33, 33, 0) 0%, #878477 10%, #878477 90%, rgba(36, 33, 33, 0) 100%);
-    display: flex;
-}
+    .Main-Content >  *:first-child {
+        margin-top: 200px;
+    }
+
+    .Main-Content > body#index {
+        margin-top: 0 !important;
+    }
+
+    .Main-Content .Title {
+        width: 100%;
+        max-height: 150px;
+        padding: 4px 0;
+        background: linear-gradient(90deg, rgba(36, 33, 33, 0) 0%, #878477 10%, #878477 90%, rgba(36, 33, 33, 0) 100%);
+        display: flex;
+    }
 
 .Title .content {
     background: #242121;

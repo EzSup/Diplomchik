@@ -19,11 +19,36 @@
     text-align: center;
     color: #FFF8E0;
     transition: color 0.3s ease;
+    position: relative;
 }
 
-.navbar-content h1:hover {
-    color: rgba(255, 248, 224, 0.5);
-}
+    .navbar-content h1::before, .navbar-content h1::after {
+        position: absolute;
+        content: " ";
+        margin: auto 0;
+        width: 0px;
+        height: 2px;
+        left: 50%;
+        transition: all 0.3s;
+        background: #878477;
+    }
+
+    .navbar-content h1::before{
+        top: 0;
+    }
+
+    .navbar-content h1::after{
+        bottom: 0;
+    }
+
+    .navbar-content h1:hover {
+        color: rgba(255, 248, 224, 0.5);
+    }
+
+    .navbar-content h1:hover::before, .navbar-content h1:hover::after{
+        left: 0;
+        width: 100%;
+    }
 
 .navigation a {
     font-family: 'Inter';
@@ -35,11 +60,27 @@
     text-decoration: none;
     margin: 0 0.5em;
     transition: color 0.5s ease;
+    position: relative;
 }
 
-.navigation a:hover{
-    color: #FFF8E0;
-}
+    .navigation a::before {
+        position: absolute;
+        content: " ";
+        left: 0;
+        bottom: 0;
+        height: 2px;
+        width: 0;
+        background: #A7A293;
+        transition: all 0.3s;
+    }
+
+    .navigation a:hover {
+        color: #FFF8E0;
+    }
+
+    .navigation a:hover::before{
+        width: 100%;
+    }
 
 .navbar.right-part div, .navbar.right-part a, .navbar.right-part label {
     margin-left: 1em;

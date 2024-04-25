@@ -34,20 +34,72 @@
 /* Стилі для фільтрів */
 .filter {
     margin: 0 1% 1em;
+    position: relative;
 }
 
 ::deep .filter input {
     width: 200px;
-    background: #FFF8E0;
+    background: #56524c;
+    border-radius: 5px;
+    color: white;
+    border: 1px solid #fff8e0;
+    transition: all 1s;
+    position: relative;
+    z-index: 1;
+    font-weight: normal;
 }
 
+    ::deep .filter input:hover {
+        border-color: #878477;
+    }
+
+    ::deep .filter input:focus, ::deep .filter input:focus-visible {
+        border-color: #878477;
+        outline: none;
+        background: none;
+    }
+
+    ::deep .filter input::placeholder {
+        color: #FFF8E0;
+    }
+
+    ::deep .filter input::-webkit-inner-spin-button {
+        transition: all 0.3s;
+    }
+
+    ::deep .filter input::-webkit-outer-spin-button {
+        transition: all 0.3s;
+    }
+
+    .filter > .on-checked {
+        width: 200px;
+        height: 1px;
+        position: absolute;
+        right: 0;
+        background: #878477;
+        border-radius: 6px;
+        transition: all 0.3s;
+        bottom: 0;
+        opacity: 0;
+        z-index: 0;
+    }
+
+    .filters-container > .filter > input:focus ~ .on-checked,
+    .filters-container > .filter > input:focus-visible ~ .on-checked
+    {
+        height: 100%;
+        opacity: 1;
+    }
+
+
+
     .filter.radio {
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
     }
 
     ::deep .filter.radio input{
@@ -61,7 +113,8 @@
         border: 1px solid;
         border-radius: 5px;
         border-color: #FFF8E0;
-        width: 150px;
+        min-width: 150px;
+        padding: 0 5px;
         display: flex;
         flex-direction: row;
         align-content: center;
