@@ -58,15 +58,27 @@
         </div>
     </div>
 </div>
-@code{
+@code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; }
+
     protected override async void OnAfterRender(bool firstRender)
     {
-        if (!firstRender)
-        {
-            await JS.InvokeVoidAsync("fadeInElement", "fade-in");
-        }
+        await JS.InvokeVoidAsync("fadeInElement", "fade-in");
     }
+
+    protected override async Task OnInitializedAsync()
+    {
+        NavigationManager.LocationChanged += HandleLocationChanged;
+    }
+
+    private async void HandleLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        await JS.InvokeVoidAsync("fadeInElement", "fade-in");
+    }
+
 }
+
 
 @* <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">

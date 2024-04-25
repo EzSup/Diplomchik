@@ -11,42 +11,41 @@
 }
 
 function fadeInElement(elementId) {
-    // Функция для проверки, находится ли элемент в видимой области экрана
-    function isElementVisible(el) {
-        var rect = el.getBoundingClientRect();
-        return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
-    }
+    var element = document.getElementById(elementId);
+    element.style.opacity = 0;
+    element.style.transform = "translateY(-130px)";
+    setTimeout(function () {
+        element.style.transition = "opacity ease 0.3s, transform ease 1s";
+        setTimeout(function () {
+            fadeInElement(element);
+        }, 250);
+    }, 250);
+    
 
-    // Функция для анимации появления элемента
+    
+    setTimeout(function () {
+        var options = {
+            threshold: 0.5
+        };
+
+        var observer = new IntersectionObserver(handleIntersection, options);
+        observer.observe(element);
+    }, 500);
+
     function fadeInElement(el) {
-        el.style.opacity = 0;
-        el.style.transition = "opacity 1s ease, transform 1s ease";
-
-        // Показываем элемент только если он в видимой области экрана
-        if (isElementVisible(el)) {
             el.style.opacity = 1;
             el.style.transform = "translateY(0)";
-        }
+    }
 
-        // Проверяем видимость элемента при скроллинге
-        window.addEventListener("scroll", function () {
-            if (isElementVisible(el)) {
-                el.style.opacity = 1;
-                el.style.transform = "translateY(0)";
+    function handleIntersection(entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                element.style.opacity = 1;
+                element.style.transform = "translateY(0)";
+            } else {
+                element.style.opacity = 0;
+                element.style.transform = "translateY(-50px)";
             }
         });
     }
-
-    // Вызываем функцию для элемента с указанным идентификатором
-    document.addEventListener("DOMContentLoaded", function () {
-        var element = document.getElementById(elementId);
-        if (element) {
-            fadeInElement(element);
-        }
-    });
 };
