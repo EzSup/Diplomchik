@@ -7,5 +7,7 @@ namespace Restaurant.Client.Services.Interfaces
     {
         Task<ICollection<CategoryResponse>> GetAll();
         Task<string> Add(CategoryCreateRequest request);
+        Task<bool> Update(CategoryRequest request);
+        Task<bool> Delete(Guid id);
     }
 }

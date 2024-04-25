@@ -1,7 +1,8 @@
 ﻿namespace Restaurant.Client.Contracts.Categories
 {
-    public record CategoryRequest(
-        Guid Id,
-        string Name,
-        Guid DiscountId);
+    public class CategoryRequest {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public Guid? DiscountId { get; set; }
+    }
 }

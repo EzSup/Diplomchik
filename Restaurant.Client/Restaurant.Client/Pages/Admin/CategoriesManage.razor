@@ -1,0 +1,94 @@
+﻿@using Restaurant.Client.Shared.Admin
+@using Restaurant.Client.Contracts.Categories
+@using Restaurant.Client.Services.Interfaces
+@using TinyMCE.Blazor
+@using Mapster
+@inject ICategoriesService categoriesService
+@inject IPhotoService photoService
+@inject ISnackbar snackbar
+@page "/categoriesManage"
+@layout AdminLayout
+<MudPaper Elevation="25">
+    <MudToolBar>
+        <MudIconButton Icon="@Icons.Material.Outlined.Refresh" @onclick="Refresh" Color="Color.Inherit" Class="mr-5" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Add" Href="/dishAdd" Color="Color.Inherit" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Edit" @onclick="Update" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Remove" @onclick="Delete" />
+    </MudToolBar>
+</MudPaper>
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="8">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+                <MudTable T="CategoryResponse" Items="@categories" Hover="true"
+                          @bind-SelectedItem="category" OnRowClick="@OnRowClickHandler">
+                    <HeaderContent>
+                        <MudTh>Name</MudTh>
+                        <MudTh>HasDiscount</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Name">@context.Name</MudTd>
+                        <MudTd DataLabel="HasDiscount">@(context.DiscountId != Guid.Empty)</MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                </MudTable>
+            </MudPaper>
+        </MudItem>
+        @if (_itemToUpdate != null)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+                    <EditForm Model="_itemToUpdate" OnValidSubmit="Update">
+                        <MudTextField Label="Id" @bind-Value="_itemToUpdate.Id" ReadOnly />
+                        <MudTextField Label="Name" HelperText="Enter a category name" @bind-Value="_itemToUpdate.Name" />
+                        <MudTextField Label="Discount Id" @bind-Value="_itemToUpdate.DiscountId"  ReadOnly/>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Update</MudButton>
+                        <MudButton OnClick="Delete" Variant="Variant.Filled" Color="Color.Error" Class="ml-auto">Delete</MudButton>
+                    </EditForm>
+                </MudPaper>
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
+
+
+@code {
+    private CategoryResponse category;
+    private CategoryRequest _itemToUpdate;
+    private List<CategoryResponse> categories = new();
+
+    private async Task Delete()
+    {
+        if (await categoriesService.Delete(_itemToUpdate.Id))
+        {
+            snackbar.Add("ВИДАЛИЛИ!", Severity.Success);
+            await Refresh();
+        }
+    }
+    private async Task Update()
+    {
+        if (await categoriesService.Update(_itemToUpdate))
+        {
+            snackbar.Add("ОНОВИЛИ", Severity.Success);
+            await Refresh();
+        }
+    }
+
+    private async Task Refresh()
+    {
+        categories = (await categoriesService.GetAll()).ToList();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+    }
+
+    private void OnRowClickHandler(TableRowClickEventArgs<CategoryResponse> args)
+    {
+        _itemToUpdate = args.Item.Adapt<CategoryRequest>();
+    }
+}

@@ -50,7 +50,7 @@
         try
         {
             if (await blogsService.PostBlogAsync(uploadedPhoto, blogEditingObj))
-                NavManager.NavigateTo("/");
+                NavManager.NavigateTo("/blogsManage");
         }
         catch (Exception ex)
         {

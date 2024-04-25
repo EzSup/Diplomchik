@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Restaurant.Client.Contracts.Blogs;
 using Restaurant.Client.Services.Interfaces;
+using System.Diagnostics.Eventing.Reader;
 using System.Text.Json;
 
 namespace Restaurant.Client.Services
@@ -48,6 +49,24 @@ namespace Restaurant.Client.Services
             var responseBody = await response.Content.ReadAsStringAsync();
             var blog = JsonConvert.DeserializeObject<BlogResponse>(responseBody);
             return blog;
+        }
+
+        public async Task<bool> Update(BlogUpdateRequest request)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"api/Blogs/Put/{request.Id}", request);
+            
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> Delete(Guid id)
+        {
+            var blog = await GetBlogById(id);
+            var response = await _httpClient.DeleteAsync($"api/Blogs/Delete/{id}");            
+            if(blog.ImageLink != null)
+            {
+                await _photoService.DeletePhotoAsync(blog.ImageLink);
+            }
+            return response.IsSuccessStatusCode;
         }
     }
 }

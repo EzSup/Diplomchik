@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Restaurant.Client.Contracts.Categories;
 using Restaurant.Client.Contracts.Cuisines;
 using Restaurant.Client.Contracts.Dishes;
 using Restaurant.Client.Services.Interfaces;
@@ -29,6 +30,19 @@ namespace Restaurant.Client.Services
             var responseBody = await response.Content.ReadAsStringAsync();
             var cuisines = JsonConvert.DeserializeObject<List<CuisineResponse>>(responseBody);
             return cuisines;
+        }
+
+        public async Task<bool> Update(CuisineRequest request)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"api/Cuisines/Put/{request.Id}", request);
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> Delete(Guid id)
+        {
+            var response = await _httpClient.DeleteAsync($"api/Cuisines/Delete/{id}");
+            return response.IsSuccessStatusCode;
         }
     }
 }

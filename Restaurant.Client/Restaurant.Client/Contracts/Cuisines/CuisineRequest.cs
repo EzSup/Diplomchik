@@ -1,7 +1,8 @@
 ﻿namespace Restaurant.Client.Contracts.Cuisines
 {
-    public record CuisineRequest(
-        Guid Id,
-        string Name,
-        Guid DiscountId);
+    public class CuisineRequest{
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public Guid? DiscountId { get; set; }
+    }
 }

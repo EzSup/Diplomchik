@@ -8,5 +8,7 @@ namespace Restaurant.Client.Services.Interfaces
         Task<bool> PostBlogAsync(IBrowserFile file, BlogsCreateRequest blog);
         Task<IEnumerable<BlogResponse>> GetBlogsByPage(int pageNum, int pageSize);
         Task<BlogResponse> GetBlogById(Guid id);
+        Task<bool> Update(BlogUpdateRequest request);
+        Task<bool> Delete(Guid id);
     }
 }
