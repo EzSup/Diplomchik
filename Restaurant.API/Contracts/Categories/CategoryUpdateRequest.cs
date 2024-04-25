@@ -5,5 +5,5 @@ namespace Restaurant.API.Contracts.Categories
     public record CategoryUpdateRequest(
         Guid Id,
         string Name,
-        Guid DiscountId);
+        Guid? DiscountId);
 }
