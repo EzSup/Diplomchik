@@ -2,5 +2,6 @@
 {
     public record TableRequest(
         decimal PriceForHour,
-        int Persons);
+        int Persons,
+        int Num);
 }

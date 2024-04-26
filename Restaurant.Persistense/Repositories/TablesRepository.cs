@@ -22,7 +22,7 @@ namespace Restaurant.Persistense.Repositories
         {
             return await _context.Tables
                 .AsNoTracking()
-                .OrderBy(t => t.Persons)
+                .OrderBy(t => t.Num)
                 .ToListAsync();
         }
 
@@ -31,7 +31,7 @@ namespace Restaurant.Persistense.Repositories
             return await _context.Tables
                 .AsNoTracking()
                 .Include(t => t.Reservations)
-                .OrderBy(t => t.Persons)
+                .OrderBy(t => t.Num)
                 .ToListAsync();
         }
 
@@ -39,6 +39,7 @@ namespace Restaurant.Persistense.Repositories
         {
             return await _context.Tables
                 .AsNoTracking()
+                .OrderBy(t => t.Num)
                 .Include(t => t.Reservations)
                 .Select(x => new Table
                 {
@@ -46,7 +47,8 @@ namespace Restaurant.Persistense.Repositories
                     Free = x.Free,
                     PriceForHour = x.PriceForHour,
                     Persons = x.Persons,
-                    Reservations = x.Reservations
+                    Reservations = x.Reservations,
+                    Num = x.Num
                 })
                 .ToListAsync();
         }
@@ -82,8 +84,9 @@ namespace Restaurant.Persistense.Repositories
                     Id = x.Id,
                     Free = x.Free,
                     PriceForHour = x.PriceForHour,
-                    Persons = x.Persons                    
-                }).OrderBy(x => x.Persons).ToListAsync();
+                    Persons = x.Persons,
+                    Num = x.Num
+                }).OrderBy(x => x.Num).ToListAsync();
         }
 
         public async Task<ICollection<Table>> GetByPage(int page, int pageSize)
@@ -102,7 +105,8 @@ namespace Restaurant.Persistense.Repositories
             {
                 PriceForHour = obj.PriceForHour,
                 Free = obj.Free,
-                Persons = obj.Persons
+                Persons = obj.Persons,
+                Num = _context.Tables.OrderByDescending(x => x.Num).First().Num + 1
             };
             _context.Tables.Add(table);
             await _context.SaveChangesAsync();
@@ -116,7 +120,8 @@ namespace Restaurant.Persistense.Repositories
                 .ExecuteUpdateAsync(s =>s
                     .SetProperty(t => t.PriceForHour, obj.PriceForHour)
                     .SetProperty(t => t.Free, obj.Free)
-                    .SetProperty(t => t.Persons, obj.Persons)) == 1;
+                    .SetProperty(t => t.Persons, obj.Persons)
+                    .SetProperty(t => t.Num, obj.Num)) == 1;
         }
 
         public async Task<bool> Delete(Guid id)

@@ -12,6 +12,9 @@ namespace Restaurant.Persistense.Configurations
 
             builder.Property(t => t.PriceForHour)
                 .IsRequired();
+
+            builder.Property(t => t.Num)
+                .IsRequired();
         }
     }
 }

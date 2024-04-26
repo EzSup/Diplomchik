@@ -77,7 +77,7 @@ namespace Restaurant.API.Controllers
         // POST api/<BlogsController>
         [HttpPost]
         [Authorize(Policy = "AdminPolicy")]
-        public async Task<ActionResult<Guid>> Post([FromBody] TableRequest request)
+        public async Task<ActionResult<Guid>> Post([FromBody] TableCreateRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -105,9 +105,9 @@ namespace Restaurant.API.Controllers
             }
             try
             {
-                var blog = request.Adapt<Table>();
-                blog.Id = id;
-                await _tablesService.Update(blog);
+                var table = request.Adapt<Table>();
+                table.Id = id;
+                await _tablesService.Update(table);
                 return NoContent();
             }
             catch (Exception ex)
