@@ -7,5 +7,9 @@ namespace Restaurant.Client.Services.Interfaces
     {
         Task<Guid> Reserve(ReserveRequest request);
         Task<ICollection<TableResponse>> GetTablesOfTime(DateTime time);
+        Task<bool> Add(TableCreateRequest request);
+        Task<bool> Update(TableUpdateRequest request);
+        Task<bool> Delete(Guid id);
+        Task<ICollection<TableResponse>> GetAll();
     }
 }

@@ -33,5 +33,31 @@ namespace Restaurant.Client.Services
             var result = JsonConvert.DeserializeObject<Guid>(responseBody);
             return result;
         }
+
+        public async Task<ICollection<TableResponse>> GetAll()
+        {
+            var response = await _httpClient.GetAsync($"api/Tables/GetAll");
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ICollection<TableResponse>>(responseBody);
+            return result;
+        }
+
+        public async Task<bool> Add(TableCreateRequest request)
+        {
+            var response = await _httpClient.PostAsJsonAsync($"api/Tables/Post", request);
+            return response.IsSuccessStatusCode;
+        }
+        public async Task<bool> Update(TableUpdateRequest request)
+        {
+            var response = await _httpClient.PutAsJsonAsync($"api/Tables/Put/{request.Id}", request);
+            return response.IsSuccessStatusCode;
+        }
+        public async Task<bool> Delete(Guid id)
+        {
+            var response = await _httpClient.DeleteAsync($"api/Tables/Delete/{id}");
+            return response.IsSuccessStatusCode;
+        }
+
     }
 }

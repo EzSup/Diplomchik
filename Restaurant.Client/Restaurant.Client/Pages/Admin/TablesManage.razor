@@ -1,17 +1,15 @@
 ﻿@using Restaurant.Client.Shared.Admin
-@using Restaurant.Client.Contracts.Categories
+@using Restaurant.Client.Contracts.Tables
 @using Restaurant.Client.Services.Interfaces
-@using TinyMCE.Blazor
 @using Mapster
-@inject ICategoriesService categoriesService
-@inject IPhotoService photoService
+@inject ITablesService tablesService
 @inject ISnackbar snackbar
-@page "/categoriesManage"
+@page "/tablesManage"
 @layout AdminLayout
 <MudPaper Elevation="25">
     <MudToolBar>
         <MudIconButton Icon="@Icons.Material.Outlined.Refresh" @onclick="Refresh" Color="Color.Inherit" Class="mr-5" />
-        <MudIconButton Icon="@Icons.Material.Outlined.Add" Href="/categoryAdd" Color="Color.Inherit" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Add" Href="/tableAdd" Color="Color.Inherit" />
         <MudIconButton Icon="@Icons.Material.Outlined.Edit" @onclick="Update" />
         <MudIconButton Icon="@Icons.Material.Outlined.Remove" @onclick="Delete" />
     </MudToolBar>
@@ -20,15 +18,17 @@
     <MudGrid>
         <MudItem xs="12" sm="6" md="8">
             <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
-                <MudTable T="CategoryResponse" Items="@categories" Hover="true"
-                          @bind-SelectedItem="category" OnRowClick="@OnRowClickHandler">
+                <MudTable T="TableResponse" Items="@tables" Hover="true"
+                          @bind-SelectedItem="table" OnRowClick="@OnRowClickHandler">
                     <HeaderContent>
-                        <MudTh>Name</MudTh>
-                        <MudTh>HasDiscount</MudTh>
+                        <MudTh>Num</MudTh>
+                        <MudTh>Persons</MudTh>
+                        <MudTh>Price per hour</MudTh>
                     </HeaderContent>
                     <RowTemplate>
-                        <MudTd DataLabel="Name">@context.Name</MudTd>
-                        <MudTd DataLabel="HasDiscount">@(context.DiscountId != Guid.Empty)</MudTd>
+                        <MudTd DataLabel="Num">@context.Num</MudTd>
+                        <MudTd DataLabel="Persons">@context.Persons</MudTd>
+                        <MudTd DataLabel="Price">@context.PriceForHour</MudTd>
                     </RowTemplate>
                     <PagerContent>
                         <MudTablePager PageSizeOptions="new int[]{50, 100}" />
@@ -42,8 +42,9 @@
                 <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
                     <EditForm Model="_itemToUpdate" OnValidSubmit="Update">
                         <MudTextField Label="Id" @bind-Value="_itemToUpdate.Id" ReadOnly />
-                        <MudTextField Label="Name" HelperText="Enter a category name" @bind-Value="_itemToUpdate.Name" />
-                        <MudTextField Label="Discount Id" @bind-Value="_itemToUpdate.DiscountId"  ReadOnly/>
+                        <MudNumericField Label="Num" HelperText="Enter a table num" @bind-Value="_itemToUpdate.Num" />
+                        <MudNumericField Label="Persons" HelperText="Enter persons count of the table" @bind-Value="_itemToUpdate.Persons" />
+                        <MudNumericField Label="Price" HelperText="Enter price per hour of the table" @bind-Value="_itemToUpdate.PriceForHour" />
                         <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Update</MudButton>
                         <MudButton OnClick="Delete" Variant="Variant.Filled" Color="Color.Error" Class="ml-auto">Delete</MudButton>
                     </EditForm>
@@ -56,13 +57,13 @@
 
 
 @code {
-    private CategoryResponse category;
-    private CategoryRequest _itemToUpdate;
-    private List<CategoryResponse> categories = new();
+    private TableResponse table;
+    private TableUpdateRequest _itemToUpdate;
+    private List<TableResponse> tables = new();
 
     private async Task Delete()
     {
-        if (await categoriesService.Delete(_itemToUpdate.Id))
+        if (await tablesService.Delete(_itemToUpdate.Id))
         {
             snackbar.Add("ВИДАЛИЛИ!", Severity.Success);
             await Refresh();
@@ -70,7 +71,7 @@
     }
     private async Task Update()
     {
-        if (await categoriesService.Update(_itemToUpdate))
+        if (await tablesService.Update(_itemToUpdate))
         {
             snackbar.Add("ОНОВИЛИ", Severity.Success);
             await Refresh();
@@ -79,7 +80,7 @@
 
     private async Task Refresh()
     {
-        categories = (await categoriesService.GetAll()).ToList();
+        tables = (await tablesService.GetAll()).ToList();
     }
 
     protected override async Task OnInitializedAsync()
@@ -87,8 +88,8 @@
         await Refresh();
     }
 
-    private void OnRowClickHandler(TableRowClickEventArgs<CategoryResponse> args)
+    private void OnRowClickHandler(TableRowClickEventArgs<TableResponse> args)
     {
-        _itemToUpdate = args.Item.Adapt<CategoryRequest>();
+        _itemToUpdate = args.Item.Adapt<TableUpdateRequest>();
     }
 }

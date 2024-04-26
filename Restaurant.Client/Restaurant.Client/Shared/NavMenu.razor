@@ -74,7 +74,11 @@
 
     private async void HandleLocationChanged(object sender, LocationChangedEventArgs e)
     {
-        await JS.InvokeVoidAsync("fadeInElement", "fade-in");
+        try
+        {
+            await JS.InvokeVoidAsync("fadeInElement", "fade-in");
+        }
+        catch{}// Це для сторінок які з іншим лейаутом, можуть бути без навбара
     }
 
 }
