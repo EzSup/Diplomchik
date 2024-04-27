@@ -59,57 +59,26 @@
     </div>
 </div>
 @code {
-    [Inject]
-    private NavigationManager NavigationManager { get; set; }
 
     protected override async void OnAfterRender(bool firstRender)
     {
         await JS.InvokeVoidAsync("fadeInElement", "fade-in");
     }
 
-    protected override async Task OnInitializedAsync()
-    {
-        NavigationManager.LocationChanged += HandleLocationChanged;
-    }
+    // [Inject]
+    // private NavigationManager NavigationManager { get; set; }
 
-    private async void HandleLocationChanged(object sender, LocationChangedEventArgs e)
-    {
-        try
-        {
-            await JS.InvokeVoidAsync("fadeInElement", "fade-in");
-        }
-        catch{}// Це для сторінок які з іншим лейаутом, можуть бути без навбара
-    }
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     NavigationManager.LocationChanged += HandleLocationChanged;
+    // }
+
+    // private async void HandleLocationChanged(object sender, LocationChangedEventArgs e)
+    // {
+    //     try
+    //     {
+    //         await JS.InvokeVoidAsync("fadeInElement", "fade-in");
+    //     }catch{}
+    // }
 
 }
-
-
-@* <div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Restaurant.Client</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
-
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-} *@

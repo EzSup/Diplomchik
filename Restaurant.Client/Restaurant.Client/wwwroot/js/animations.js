@@ -18,8 +18,8 @@ function fadeInElement(elementId) {
         element.style.transition = "opacity ease 0.3s, transform ease 1s";
         setTimeout(function () {
             fadeInElement(element);
-        }, 250);
-    }, 250);
+        }, 1);
+    }, 50);
     
 
     
@@ -30,7 +30,7 @@ function fadeInElement(elementId) {
 
         var observer = new IntersectionObserver(handleIntersection, options);
         observer.observe(element);
-    }, 500);
+    }, 52);
 
     function fadeInElement(el) {
             el.style.opacity = 1;

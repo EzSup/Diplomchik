@@ -76,7 +76,7 @@
         height: 1px;
         position: absolute;
         right: 0;
-        background: #878477;
+        background: #242121;
         border-radius: 6px;
         transition: all 0.3s;
         bottom: 0;
@@ -157,12 +157,12 @@
     }
 
     .filter.radio label:hover .on-checked::after{
-        opacity: 1;
+        opacity: 0.5;
         height: 100%;
     }
 
     .filters-container > .filter.radio > label > .hidden:checked ~ .on-checked::after {
-        opacity: 0.5;
+        opacity: 0.3;
         height: 100%;
     }
 

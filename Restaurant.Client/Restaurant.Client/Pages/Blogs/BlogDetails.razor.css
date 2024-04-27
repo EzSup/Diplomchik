@@ -1,1 +1,45 @@
-﻿
+﻿.wrap-row-content {
+    max-width: 1000px;
+    margin: 0.5em 0 0;
+    p
+{
+    font-size: 20px;
+    margin: 0;
+    display: flex;
+    justify-content: flex-start;
+    width: 500px;
+}
+}
+
+.card-text {
+    width: auto !important;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center !important;
+}
+
+::deep .teaser-cont {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+::deep .teaser-cont.full-width{
+    width: 1000px;
+}
+
+::deep .content-comp-teaser{
+    width: 45%;
+}
+
+::deep .full-width .content-comp-teaser{
+    width: 100%;
+    p{
+         width: 100%;
+     }
+     h3{
+         text-align: center;
+     }
+}
