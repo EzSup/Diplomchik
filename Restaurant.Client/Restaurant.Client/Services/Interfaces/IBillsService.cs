@@ -9,5 +9,8 @@ namespace Restaurant.Client.Services.Interfaces
         Task PayBill(BillPayRequest request);
         Task<BillResponse> Get(Guid id);
         Task<ICollection<BillResponse>> GetBillsOfCustomer(int pageIndex, int pageSize, Guid customerId);
+        Task<ICollection<BillResponse>> GetAll();
+        Task<BillResponseForAdmin> GetForAdmin(Guid id);
+        Task<bool> Delete(Guid id);
     }
 }

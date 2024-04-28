@@ -19,7 +19,7 @@
     </div>
     <div class="navbar-content">
         <div class="navbar right-part">
-            <div class="LangSwitch"><CultureSelector /></div>
+            @* <div class="LangSwitch"><CultureSelector /></div> *@
             <AuthorizeView Roles="Admin">@*Коли зареганий адмін він бачить це*@
                 <Authorized>
                     <NavLink href="/dishesManage">Admin page</NavLink>

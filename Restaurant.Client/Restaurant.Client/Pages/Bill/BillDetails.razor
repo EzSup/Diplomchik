@@ -14,11 +14,11 @@
             <p><strong>Is Paid:</strong> @Bill.IsPaid</p>
             @if (Bill.Type == OrderType.InRestaurant)
             {
-                <p><strong>Reservation ID:</strong> @Bill.ReservationOrDeliveryId</p>
+                <p><strong>Номер столика і час резервації:</strong> @Bill.TableNumOrDeliveryAdress</p>
             }
             else if (Bill.Type == OrderType.Delivery)
             {
-                <p><strong>Delivery ID:</strong> @Bill.ReservationOrDeliveryId</p>
+                <p><strong>Адреса доставки:</strong> @Bill.TableNumOrDeliveryAdress</p>
             }
         </div>
         <hr />

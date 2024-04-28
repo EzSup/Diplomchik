@@ -12,7 +12,8 @@ namespace Restaurant.Client.Contracts.Bill
         public OrderType Type { get; set; }
         public bool IsPaid { get; set; } = false;
 
-        public Guid? ReservationOrDeliveryId { get; set; }
+        public string TableNumOrDeliveryAdress { get; set; } = string.Empty;
+        //public Guid? ReservationOrDeliveryId { get; set; }
         public ICollection<DishOfBill> Dishes { get; set; } = [];
     }
 

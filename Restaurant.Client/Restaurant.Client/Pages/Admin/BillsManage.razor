@@ -1,0 +1,140 @@
+﻿@using Restaurant.Client.Shared.Admin
+@using Restaurant.Client.Contracts.Bill
+@using Restaurant.Client.Services.Interfaces
+@using Mapster
+@inject IBillsService billsService
+@inject ISnackbar snackbar
+@page "/billsManage"
+@layout AdminLayout
+<MudPaper Elevation="25">
+    <MudToolBar>
+        <MudIconButton Icon="@Icons.Material.Outlined.Refresh" @onclick="Refresh" Color="Color.Inherit" Class="mr-5" />
+        @* <MudIconButton Icon="@Icons.Material.Outlined.Add" Href="/categoryAdd" Color="Color.Inherit" /> *@
+        @* <MudIconButton Icon="@Icons.Material.Outlined.Edit" @onclick="Update" /> *@
+        <MudIconButton Icon="@Icons.Material.Outlined.Remove" @onclick="Delete" />
+    </MudToolBar>
+</MudPaper>
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="8">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+                <MudTable T="BillResponse" Items="@bills" Hover="true"
+                          @bind-SelectedItem="bill" OnRowClick="@OnRowClickHandler">
+                    <HeaderContent>
+                        <MudTh>Ціна</MudTh>
+                        <MudTh>Чи сплачено</MudTh>
+                        <MudTh>Дата</MudTh>
+                        <MudTh>Тип</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Ціна">@context.TotalPrice</MudTd>
+                        <MudTd DataLabel="Чи сплачено">@context.IsPaid</MudTd>
+                        <MudTd DataLabel="Дата">@context.OrderDateAndTime</MudTd>
+                        <MudTd DataLabel="Тип">@context.Type</MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                </MudTable>
+            </MudPaper>
+        </MudItem>
+        @if (_itemToUpdate != null)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+                    <MudTextField Label="Id" @bind-Value="_itemToUpdate.billData.Id" ReadOnly />
+                    <MudTextField Label="Сума" @bind-Value="_itemToUpdate.billData.TotalPrice" ReadOnly />
+                    <MudTextField Label="Чайові" @bind-Value="_itemToUpdate.billData.Tips" ReadOnly />
+                    <MudTextField Label="Дата замовлення" @bind-Value="_itemToUpdate.billData.OrderDateAndTime" ReadOnly />
+                    <MudTextField Label="Тип замовлення" @bind-Value="_itemToUpdate.billData.Type" ReadOnly />
+                    <MudTextField Label="Дані замовлення" @bind-Value="_itemToUpdate.billData.TableNumOrDeliveryAdress" ReadOnly />
+                    <MudText>Кошик</MudText>
+                    <table style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th>Назва</th>
+                                <th>Ціна</th>
+                                <th>Кількість</th>
+                                <th>Сума</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var dish in _itemToUpdate.billData.Dishes)
+                            {
+                                <tr>
+                                    <td>@dish.Name</td>
+                                    <td>@dish.Price</td>
+                                    <td>@dish.Count</td>
+                                    <td>@dish.SumPrice</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <MudText>Замовник</MudText>
+                    <table>
+                        <tbody>
+                            <tr>
+                                <th>Покупець</th>
+                                <td>@_itemToUpdate.customerData.Name</td>
+                            </tr>
+                            <tr>
+                                <th>Email</th>
+                                <td>@_itemToUpdate.customerData.Email</td>
+                            </tr>
+                            <tr>
+                                <th>Телефон</th>
+                                <td>@_itemToUpdate.customerData.PhoneNum</td>
+                            </tr>
+                            <tr>
+                                <th>ID</th>
+                                <td>@_itemToUpdate.customerData.Id</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <MudButton OnClick="Delete" Variant="Variant.Filled" Color="Color.Error" Class="ml-auto">Delete</MudButton>
+                </MudPaper>
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
+
+
+@code {
+    private BillResponse bill;
+    private BillResponseForAdmin _itemToUpdate;
+    private List<BillResponse> bills = new();
+
+    private async Task Delete()
+    {
+        if (await billsService.Delete(_itemToUpdate.billData.Id))
+        {
+            snackbar.Add("ВИДАЛИЛИ!", Severity.Success);
+            await Refresh();
+        }
+    }
+    // private async Task Update()
+    // {
+    //     if (await categoriesService.Update(_itemToUpdate))
+    //     {
+    //         snackbar.Add("ОНОВИЛИ", Severity.Success);
+    //         await Refresh();
+    //     }
+    // }
+
+    private async Task Refresh()
+    {
+        bills = (await billsService.GetAll()).ToList();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+    }
+
+    private async Task OnRowClickHandler(TableRowClickEventArgs<BillResponse> args)
+    {
+        var id = args.Item.Adapt<BillResponse>().Id;
+        _itemToUpdate = await billsService.GetForAdmin(id);
+    }
+}

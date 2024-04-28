@@ -1,7 +1,6 @@
 ﻿@page "/billData/{billId:guid}"
 @using Restaurant.Client.Contracts.Bill
 @inject IBillsService billsService
-@inject ISnackbar snackbar
 <h3>Bill Data</h3>
 
 @if (bill != null)
@@ -10,19 +9,26 @@
         <div class="card-body">
             <h5 class="card-title">Bill ID: @bill.Id</h5>
             <p class="card-text">Type: @bill.Type</p>
-            <p class="card-text">Reservation ID: @bill.ReservationOrDeliveryId</p>
+            @if(bill.Type == Contracts.Enums.OrderType.InRestaurant)
+            {
+                <p class="card-text">Номер столика і час резервації: @bill.TableNumOrDeliveryAdress</p>
+            }
+            else if(bill.Type == Contracts.Enums.OrderType.Delivery)
+            {
+                <p class="card-text">Адреса доставки: @bill.TableNumOrDeliveryAdress</p>
+            }
             <p class="card-text">Date: @bill.OrderDateAndTime</p>
-            <p class="card-text">Total Price: @bill.TotalPrice</p>
+            <p class="card-text">Total Price: @bill.TotalPrice ₴</p>
             <p class="card-text">Paid: @bill.IsPaid</p>
             <hr />
-            <h5 class="card-title">Cart</h5>
+            <h5 class="card-title">Кошик</h5>
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Count</th>
-                        <th>Price</th>
-                        <th>Summary Price</th>
+                        <th>Назва страви</th>
+                        <th>Кількість</th>
+                        <th>Ціна, ₴</th>
+                        <th>Сума, ₴</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,12 +49,29 @@
         @if (!bill.IsPaid)
         {
             <div>
-                <label>The amount you pay:</label>
-                <InputNumber @bind-Value="paid"></InputNumber>
+                <label>Сума до сплати: @(bill.TotalPrice + bill.TotalPrice * tipsPercents * 0.01m) ₴</label>
             </div>
             <div>
-                <label>Tipping, percentage of the cost:</label>
-                <InputNumber @bind-Value="tipsPercents"></InputNumber>
+                <label>Чайові, у відсотках від суми:</label>
+                <InputRadioGroup @bind-Value="@tipsPercents" TValue="int">
+                    <div>
+                        <label>Без чайових</label>
+                        <InputRadio Value="0"></InputRadio>
+                    </div>
+                    <div>
+                        <label>5% чайових</label>
+                        <InputRadio Value="5"></InputRadio>
+                    </div>
+                    <div>
+                        <label>10% чайових</label>
+                        <InputRadio Value="10"></InputRadio>
+                    </div>
+                    <div>
+                        <label>15% чайових</label>
+                        <InputRadio Value="15"></InputRadio>
+                    </div>
+                </InputRadioGroup>
+                @* <InputNumber min="0" max="100" @bind-Value="tipsPercents" ValueChanged=""></InputNumber> *@
             </div>
             <div>
                 <button class="btn btn-primary" @onclick="PayForBill">Pay for it</button>
@@ -58,7 +81,7 @@
 }
 else
 {
-    <p>Loading...</p>
+    <p>Завантаження...</p>
 }
 
 @code {
@@ -73,9 +96,10 @@ else
         bill = await billsService.Get(billId);
     }
 
+
     private async Task PayForBill()
-    {
-        var payRequest = new BillPayRequest() { BillId = billId, Amount = paid, TipsPercents = tipsPercents };
+    {        
+        var payRequest = new BillPayRequest() { BillId = billId, Amount = bill.TotalPrice + bill.TotalPrice * tipsPercents * 0.01m, TipsPercents = tipsPercents };
         await billsService.PayBill(payRequest);
     }
 }

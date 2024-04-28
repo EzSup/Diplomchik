@@ -8,15 +8,17 @@
     <div class="user-data">
         @if (_customer != null)
         {
-            <h5>User data:</h5>
-            <p style="font-size: 24px;"><strong>Name:</strong> @_customer.Name</p>
+            <h5>Ваші дані:</h5>
+            <p style="font-size: 24px;"><strong>Ім'я:</strong> @_customer.Name</p>
+            <p style="font-size: 24px;"><strong>Пошта:</strong> @_customer.Email</p>
+            <p style="font-size: 24px;"><strong>Телефон:</strong> @_customer.PhoneNum</p>
         }
     </div>
     <br />
     <div class="bills">
         @if (_bills != null && _bills.Count > 0)
         {
-            <h5>Your Bills:</h5>
+            <h5>Ваші чеки:</h5>
             foreach (var bill in _bills)
             {
                 <BillCard  Bill="@bill"></BillCard>
@@ -24,7 +26,7 @@
         }
         else
         {
-            <p>Loading...</p>
+            <p>Завантаження...</p>
         }
     </div>
 </body>

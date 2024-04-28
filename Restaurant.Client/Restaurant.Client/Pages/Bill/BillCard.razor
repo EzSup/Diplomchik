@@ -3,13 +3,24 @@
 @if (Bill != null)
 {
     <div @onclick="MoveToDetails" style="border: 1px solid #ccc; border-radius: 5px; padding: 10px;  margin: 20px; width: 300px; height: 400px; background-color: @(Bill.IsPaid ?"#b5e7a0":"#eca1a6");">
-        <h5>Bill Details</h5>
+        <h6>@Bill.OrderDateAndTime</h6>
         <hr />
         <div >
-            <p style="font-size: 24px;"><strong>Total Price:</strong> @Bill.TotalPrice</p>
-            <p style="font-size: 24px;"><strong>Order Date and Time:</strong> @Bill.OrderDateAndTime</p>
-            <p style="font-size: 24px;"><strong>Tips:</strong> @Bill.Tips</p>
-            <p style="font-size: 24px;"><strong>Order Type:</strong> @Bill.Type</p>
+            <p style="font-size: 24px;"><strong>Загальна сума:</strong> @Bill.TotalPrice ₴</p>
+            @* <p style="font-size: 24px;"><strong>Дата і час замовлення:</strong> @Bill.OrderDateAndTime</p> *@
+            @if(Bill.Tips > 0){
+                <p style="font-size: 24px;"><strong>Чайові:</strong> @Bill.Tips ₴</p>
+            }
+            <p style="font-size: 24px;"><strong>Тип замовлення:</strong> @Bill.Type</p>
+            @if(Bill.Type == OrderType.InRestaurant)
+            {
+                <p style="font-size: 24px;"><strong>Номер столика і час резервації:</strong> @Bill.TableNumOrDeliveryAdress</p>
+            }
+            else if (Bill.Type == OrderType.Delivery)
+            {
+                <p style="font-size: 24px;"><strong>Адреса доставки:</strong> @Bill.TableNumOrDeliveryAdress</p>
+            }
+
             @* <p><strong>Is Paid:</strong> @Bill.IsPaid</p> *@
         </div>        
     </div>

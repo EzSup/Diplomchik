@@ -5,23 +5,28 @@
 @inject ICartsService cartService
 @inject ICustomersService customersService
 
-@if (cart != null)
+@if (cart != null && cart.Dishes.Count > 0)
 {
     @foreach (var dish in cart.Dishes)
     {
         <DishRowOfCart Dish="dish" OnButtonClick="() => Update(dish.Id, dish.count)"></DishRowOfCart>
     }
+
+    <div class="form-group">
+        <lable class="form-Label">Тип замовлення</lable>
+        <select @bind="orderType">
+            <option value="@OrderType.InRestaurant">В ресторані</option>
+            <option value="@OrderType.Delivery">Доставка</option>
+        </select>
+    </div>
+    <button @onclick="Continue">
+        Підтвердити і продовжити
+    </button>
 }
-<div class="form-group">
-    <lable class="form-Label">Order type</lable>
-    <select @bind="orderType">
-        <option value="@OrderType.InRestaurant">In restaurant</option>
-        <option value="@OrderType.Delivery">Delivery</option>
-    </select>
-</div>
-<button @onclick="Continue">
-    Confirm and continue
-</button>
+else
+{
+    <h1>Корзина пуста, <a href="/menu">оберіть собі щось смачненьке!</a></h1>
+}
 
 @code {
 

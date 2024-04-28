@@ -7,6 +7,7 @@ using Restaurant.Client.Services.Interfaces;
 using Blazored.Toast;
 using Blazored.Toast.Services;
 using Microsoft.AspNetCore.Components;
+using System.Drawing.Printing;
 
 namespace Restaurant.Client.Services
 {
@@ -48,12 +49,36 @@ namespace Restaurant.Client.Services
             return result;
         }
 
+        public async Task<bool> Delete(Guid id)
+        {
+            var response = await _httpClient.DeleteAsync($"api/Bills/Delete/{id}");            
+            return response.IsSuccessStatusCode;
+        }
+
         public async Task<ICollection<BillResponse>> GetBillsOfCustomer(int pageIndex, int pageSize, Guid customerId)
         {
             var response = await _httpClient.GetAsync($"api/Bills/GetBillsOfCustomer?pageIndex={pageIndex}&pageSize={pageSize}&CustomerId={customerId}");
             response.EnsureSuccessStatusCode();
             var responseBody = await response.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<ICollection<BillResponse>>(responseBody);
+            return result;
+        }
+
+        public async Task<ICollection<BillResponse>> GetAll()
+        {
+            var response = await _httpClient.GetAsync($"api/Bills/GetAll");
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ICollection<BillResponse>>(responseBody);
+            return result;
+        }
+
+        public async Task<BillResponseForAdmin> GetForAdmin(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"api/Bills/GetForAdmin/{id}");
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<BillResponseForAdmin>(responseBody);
             return result;
         }
 
