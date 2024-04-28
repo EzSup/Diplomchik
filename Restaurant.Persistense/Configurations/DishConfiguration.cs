@@ -23,8 +23,8 @@ namespace Restaurant.Persistense.Configurations
                 .HasForeignKey(d => d.CuisineId)
                 .OnDelete(DeleteBehavior.SetNull);
             builder.HasOne(d => d.Discount)
-                .WithMany(dis => dis.Dishes)
-                .HasForeignKey(d => d.DiscountId)
+                .WithOne(dis => dis.Dish)
+                .HasForeignKey<Dish>(d => d.DiscountId)
                 .OnDelete(DeleteBehavior.SetNull);
 
 

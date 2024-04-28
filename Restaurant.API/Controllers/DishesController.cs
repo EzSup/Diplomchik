@@ -26,8 +26,12 @@ namespace Restaurant.API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<ICollection<DishResponse>?>> GetAll()
         {
-            var dishes = (await _dishesService.GetAll()) ?? new List<Dish>();
+            var dishes = (await _dishesService.GetAll()).ToList() ?? new List<Dish>();
             var response = dishes.Adapt<List<DishResponse>>();
+            for (int i = 0; i<response.Count; i++)
+            {
+                response[i].DiscountPercents = dishes[i]?.Discount?.PecentsAmount == null ? 0 : dishes[i].Discount.PecentsAmount;
+            }
             return Ok(response);
         }
 
@@ -35,8 +39,12 @@ namespace Restaurant.API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<ICollection<DishResponse>>> GetByPage(int page, int pageSize)
         {
-            var dishes = await _dishesService.GetByPage(page, pageSize);
+            var dishes = (await _dishesService.GetByPage(page, pageSize)).ToList();
             var response = dishes.Adapt<List<DishResponse>>();
+            for (int i = 0; i < response.Count; i++)
+            {
+                response[i].DiscountPercents = dishes[i]?.Discount?.PecentsAmount == null ? 0 : dishes[i].Discount.PecentsAmount;
+            }
             return Ok(response);
         }
 
@@ -47,6 +55,7 @@ namespace Restaurant.API.Controllers
             //var dish = (await _dishesService.GetAll()).FirstOrDefault(x => x.Id == id);
             var dish = await _dishesService.GetById(id);
             var response = dish.Adapt<DishResponse>();
+            response.DiscountPercents = dish?.Discount?.PecentsAmount == null ? 0 : dish.Discount.PecentsAmount;
             return Ok(response);
         }
 
@@ -87,6 +96,38 @@ namespace Restaurant.API.Controllers
                 dish.CategoryId = Guid.Empty == request.CategoryId ? null : request.CategoryId;
                 dish.CuisineId = Guid.Empty == request.CuisineId ? null : request.CuisineId;
                 return Ok(await _dishesService.Add(dish));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch]
+        [Authorize(Policy = "AdminPolicy")]
+        public async Task<IActionResult> AddDiscount(Guid dishId, double PercentsAmount)
+        {
+            try
+            {
+                if(await _dishesService.AddDiscount(dishId, PercentsAmount))
+                    return NoContent();
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{dishId:guid}")]
+        [Authorize(Policy = "AdminPolicy")]
+        public async Task<IActionResult> RemoveDiscount(Guid dishId)
+        {
+            try
+            {
+                if (await _dishesService.RemoveDiscount(dishId))
+                    return NoContent();
+                return NotFound();
             }
             catch (Exception ex)
             {

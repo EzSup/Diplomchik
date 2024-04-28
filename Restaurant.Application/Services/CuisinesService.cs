@@ -12,10 +12,12 @@ namespace Restaurant.Application.Services
     public class CuisinesService : ICuisinesService
     {
         private readonly ICuisinesRepository _cuisinesRepository;
+        private readonly IDiscountsRepository _discountsRepository;
 
-        public CuisinesService(ICuisinesRepository cuisinesRepository)
+        public CuisinesService(ICuisinesRepository cuisinesRepository, IDiscountsRepository discountsRepository)
         {
             _cuisinesRepository = cuisinesRepository;
+            _discountsRepository = discountsRepository;
         }
 
         public async Task<Guid> Add(Cuisine entity)
@@ -38,5 +40,27 @@ namespace Restaurant.Application.Services
 
         public async Task<bool> Update(Cuisine entity)
             => await _cuisinesRepository.Update(entity);
+
+        public async Task<bool> AddDiscount(Guid cuisineId, double PercentsAmount)
+        {
+            var cuisine = await GetById(cuisineId);
+            if (cuisine == null)
+            {
+                throw new ArgumentException("Такої кухні не існує!");
+            }
+            var id = await _discountsRepository.Add(new Discount() { DiscountType = Core.Enums.DiscountType.Cuisine, PecentsAmount = PercentsAmount });
+            cuisine.DiscountId = id;
+            return await _cuisinesRepository.Update(cuisine);
+
+        }
+
+        public async Task<bool> RemoveDiscount(Guid dishId)
+        {
+            var cuisine = await GetById(dishId);
+            Guid discountId = cuisine.DiscountId ?? throw new ArgumentException("Немає знижки в цієї кухні!");
+            cuisine.DiscountId = null;
+            await Update(cuisine);
+            return await _discountsRepository.Delete(discountId);
+        }
     }
 }

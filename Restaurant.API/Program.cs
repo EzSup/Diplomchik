@@ -53,6 +53,7 @@ namespace Restaurant.API
             builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
             builder.Services.AddScoped<IReservationsRepository, ReservationsRepository>();
             builder.Services.AddScoped<IDeliveryDatasRepository, DeliveryDatasRepository>();
+            builder.Services.AddScoped<IDiscountsRepository, DiscountsRepository>();
 
             builder.Services.AddScoped<IBillsService, BillsService>();
             builder.Services.AddScoped<IBlogsService, BlogsService>();

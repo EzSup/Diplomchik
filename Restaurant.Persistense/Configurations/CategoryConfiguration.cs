@@ -13,8 +13,8 @@ namespace Restaurant.Persistense.Configurations
                 .IsRequired();
 
             builder.HasOne(b => b.Discount)
-                .WithMany(c => c.Categories)
-                .HasForeignKey(b => b.DiscountId)
+                .WithOne(c => c.Category)
+                .HasForeignKey<Category>(c => c.DiscountId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.Navigation(d => d.Discount).IsRequired(false);

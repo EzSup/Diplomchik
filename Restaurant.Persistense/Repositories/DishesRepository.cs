@@ -54,6 +54,7 @@ namespace Restaurant.Persistense.Repositories
         public async Task<ICollection<Dish>> GetAll()
         {
             return await _context.Dishes.AsNoTracking()
+                .Include(d => d.Discount)
                 //.OrderBy(x => x.CategoryId)
                 .Select(d => new Dish
                 {
@@ -66,8 +67,9 @@ namespace Restaurant.Persistense.Repositories
                     PhotoLinks = d.PhotoLinks,
                     IngredientsList = d.IngredientsList,
                     DiscountId = d.DiscountId,
+                    Discount = d.Discount,
                     CategoryId = d.CategoryId,
-                    CuisineId=d.CuisineId,
+                    CuisineId = d.CuisineId,
                 })
                 .ToListAsync();
         }
@@ -131,15 +133,18 @@ namespace Restaurant.Persistense.Repositories
             }
 
             var s = await query
-                .Select(x => new DishPaginationResponse(
-                    x.Id, x.Name, x.PhotoLinks.FirstOrDefault(),
-                    x.Price, (x.Price * (decimal)(x.Discount.PecentsAmount != null && x.Discount.PecentsAmount > 0 ? x.Discount.PecentsAmount : 100) * 0.01m))).ToListAsync(); //розібратись чому tolistasync викликає помилку
+                .Select(x => new DishPaginationResponse(x.Id, x.Name, x.PhotoLinks.FirstOrDefault(), x.Price, 
+                x.Price - (x.Price * 0.01m * (decimal)(x.Discount.PecentsAmount != null ? x.Discount.PecentsAmount : 0))
+                - (x.Price * 0.01m * (decimal)(x.Category.Discount.PecentsAmount != null ? x.Category.Discount.PecentsAmount : 0))
+                - (x.Price * 0.01m * (decimal)(x.Cuisine.Discount.PecentsAmount != null ? x.Cuisine.Discount.PecentsAmount : 0))))
+                .ToListAsync();
+            //розібратись чому tolistasync викликає помилку
             return s;
         }
 
         public async Task<Dish> GetById(Guid id)
         {
-            var dish =  await _context.Dishes
+            var dish = await _context.Dishes
                 .AsNoTracking()
                 .Include(x => x.DishCarts)
                 .Include(x => x.Reviews)
@@ -178,7 +183,7 @@ namespace Restaurant.Persistense.Repositories
             throw new ArgumentException("Page size and number has to be greater than 0!");
         }
 
-        public async Task<ICollection<Dish>> GetByPageAvailable (int page, int pageSize)
+        public async Task<ICollection<Dish>> GetByPageAvailable(int page, int pageSize)
         {
             if (pageSize > 0 && page > 0)
             {
@@ -206,7 +211,7 @@ namespace Restaurant.Persistense.Repositories
                     .SetProperty(r => r.IngredientsList, entity.IngredientsList)
                     .SetProperty(r => r.Available, entity.Available)
                     .SetProperty(r => r.Price, entity.Price)
-                    .SetProperty(r => r.PhotoLinks, entity.PhotoLinks )
+                    .SetProperty(r => r.PhotoLinks, entity.PhotoLinks)
                     .SetProperty(r => r.DiscountId, entity.DiscountId == Guid.Empty ? null : entity.DiscountId)
                     .SetProperty(r => r.CuisineId, entity.CuisineId == Guid.Empty ? null : entity.CuisineId)
                     .SetProperty(r => r.CategoryId, entity.CategoryId == Guid.Empty ? null : entity.CategoryId)) == 1;

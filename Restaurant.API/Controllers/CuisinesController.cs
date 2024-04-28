@@ -25,8 +25,12 @@ namespace Restaurant.API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<ICollection<CuisineResponse>>> GetAll()
         {
-            var cuisines = await _cuisinesService.GetAll();
+            var cuisines = (await _cuisinesService.GetAll()).ToList();
             var response = cuisines.Adapt<List<CuisineResponse>>();
+            for (int i = 0; i < response.Count; i++)
+            {
+                response[i].DiscountPercents = cuisines[i]?.Discount?.PecentsAmount == null ? 0 : cuisines[i].Discount.PecentsAmount;
+            }
             return Ok(response);
         }
 
@@ -34,8 +38,12 @@ namespace Restaurant.API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<ICollection<CuisineResponse>>> GetByPage(int page, int pageSize)
         {
-            var cuisines = await _cuisinesService.GetByPage(page, pageSize);
+            var cuisines = (await _cuisinesService.GetByPage(page, pageSize)).ToList();
             var response = cuisines.Adapt<List<CuisineResponse>>();
+            for (int i = 0; i < response.Count; i++)
+            {
+                response[i].DiscountPercents = cuisines[i]?.Discount?.PecentsAmount == null ? 0 : cuisines[i].Discount.PecentsAmount;
+            }
             return Ok(response);
         }
 
@@ -45,6 +53,7 @@ namespace Restaurant.API.Controllers
         {
             var cuisine = await _cuisinesService.GetById(id);
             var response = cuisine.Adapt<CuisineResponse>();
+            response.DiscountPercents = cuisine?.Discount?.PecentsAmount == null ? 0 : cuisine.Discount.PecentsAmount;
             return Ok(response);
         }
 
@@ -85,6 +94,39 @@ namespace Restaurant.API.Controllers
                 cuisine.Id = id;
                 await _cuisinesService.Update(cuisine);
                 return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch]
+        [Authorize(Policy = "AdminPolicy")]
+        public async Task<IActionResult> AddDiscount(Guid cuisineId, double PercentsAmount)
+        {
+            try
+            {
+                if(await _cuisinesService.AddDiscount(cuisineId, PercentsAmount))
+                    return NoContent();
+
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{cuisineId:guid}")]
+        [Authorize(Policy = "AdminPolicy")]
+        public async Task<IActionResult> RemoveDiscount(Guid cuisineId)
+        {
+            try
+            {
+                if(await _cuisinesService.RemoveDiscount(cuisineId))
+                    return NoContent();
+                return NotFound();
             }
             catch (Exception ex)
             {

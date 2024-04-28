@@ -19,8 +19,13 @@ namespace Restaurant.Persistense.Repositories
 
         public async Task<Guid> Add(Discount entity)
         {
+            if (entity.PecentsAmount <= 0 || entity.PecentsAmount >= 100)
+            {
+                throw new ArgumentException("Кількість відсотків має складати значення між 0 і 100%");
+            }
             var model = new Discount()
             {
+                DiscountType = entity.DiscountType,
                 PecentsAmount = entity.PecentsAmount
             };
             await _context.Discounts.AddAsync(model);
@@ -46,9 +51,9 @@ namespace Restaurant.Persistense.Repositories
         public async Task<Discount> GetById(Guid id)
         {
             return await _context.Discounts.AsNoTracking()
-                .Include(x => x.Categories)
+                .Include(x => x.Category)
                 .Include(x => x.Cuisine)
-                .Include(x => x.Dishes) 
+                .Include(x => x.Dish) 
                 .FirstOrDefaultAsync(x => x.Id == id) ?? throw new KeyNotFoundException("Discount not found!");
         }
 
@@ -74,6 +79,7 @@ namespace Restaurant.Persistense.Repositories
             return await _context.Discounts
                 .Where(r => r.Id == entity.Id)
                 .ExecuteUpdateAsync(s => s
+                    .SetProperty(r => r.DiscountType, entity.DiscountType)
                     .SetProperty(r => r.PecentsAmount, entity.PecentsAmount)) == 1;
         }
     }

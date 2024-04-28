@@ -16,5 +16,7 @@ namespace Restaurant.Application.Interfaces.Services
         Task<bool> Delete(Guid id);
         Task<int> Purge(IEnumerable<Guid> values);
         Task<ICollection<Cuisine>> GetByPage(int page, int pageSize);
+        Task<bool> AddDiscount(Guid cuisineId, double PercentsAmount);
+        Task<bool> RemoveDiscount(Guid cuisineId);
     }
 }

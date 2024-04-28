@@ -23,5 +23,7 @@ namespace Restaurant.Application.Interfaces.Services
         //Task<ICollection<DishPaginationResponse>> GetByFilterPage(DishPaginationRequest request);
 
         Task<int> PagesCount(DishPaginationRequest request);
+        Task<bool> AddDiscount(Guid dishId, double PercentsAmount);
+        Task<bool> RemoveDiscount(Guid dishId);
     }
 }

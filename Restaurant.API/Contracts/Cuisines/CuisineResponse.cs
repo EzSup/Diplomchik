@@ -1,7 +1,8 @@
 ﻿namespace Restaurant.API.Contracts.Cuisines
 {
-    public record CuisineResponse(
-        Guid Id,
-        string Name,
-        Guid? DiscountId);
+    public class CuisineResponse {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public double DiscountPercents { get; set; }
+    }
 }

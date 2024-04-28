@@ -1,11 +1,14 @@
-﻿namespace Restaurant.Core.Models;
+﻿using Restaurant.Core.Enums;
+
+namespace Restaurant.Core.Models;
 
 public class Discount
 {
     public Guid Id { get; set; }
+    public DiscountType DiscountType { get; set; } = DiscountType.Dish;
     public double PecentsAmount { get; set; } = 0;
 
-    public ICollection<Category> Categories { get; set; } = [];
+    public Category? Category { get; set; }
     public Cuisine? Cuisine { get; set; }
-    public ICollection<Dish> Dishes { get; set; } = [];
+    public Dish? Dish { get; set; }
 }

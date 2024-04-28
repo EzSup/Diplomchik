@@ -41,6 +41,7 @@ namespace Restaurant.Persistense.Repositories
         {
             return await _context.Cuisines
                 .AsNoTracking()
+                .Include(x => x.Discount)
                 .OrderBy(x => x.Name)
                 .ToListAsync();
         }
@@ -49,7 +50,17 @@ namespace Restaurant.Persistense.Repositories
         {
             return await _context.Cuisines.AsNoTracking()
                 .Include(x => x.Discount)
-                .Include(x => x.Dishes)
+                //.Include(x => x.Dishes).ThenInclude(d => new Dish()
+                //{
+                //    Id = d.Id,
+                //    Name = d.Name,
+                //    Available = d.Available,
+                //    Weight = d.Weight,
+                //    IngredientsList = d.IngredientsList,
+                //    CategoryId = d.CategoryId,
+                //    CuisineId = d.CuisineId,
+                //    DiscountId = d.DiscountId
+                //})
                 .FirstOrDefaultAsync(x => x.Id == id) ?? throw new KeyNotFoundException("Cuisine not found!");
         }
 

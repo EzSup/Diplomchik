@@ -26,8 +26,12 @@ namespace Restaurant.API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<ICollection<CategoryResponse>>> GetAll()
         {
-            var categories = await _categoriesService.GetAll();
+            var categories = (await _categoriesService.GetAll()).ToList();
             var response = categories.Adapt<List<CategoryResponse>>();
+            for (int i = 0; i < response.Count; i++)
+            {
+                response[i].DiscountPercents = categories[i]?.Discount?.PecentsAmount == null ? 0 : categories[i].Discount.PecentsAmount;
+            }
             return Ok(response);
         }
 
@@ -35,8 +39,12 @@ namespace Restaurant.API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<ICollection<CategoryResponse>>> GetByPage(int page, int pageSize)
         {
-            var categories = await _categoriesService.GetByPage(page, pageSize);
+            var categories = (await _categoriesService.GetByPage(page, pageSize)).ToList();
             var response = categories.Adapt<List<CategoryResponse>>();
+            for (int i = 0; i < response.Count; i++)
+            {
+                response[i].DiscountPercents = categories[i]?.Discount?.PecentsAmount == null ? 0 : categories[i].Discount.PecentsAmount;
+            }
             return Ok(response);
         }
 
@@ -44,8 +52,9 @@ namespace Restaurant.API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<CategoryResponse>> Get(Guid id)
         {
-            var categories = await _categoriesService.GetById(id);
-            var response = categories.Adapt<CategoryResponse>();
+            var category = await _categoriesService.GetById(id);
+            var response = category.Adapt<CategoryResponse>();
+            response.DiscountPercents = category?.Discount?.PecentsAmount == null ? 0 : category.Discount.PecentsAmount;
             return Ok(response);
         }
 
@@ -88,6 +97,38 @@ namespace Restaurant.API.Controllers
                 category.Id = id;
                 await _categoriesService.Update(category);
                 return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch]
+        [Authorize(Policy = "AdminPolicy")]
+        public async Task<IActionResult> AddDiscount(Guid categoryId, double PercentsAmount)
+        {
+            try
+            {
+                if(await _categoriesService.AddDiscount(categoryId, PercentsAmount))
+                    return NoContent();
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{categoryId:guid}")]
+        [Authorize(Policy = "AdminPolicy")]
+        public async Task<IActionResult> RemoveDiscount(Guid categoryId)
+        {
+            try
+            {
+                if (await _categoriesService.RemoveDiscount(categoryId))
+                    return NoContent();
+                return NotFound();
             }
             catch (Exception ex)
             {

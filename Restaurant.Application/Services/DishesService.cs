@@ -16,10 +16,12 @@ namespace Restaurant.Application.Services
     public class DishesService : IDishesService
     {
         private readonly IDishesRepository _dishesRepository;
+        private readonly IDiscountsRepository _discountsRepository;
 
-        public DishesService(IDishesRepository dishesRepository)
+        public DishesService(IDishesRepository dishesRepository, IDiscountsRepository discountsRepository)
         {
             _dishesRepository = dishesRepository;
+            _discountsRepository = discountsRepository;
         }
 
         public async Task<ICollection<Dish>> GetAll() 
@@ -70,6 +72,28 @@ namespace Restaurant.Application.Services
                     .ToList();
             }
             throw new ArgumentException("Page size and number has to be greater than 0!");
+        }
+
+        public async Task<bool> AddDiscount(Guid dishId, double PercentsAmount)
+        {
+            var dish = await GetById(dishId);
+            if (dish == null)
+            {
+                throw new ArgumentException("Такої страви не існує!");
+            }
+            var id = await _discountsRepository.Add(new Discount() { DiscountType = Core.Enums.DiscountType.Dish, PecentsAmount = PercentsAmount });
+            dish.DiscountId = id;
+            return await _dishesRepository.Update(dish);
+
+        }
+
+        public async Task<bool> RemoveDiscount(Guid dishId)
+        {
+            var dish = await GetById(dishId);
+            Guid discountId = dish.DiscountId ?? throw new ArgumentException("Немає знижки в цієї страви!");            
+            dish.DiscountId = null;
+            await Update(dish);
+            return await _discountsRepository.Delete(discountId);
         }
     }
 }
