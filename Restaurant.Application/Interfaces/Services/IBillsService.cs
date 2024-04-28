@@ -18,6 +18,7 @@ namespace Restaurant.Application.Interfaces.Services
         Task<int> Purge(IEnumerable<Guid> values);
         Task<BillResponse> RegisterBill(BillAddRequest obj);
         Task<BillResponse> GetResponseById(Guid Id);
+        Task<BillResponseForAdmin> GetResponseAdminById(Guid Id);
         Task<ICollection<Bill>> GetByPage(int page, int pageSize);
         Task<ICollection<BillResponse>> GetBillsOfCustomer(int pageIndex, int pageSize, Guid CustomerId);
         Task<(bool flag, string message, decimal rest)> Pay(Guid BillId, decimal Amount, int TipsPercents);

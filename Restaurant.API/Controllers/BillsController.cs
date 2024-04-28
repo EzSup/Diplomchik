@@ -25,10 +25,10 @@ namespace Restaurant.API.Controllers
 
         [HttpGet]
         [Authorize(Policy ="AdminPolicy")]
-        public async Task<ActionResult<ICollection<BillResponse>>> GetAll()
+        public async Task<ActionResult<ICollection<BillShortResponse>>> GetAll()
         {
             var blogs = await _billsService.GetAll();
-            var response = blogs.Adapt<List<BillResponse>>();
+            var response = blogs.Adapt<List<BillShortResponse>>();
             return Ok(response);
         }
 
@@ -47,6 +47,14 @@ namespace Restaurant.API.Controllers
         public async Task<ActionResult<BillResponse>> Get(Guid id)
         {
             var bill = await _billsService.GetResponseById(id);
+            return Ok(bill);
+        }
+
+        [HttpGet("{id:guid}")]
+        [Authorize(Policy ="AdminPolicy")]
+        public async Task<ActionResult<BillResponseForAdmin>> GetForAdmin(Guid id)
+        {
+            var bill = await _billsService.GetResponseAdminById(id);
             return Ok(bill);
         }
 

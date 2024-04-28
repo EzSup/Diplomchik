@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Restaurant.API.Contracts.Blogs;
 using Restaurant.API.Contracts.Customers;
+using Restaurant.Core.Dtos.Customer;
 using Restaurant.Application.Interfaces.Services;
 using Restaurant.Application.Services;
 using Restaurant.Core.Dtos;
@@ -26,27 +27,25 @@ namespace Restaurant.API.Controllers
         [Authorize(Policy = "AdminPolicy")]
         public async Task<ActionResult<IEnumerable<CustomerResponse>>> GetAll()
         {
-            var customers = await _customersService.GetAll();
-            var response = customers.Adapt<IEnumerable<CustomerResponse>>();
-            return Ok(response);
+            var customers = await _customersService.GetAllAsResponses();
+            return Ok(customers);
         }
 
         [HttpGet("{id:guid}")]
         [Authorize]
         public async Task<ActionResult<CustomerResponse>> Get(Guid id)
         {
-            var customer = await _customersService.GetById(id);
-            var response = customer.Adapt<CustomerResponse>();
-            return Ok(response);
+            var customer = await _customersService.GetResponseById(id);
+            return Ok(customer);
         }
+
 
         [HttpGet("{id:guid}")]
         [AllowAnonymous]
         public async Task<ActionResult<CustomerResponse>> GetByUser(Guid id)
         {
-            var customer = await _customersService.GetByUser(id);
-            var response = customer.Adapt<CustomerResponse>();
-            return Ok(response);
+            var customer = await _customersService.GetResponseByUser(id);
+            return Ok(customer);
         }
 
         [HttpPost]

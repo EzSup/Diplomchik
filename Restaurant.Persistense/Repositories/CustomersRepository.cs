@@ -113,7 +113,7 @@ namespace Restaurant.Persistense.Repositories
 
         public async Task<Customer> GetByUser(Guid userId)
         {
-            return await _context.Customers.FirstOrDefaultAsync(
+            return await _context.Customers.AsNoTracking().Include(c => c.User).FirstOrDefaultAsync(
                 x=> x.UserId == userId) ?? throw new KeyNotFoundException("Покупця за таким користувачем не знайдено!");
         }
     }

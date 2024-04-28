@@ -1,4 +1,5 @@
-﻿using Restaurant.Core.Models;
+﻿using Restaurant.Core.Dtos.Customer;
+using Restaurant.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,9 @@ namespace Restaurant.Application.Interfaces.Services
         Task<int> Purge(IEnumerable<Guid> values);
         Task<bool> UpdateImage(Guid id, string ImageLink);
         Task<Customer> GetByUser(Guid userId);
+        Task<CustomerResponse> GetShortCustomerData(Guid id);
+        Task<CustomerResponse> GetResponseById(Guid id);
+        Task<CustomerResponse> GetResponseByUser(Guid id);
+        Task<ICollection<CustomerResponse>> GetAllAsResponses();
     }
 }

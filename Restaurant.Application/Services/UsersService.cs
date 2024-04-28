@@ -49,5 +49,6 @@ namespace Restaurant.Application.Services
 
             return token;
         }
+
     }
 }

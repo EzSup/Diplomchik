@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Restaurant.Core.Models.Bill;
+﻿using static Restaurant.Core.Models.Bill;
 
 namespace Restaurant.Core.Dtos.Bill
 {
@@ -17,7 +12,8 @@ namespace Restaurant.Core.Dtos.Bill
         public OrderType Type { get; set; }
         public bool IsPaid { get; set; } = false;
 
-        public Guid? ReservationOrDeliveryId { get; set; }
+        public string TableNumOrDeliveryAdress { get; set; } = string.Empty;
+        //public Guid? ReservationOrDeliveryId { get; set; }
         public ICollection<DishOfBill> Dishes { get; set; } = [];
     }
 

@@ -93,6 +93,9 @@ namespace Restaurant.Persistense.Repositories
         {
             Bill bill = await _context.Bills
                 .AsNoTracking()
+                .Include(b => b.DeliveryData)
+                .Include(b => b.Reservation)
+                .ThenInclude(r => r.Table)
                 .Include(b => b.Cart)
                 .ThenInclude(c => c.DishCarts)
                 .FirstAsync(x => x.Id == id);

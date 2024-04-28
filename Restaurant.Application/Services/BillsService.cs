@@ -1,13 +1,7 @@
-﻿using Azure.Core;
-using Restaurant.Application.Interfaces.Services;
+﻿using Restaurant.Application.Interfaces.Services;
 using Restaurant.Core.Dtos.Bill;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Restaurant.Application.Services
 {
@@ -25,23 +19,43 @@ namespace Restaurant.Application.Services
         }
         public async Task<Bill> GetById(Guid Id) => await _billsRepository.GetById(Id);
         public async Task<ICollection<Bill>> GetAll() => await _billsRepository.GetAll();
-        public async Task<BillResponse> GetResponseById(Guid Id)
+
+        public async Task<BillResponseForAdmin> GetResponseAdminById(Guid Id)
         {
-            var bill = await _billsRepository.GetById(Id);
+            var bill = await GetById(Id);
+            var customer = await _customersService.GetShortCustomerData(bill.CustomerId);
+            return new BillResponseForAdmin
+            {
+                billData = BillToResponse(bill),
+                customerData = customer
+            };
+        }
+
+        private BillResponse BillToResponse(Bill bill)
+        {
             var response = new BillResponse();
-            response.Id = Id;
+            response.Id = bill.Id;
             response.TotalPrice = bill.TotalPrice;
             response.OrderDateAndTime = bill.OrderDateAndTime;
             response.Tips = bill.Tips;
             response.Type = bill.Type;
             if (response.Type == Bill.OrderType.InRestaurant)
-                response.ReservationOrDeliveryId = bill.ReservationId;
+                response.TableNumOrDeliveryAdress = $"{bill.Reservation.Table.Num}, " +
+                    $"{bill.Reservation.Start.ToString("dd.MM.yy HH:mm")}-{bill.Reservation.End.ToString("HH:mm")}";
             else
-                response.ReservationOrDeliveryId = bill.DeliveryId;
+                response.TableNumOrDeliveryAdress =
+                    $"{bill.DeliveryData.SettlementName} {bill.DeliveryData.StreetName} {bill.DeliveryData.StreetNum}";
             response.IsPaid = bill.IsPaid;
 
             response.Dishes = bill.Cart.DishCarts
                 .Select(x => new DishOfBill(x.Dish.Name, x.Count, x.Dish.Price, x.Count * x.Dish.Price)).ToList();
+            return response;
+        }
+
+        public async Task<BillResponse> GetResponseById(Guid Id)
+        {
+            var bill = await _billsRepository.GetById(Id);
+            var response = BillToResponse(bill);
             return response;
         }
         public async Task<ICollection<Bill>> GetByPage(int page, int pageSize) => await _billsRepository.GetByPage(page, pageSize);

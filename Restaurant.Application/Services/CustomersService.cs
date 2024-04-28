@@ -1,11 +1,7 @@
 ﻿using Restaurant.Application.Interfaces.Services;
+using Restaurant.Core.Dtos.Customer;
 using Restaurant.Core.Interfaces;
 using Restaurant.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Restaurant.Application.Services
 {
@@ -35,11 +31,54 @@ namespace Restaurant.Application.Services
         public async Task<ICollection<Customer>> GetAll()=> await _customersRepository.GetAll();
 
         public async Task<Customer> GetById(Guid id) => await _customersRepository.GetById(id);
+        
+        public async Task<Customer> GetByUser(Guid id) => await _customersRepository.GetByUser(id);
 
         public async Task<int> Purge(IEnumerable<Guid> values) => await _customersRepository.Purge(values);
 
         public async Task<bool> Update(Customer entity) => await _customersRepository.Update(entity);
 
-        public async Task<Customer> GetByUser(Guid id) => await _customersRepository.GetByUser(id);
+        public async Task<ICollection<CustomerResponse>> GetAllAsResponses() 
+        {
+            var customers = await _customersRepository.GetAll();
+            List<CustomerResponse> response = new();
+            foreach (var customer in customers)
+            {
+                response.Add(CustomerToResponse(customer));
+            }
+            return response;
+        }
+
+        public async Task<CustomerResponse> GetResponseById(Guid id)
+        {
+            var customer = await _customersRepository.GetById(id);
+            var resposne = CustomerToResponse(customer);
+            return resposne;
+        }
+
+        public async Task<CustomerResponse> GetResponseByUser(Guid id)
+        {
+            var customer = await _customersRepository.GetByUser(id);
+            var resposne = CustomerToResponse(customer);
+            return resposne;
+        }
+
+        public async Task<CustomerResponse> GetShortCustomerData(Guid id)
+        {
+            var customer = await _customersRepository.GetById(id);
+            return CustomerToResponse(customer);
+        }
+
+        private CustomerResponse CustomerToResponse(Customer customer)
+        {
+            var response = new CustomerResponse()
+            {
+                Id = customer.Id,
+                Name = customer.Name,
+                Email = customer.User.Email,
+                PhoneNum = customer.User.PhoneNum
+            };
+            return response;
+        }
     }
 }
