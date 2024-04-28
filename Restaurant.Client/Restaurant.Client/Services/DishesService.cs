@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Components.Forms;
 using Newtonsoft.Json;
 using Restaurant.Client.Contracts.Blogs;
 using Restaurant.Client.Contracts.Dishes;
@@ -86,11 +87,19 @@ namespace Restaurant.Client.Services
 
         public async Task<bool> Update(DishRequest request)
         {
-            //if(files != null && files.Count() > 0) 
-            //{
-
-            //}
             var response = await _httpClient.PutAsJsonAsync($"api/Dishes/Put/{request.Id}", request);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> AddDiscount(Guid dishId, double PercentsAmount)
+        {
+            var response = await _httpClient.PatchAsync($"api/Dishes/AddDiscount?dishId={dishId}&PercentsAmount={PercentsAmount}", new StringContent(""));
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> RemoveDiscount(Guid dishId)
+        {
+            var response = await _httpClient.DeleteAsync($"api/Dishes/RemoveDiscount/{dishId}");
             return response.IsSuccessStatusCode;
         }
     }

@@ -41,54 +41,80 @@
                 </MudTable>
             </MudPaper>
         </MudItem>
-        @if(dishEditingObject != null){
-        <MudItem xs="12" sm="6" md="4" >
-            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
-                <EditForm Model="dishEditingObject" OnValidSubmit="Update">
-                    <MudTextField Label="Id" @bind-Value="dishEditingObject.Id" ReadOnly/>
-                    <MudTextField Label="Name" HelperText="Enter an expense type name" @bind-Value="dishEditingObject.Name" />
-                    <MudNumericField Label="Price" @bind-Value="dishEditingObject.Price" />
-                    <MudSwitch Label="Available" @bind-Checked="dishEditingObject.Available" Color="Color.Success" UnCheckedColor="Color.Error" />
-                    <MudNumericField Label="Weight" @bind-Value="dishEditingObject.Weight" />
-                    <MudTextField AutoGrow Label="Ingredients" @bind-Value="ingredients" />
-                    @if(dishEditingObject.PhotoLinks != null)
-                    {
-                        @foreach(var image in dishEditingObject.PhotoLinks)
+        @if (dishEditingObject != null)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+                    <EditForm Model="dishEditingObject" OnValidSubmit="Update">
+                        <MudTextField Label="Id" @bind-Value="dishEditingObject.Id" ReadOnly />
+                        <MudTextField Label="Name" HelperText="Enter an expense type name" @bind-Value="dishEditingObject.Name" />
+                        <MudNumericField Label="Price" @bind-Value="dishEditingObject.Price" />
+                        <MudSwitch Label="Available" @bind-Checked="dishEditingObject.Available" Color="Color.Success" UnCheckedColor="Color.Error" />
+                        <MudNumericField Label="Weight" @bind-Value="dishEditingObject.Weight" />
+                        <MudTextField AutoGrow Label="Ingredients" @bind-Value="ingredients" />
+                        @if (dishEditingObject.PhotoLinks != null)
                         {
-                            <img src="@image" width="100px" height="80px"/>
+                            @foreach (var image in dishEditingObject.PhotoLinks)
+                            {
+                                <img src="@image" width="100px" height="80px" />
+                            }
                         }
-                    }
-                    @* <InputFile accept=".png,.jpg,.jpeg,.gif" OnChange="HandleFileChange" class="form-control" multiple /> *@
-                    @if (cuisines != null)
-                    {
+                        @* <InputFile accept=".png,.jpg,.jpeg,.gif" OnChange="HandleFileChange" class="form-control" multiple /> *@
+                        @if (cuisines != null)
+                        {
                             <MudSelect T="Guid" Label="Cuisine" @bind-Value="@dishEditingObject.CuisineId" AdornmentIcon="@Icons.Material.Filled.FoodBank">
-                            @foreach (var cuisine in cuisines)
-                            {
-                                <MudSelectItem Value="@cuisine.Id">@cuisine.Name</MudSelectItem>
-                            }
-                        </MudSelect>
-                    }
-                    @if (categories != null)
-                    {
-                        <MudSelect T="Guid" Label="Category" @bind-Value="@dishEditingObject.CategoryId" AdornmentIcon="@Icons.Material.Filled.Fastfood">
-                            @foreach (var category in categories)
-                            {
-                                <MudSelectItem Value="@category.Id">@category.Name</MudSelectItem>
-                            }
-                        </MudSelect>
-                    }
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" >Update</MudButton>
-                    <MudButton OnClick="Delete" Variant="Variant.Filled" Color="Color.Error" Class="ml-auto">Delete</MudButton>
-                </EditForm>
-            </MudPaper>
-        </MudItem>
+                                @foreach (var cuisine in cuisines)
+                                {
+                                    <MudSelectItem Value="@cuisine.Id">@cuisine.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        }
+                        @if (categories != null)
+                        {
+                            <MudSelect T="Guid" Label="Category" @bind-Value="@dishEditingObject.CategoryId" AdornmentIcon="@Icons.Material.Filled.Fastfood">
+                                @foreach (var category in categories)
+                                {
+                                    <MudSelectItem Value="@category.Id">@category.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        }
+                        @if (dishEditingObject.DiscountPercents > 0)
+                        {
+                            <MudButton OnClick="RemoveDiscount" Variant="Variant.Filled" Color="Color.Error" Class="ml-auto">Remove discount</MudButton>
+                        }
+                        else
+                        {
+                            <MudButton OnClick="() => dialogVisible = true" Variant="Variant.Filled" Color="Color.Secondary" Class="ml-auto">Add discount</MudButton>
+                        }
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Update</MudButton>
+                        <MudButton OnClick="Delete" Variant="Variant.Filled" Color="Color.Error" Class="ml-auto">Delete</MudButton>
+                    </EditForm>
+                </MudPaper>
+            </MudItem>
         }
     </MudGrid>
 </MudContainer>
 
+<MudDialog @bind-IsVisible="dialogVisible" Options="dialogOptions">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3" /> Edit rating
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <p>Який розмір знижки?</p>
+        <MudNumericField Min="1" Max="100" @bind-Value="percents"></MudNumericField>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddDiscount" Class="px-10">Підтвердити</MudButton>
+    </DialogActions>
+</MudDialog>
 
 
 @code {
+    private double percents = 0;
+    private bool dialogVisible = false;
+    private DialogOptions dialogOptions = new() { FullWidth = true };
     private DishResponse dish;
     private DishRequest _itemToUpdate;
     private List<DishResponse> dishes = new();
@@ -106,14 +132,43 @@
         public ICollection<string> PhotoLinks;
         public bool? Available;
         public decimal Price;
+        public double DiscountPercents;
         public Guid CategoryId { get; set; }
         public Guid CuisineId { get; set; }
-        public Guid DiscountId { get; set; }
+    }
+
+    private async Task RemoveDiscount()
+    {
+        if (await dishesService.RemoveDiscount(dish.Id))
+        {
+            snackbar.Add("Знижку видалено!", Severity.Success);
+            await Refresh();
+        }
+        else
+        {
+            snackbar.Add("Помилка при видаленні знижки!", Severity.Error);
+            await Refresh();
+        }
+    }
+
+    private async Task AddDiscount()
+    {
+        if (await dishesService.AddDiscount(dish.Id, percents))
+        {
+            snackbar.Add("Знижку додано!", Severity.Success);
+            await Refresh();
+        }
+        else
+        {
+            snackbar.Add("Помилка при додаванні знижки!", Severity.Error);
+            await Refresh();
+        }
+        dialogVisible = false;
     }
 
     private async Task Delete()
-    {
-        if (await dishesService.Delete(dishEditingObject.Id))
+    {        
+        if (await dishesService.Delete(dish.Id))
         {
             snackbar.Add("ВИДАЛИЛИ!", Severity.Success);
             NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
@@ -129,7 +184,7 @@
         //dishEditingObject.PhotoLinks = results;
         dishEditingObject.IngredientsList = ingredients.Split(", ");
         _itemToUpdate = dishEditingObject.Adapt<DishRequest>();
-        if(await dishesService.Update(_itemToUpdate))
+        if (await dishesService.Update(_itemToUpdate))
         {
             snackbar.Add("ОНОВИЛИ", Severity.Success);
             NavManager.NavigateTo(NavManager.Uri, forceLoad: true);

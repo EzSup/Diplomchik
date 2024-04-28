@@ -3,11 +3,10 @@
     <img src="@Dish.PhotoLink" alt="Страва 1">
     <p style="font-size: 20px;">@Dish.Name</p>
     <p style="font-size: 16px;">
-        Ціна: <span style="color: yellow;">@Dish.OriginalPrice</span>
-        @if (Dish.OriginalPrice != Dish.ResultingPrice)
+        Ціна: <span style="color: yellow;">@Dish.ResultingPrice ₴</span>
+        @if (Dish.OriginalPrice > Dish.ResultingPrice)
         {
-            <del style="color: gray;">$12</del>
-
+            <span style="color: gray; text-decoration: line-through;"> @Dish.OriginalPrice ₴</span>
             <span class="promotion-label">Знижка</span>
         }
     </p>

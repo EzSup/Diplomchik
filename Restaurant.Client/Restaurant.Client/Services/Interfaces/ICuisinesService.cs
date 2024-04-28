@@ -9,5 +9,7 @@ namespace Restaurant.Client.Services.Interfaces
         Task<string> Add(CuisineCreateRequest request);
         Task<bool> Update(CuisineRequest request);
         Task<bool> Delete(Guid id);
+        Task<bool> AddDiscount(Guid cuisineId, double PercentsAmount);
+        Task<bool> RemoveDiscount(Guid cuisineId);
     }
 }

@@ -3,5 +3,5 @@
     public record CuisineResponse(
         Guid Id,
         string Name,
-        Guid? DiscountId);
+        double DiscountPercents);
 }

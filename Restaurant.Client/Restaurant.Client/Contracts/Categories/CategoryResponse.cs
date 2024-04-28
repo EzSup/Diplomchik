@@ -3,5 +3,5 @@
     public record CategoryResponse(
         Guid Id,
         string Name,
-        Guid? DiscountId);
+        double DiscountPercents);
 }

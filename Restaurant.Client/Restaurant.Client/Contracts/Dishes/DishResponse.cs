@@ -8,7 +8,7 @@
         bool Available,
         decimal Price,
         ICollection<string> PhotoLinks,
+        double DiscountPercents,
         Guid CategoryId,
-        Guid CuisineId,
-        Guid DiscountId);
+        Guid CuisineId);
 }

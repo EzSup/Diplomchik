@@ -44,5 +44,17 @@ namespace Restaurant.Client.Services
             var response = await _httpClient.DeleteAsync($"api/Cuisines/Delete/{id}");
             return response.IsSuccessStatusCode;
         }
+
+        public async Task<bool> AddDiscount(Guid cuisineId, double PercentsAmount)
+        {
+            var response = await _httpClient.PatchAsync($"api/Cuisines/AddDiscount?cuisineId={cuisineId}&PercentsAmount={PercentsAmount}", new StringContent(""));
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> RemoveDiscount(Guid cuisineId)
+        {
+            var response = await _httpClient.DeleteAsync($"api/Cuisines/RemoveDiscount/{cuisineId}");
+            return response.IsSuccessStatusCode;
+        }
     }
 }
