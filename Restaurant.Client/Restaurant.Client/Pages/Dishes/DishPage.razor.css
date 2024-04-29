@@ -1,6 +1,4 @@
-﻿.body{
-    margin-top: 200px;
-}
+﻿
 
 .small-image{
     width: 80px;
@@ -8,17 +6,27 @@
     margin: 5px;
     border-radius: 2px;
 }
+    .small-image:hover {
+        border: 2px solid #ffc93c;
+    }
+
+.param-row{
+    font-size: 15px;
+    line-height: 17px;
+}
+
+
 .main-image{
-    width: 400px;
-    height: 400px;
+    width: 500px;
+    height: 500px;
     border-radius: 15px;
 }
 
 .small-images-container {
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 5px;
     width: 100px;
-    height: 400px;
+    height: 500px;
     margin-right: 20px;
     padding: 5px;
 }
@@ -36,7 +44,6 @@
 
 .data-block {
     margin: 10px;
-    height: 400px;
     display: block;
     align-items: center;
     position: relative;
@@ -46,7 +53,6 @@
 .add-to-cart-selector {
     display: flex;
     align-items:center;
-    justify-content: space-between;
 }
 
 .available-label {
@@ -59,3 +65,39 @@
     /*top: 0; Розміщення зверху */
     /*left: 0; Розміщення зліва */
 }
+
+.reviewsdata-block {
+    display: flex;
+    align-items: center;
+}
+    .reviewsdata-block > * {
+        margin: 0px 10px;
+    }
+
+.ingredients-block {
+    display: initial;
+    align-items: initial;
+    position: initial;
+}
+
+.ingredient {
+    display: inline-block; /* зміна display */
+    border: 1px solid #ccc;
+    padding: 0px 6px;
+    line-height: 25px;
+    border-radius: 50px;
+    font-size: 13px;
+    height: auto; /* автоматична висота */
+    margin: 5px; /* додаткові відступи, які ви можете встановити за необхідності */
+}
+
+.item-input {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+

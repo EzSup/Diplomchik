@@ -15,5 +15,6 @@ namespace Restaurant.Client.Services.Interfaces
         Task<int> GetPagesCount(DishPaginationRequest request);
         Task<bool> AddDiscount(Guid dishId, double PercentsAmount);
         Task<bool> RemoveDiscount(Guid dishId);
+        Task<DishDataPageResponse> GetDishDataPageById(Guid id);
     } 
 }

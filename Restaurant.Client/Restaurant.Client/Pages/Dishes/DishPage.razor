@@ -1,5 +1,7 @@
 ﻿@page "/dishPage/{id:guid}"
 @inject IDishesService dishesService
+@inject ICartsService cartsService
+@inject AuthenticationStateProvider provider
 @using Restaurant.Client.Contracts.Dishes
 <body>
     @if (dish != null)
@@ -12,21 +14,52 @@
                         <img src="@imageLink" class="small-image" @onclick="() => SetMainImageLink(imageLink)" />
                     }
                 </div>
-
                 <img src="@mainImageLink" class="main-image" />
             </div>
             <div class="data-block">
                 <span class="available-label" style='@($"background-color: {availableLableColor};")'>@availableLable</span>
-
-                <div class="add-to-cart-selector">
-                    <button>+</button>
-                    <input min="1" max="100" type="number" class="item-input" value="@countToAdd" readonly>
-                    <button>-</button>
-                    <button> До кошика</button>
+                <h1>@dish.Name</h1>
+                <div class="reviewsdata-block">
+                    <h3>@dish.ResultingPrice ₴</h3>
+                    @if (dish.ResultingPrice != dish.OriginalPrice)
+                    {
+                        <h3 style="text-decoration: line-through;">@dish.OriginalPrice ₴</h3>
+                    }
                 </div>
+                <div class="add-to-cart-selector">
+                    <button @onclick="Substract">-</button>
+                    <h6 class="item-input">@countToAdd</h6>
+                    <button @onclick="Add">+</button>
+                    <button @onclick="AddDishAndGoToCart"> До кошика</button>
+                </div>
+                <hr />
+                <div class="reviewsdata-block">
+                    <MudRating Disabled="true" SelectedValue="@((int)dish.Rating)" />
+                    <p class="param-row">@($"{dish.Rating:F1}") Рейтинг</p>
+                    <p class="param-row">@dish.ReviewsCount Відгуків</p>
+                </div>
+                <hr />
+                <p class="param-row"><strong>Маса:</strong> @dish.Weight г</p>
+                @if (dish.Category != string.Empty)
+                {
+                    <p class="param-row"><strong>Категорія:</strong> @dish.Category</p>
+                }
+                @if (dish.Cuisine != string.Empty)
+                {
+                    <p class="param-row"><strong>Кухня:</strong> @dish.Cuisine</p>
+                }
+                <hr />
+                <div class="ingredients-block">
+                    <strong>Інгредієнти:</strong>
+                    @foreach (var ingredient in dish.IngredientsList)
+                    {
+                        <p class="ingredient">@ingredient</p>
+                    }
+                </div>
+
             </div>
         </div>
-        
+
     }
 
 </body>
@@ -35,11 +68,12 @@
 @code {
     [Parameter]
     public Guid id { get; set; }
-    private DishResponse dish { get; set; }
+    private DishDataPageResponse dish { get; set; }
     private string mainImageLink { get; set; } = "~/wwwroot/images/emptyDish.jpg";
     private int countToAdd { get; set; } = 1;
     private string availableLable { get; set; } = string.Empty;
     private string availableLableColor { get; set; } = string.Empty;
+    Guid currentUserId = Guid.Empty;
 
     private void SetMainImageLink(string link)
     {
@@ -48,12 +82,38 @@
 
     protected override async Task OnInitializedAsync()
     {
-        dish = await dishesService.GetById(id);
-        if(dish.PhotoLinks.Count > 0)
+        var state = await provider.GetAuthenticationStateAsync();
+        if (Guid.TryParse(state.User.Identity.Name, out Guid userId) && userId != Guid.Empty)
+        {
+            currentUserId = userId;
+        }
+        dish = await dishesService.GetDishDataPageById(id);
+        if (dish.PhotoLinks.Count > 0)
         {
             mainImageLink = dish.PhotoLinks.First();
         }
         availableLable = dish.Available ? "У продажі" : "Вичерпано";
         availableLableColor = dish.Available ? "#97cba9" : "#f95959";
+    }
+
+    private async Task AddDishAndGoToCart()
+    {
+        await cartsService.AddDishToCartOfCustomerByUserId(currentUserId, id, countToAdd);
+        NavManager.NavigateTo($"/cart/{currentUserId}");
+    }
+
+    private void Add()
+    {
+        if (countToAdd < 100)
+        {
+            countToAdd++;
+        }
+    }
+    private void Substract()
+    {
+        if (countToAdd > 1)
+        {
+            countToAdd--;
+        }
     }
 }

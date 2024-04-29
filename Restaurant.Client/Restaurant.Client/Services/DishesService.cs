@@ -59,6 +59,15 @@ namespace Restaurant.Client.Services
             return dish;
         }
 
+        public async Task<DishDataPageResponse> GetDishDataPageById(Guid id)
+        {
+            var response = await _httpClient.GetAsync($"api/Dishes/GetDataPage/{id}");
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var dish = JsonConvert.DeserializeObject<DishDataPageResponse>(responseBody);
+            return dish;
+        }
+
         public async Task<ICollection<DishResponse>> GetAllDishes()
         {
             var response = await _httpClient.GetAsync($"api/Dishes/GetAll");
