@@ -37,6 +37,40 @@ namespace Restaurant.Application.Services
         public async Task<int> Purge(IEnumerable<Guid> values)
             => await _dishesRepository.Purge(values);
 
+
+        public async Task<DishDataPageResponse> GetDishDataById(Guid id)
+        {
+            var dish = await GetById(id);
+            decimal discountAmount = (decimal)(dish.Discount?.PecentsAmount ?? 0);
+            decimal categoryDiscountAmount = (decimal)(dish.Category?.Discount?.PecentsAmount ?? 0);
+            decimal cuisineDiscountAmount = (decimal)(dish.Cuisine?.Discount?.PecentsAmount ?? 0);
+
+            decimal discountedPrice = dish.Price
+                - dish.Price * 0.01m * discountAmount
+                - dish.Price * 0.01m * categoryDiscountAmount
+                - dish.Price * 0.01m * cuisineDiscountAmount;
+
+            decimal priceAfterDiscount = discountedPrice < 0 ? 0 : discountedPrice;
+
+            DishDataPageResponse response = new()
+            {
+                Id = dish.Id,
+                Name = dish.Name,
+                Weight = dish.Weight,
+                IngredientsList = dish.IngredientsList,
+                Available = dish.Available,
+                OriginalPrice = dish.Price,
+                ResultingPrice = priceAfterDiscount,
+                PhotoLinks = dish.PhotoLinks,
+                DiscountPercents = dish?.Discount?.PecentsAmount ?? 0,
+                Category = dish?.Category?.Name ?? string.Empty,
+                Cuisine = dish?.Cuisine?.Name ?? string.Empty,
+                ReviewsCount = dish.Reviews?.Count ?? 0,
+                Rating = dish?.Reviews?.Average(x => x.Rate) ?? 0
+            };
+            return response;
+        }
+
         public async Task<int> PagesCount(DishPaginationRequest request)
         {
             var dishes = await _dishesRepository.GetByFilter(DishSortingOrder.Name, request.Name, request.MinWeight, request.MaxWeight,

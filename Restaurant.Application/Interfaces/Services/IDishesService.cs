@@ -13,6 +13,7 @@ namespace Restaurant.Application.Interfaces.Services
     {
         Task<ICollection<Dish>> GetAll();
         Task<Dish> GetById(Guid id);
+        Task<DishDataPageResponse> GetDishDataById(Guid id);
         Task<Guid> Add(Dish entity);
         Task<bool> Update(Dish entity);
         Task<bool> Delete(Guid id);

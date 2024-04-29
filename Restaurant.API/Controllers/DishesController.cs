@@ -59,6 +59,14 @@ namespace Restaurant.API.Controllers
             return Ok(response);
         }
 
+        [HttpGet("{id:guid}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<DishDataPageResponse>> GetDataPage(Guid id)
+        {
+            var dish = await _dishesService.GetDishDataById(id);
+            return Ok(dish);
+        }
+
         [HttpPut]
         [AllowAnonymous]
         public async Task<ActionResult<ICollection<DishPaginationResponse>>> GetByFilerPage([FromBody] DishPaginationRequest request)

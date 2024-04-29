@@ -149,7 +149,9 @@ namespace Restaurant.Persistense.Repositories
                 .Include(x => x.DishCarts)
                 .Include(x => x.Reviews)
                 .Include(x => x.Cuisine)
+                .ThenInclude(c => c.Discount)
                 .Include(x => x.Category)
+                .ThenInclude(c => c.Discount)
                 .Include(x => x.Discount)
                 .Select(x => new Dish()
                 {
