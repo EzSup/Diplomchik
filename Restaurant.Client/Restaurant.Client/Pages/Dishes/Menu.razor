@@ -110,11 +110,10 @@
     {
         @foreach (var dish in dishes)
         {
-            <DishCard Dish="dish" OnClick="() => AddDishAndGoToCart(dish.Id)" />
+            <DishCard Dish="dish" OnClick="() => GoToDishPage(dish.Id)" OnClickCart="() => AddDishAndGoToCart(dish.Id)" />
         }
     }
 </div>
-
 
 <div class="pagination-buttons">
     @if (currentPageIndex > 1)
@@ -157,6 +156,11 @@
         currentPageIndex = page;
         filter.pageIndex = currentPageIndex;
         await Filter();
+    }
+
+    private void GoToDishPage(Guid dishId)
+    {
+        NavManager.NavigateTo($"/dishPage/{dishId}");
     }
 
     private async Task Filter()

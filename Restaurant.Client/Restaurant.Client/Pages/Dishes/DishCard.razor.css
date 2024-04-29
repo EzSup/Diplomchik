@@ -8,10 +8,18 @@
     position: relative; /* Для позиціонування значка акції */
 }
 
-    .dish-card img {
-        width: 100%; /* Зображення розтягується на всю ширину карточки */
-        border-radius: 8px; /* Закруглені кути зображення */
-    }
+.dish-card img {
+    width: 100%; /* Зображення розтягується на всю ширину карточки */
+    border-radius: 8px; /* Закруглені кути зображення */
+}
+
+.add-to-cart-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 10px;
+    padding: 3px 6px;
+}
 
 .promotion-label {
     background-color: #ff0000; /* Червоний колір для фону підказки */

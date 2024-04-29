@@ -1,0 +1,59 @@
+﻿@page "/dishPage/{id:guid}"
+@inject IDishesService dishesService
+@using Restaurant.Client.Contracts.Dishes
+<body>
+    @if (dish != null)
+    {
+        <div class="dish-maindata-container">
+            <div class="images-block">
+                <div class="small-images-container">
+                    @foreach (var imageLink in dish.PhotoLinks)
+                    {
+                        <img src="@imageLink" class="small-image" @onclick="() => SetMainImageLink(imageLink)" />
+                    }
+                </div>
+
+                <img src="@mainImageLink" class="main-image" />
+            </div>
+            <div class="data-block">
+                <span class="available-label" style='@($"background-color: {availableLableColor};")'>@availableLable</span>
+
+                <div class="add-to-cart-selector">
+                    <button>+</button>
+                    <input min="1" max="100" type="number" class="item-input" value="@countToAdd" readonly>
+                    <button>-</button>
+                    <button> До кошика</button>
+                </div>
+            </div>
+        </div>
+        
+    }
+
+</body>
+
+
+@code {
+    [Parameter]
+    public Guid id { get; set; }
+    private DishResponse dish { get; set; }
+    private string mainImageLink { get; set; } = "~/wwwroot/images/emptyDish.jpg";
+    private int countToAdd { get; set; } = 1;
+    private string availableLable { get; set; } = string.Empty;
+    private string availableLableColor { get; set; } = string.Empty;
+
+    private void SetMainImageLink(string link)
+    {
+        mainImageLink = link;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        dish = await dishesService.GetById(id);
+        if(dish.PhotoLinks.Count > 0)
+        {
+            mainImageLink = dish.PhotoLinks.First();
+        }
+        availableLable = dish.Available ? "У продажі" : "Вичерпано";
+        availableLableColor = dish.Available ? "#97cba9" : "#f95959";
+    }
+}
