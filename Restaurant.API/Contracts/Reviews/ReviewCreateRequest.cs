@@ -1,8 +1,7 @@
 ﻿namespace Restaurant.API.Contracts.Reviews
 {
     public record ReviewCreateRequest
-        (Guid AuthorId,
-        Guid DishId,
+        (Guid DishId,
         string? Title,
         string? Content,
         double Rate);

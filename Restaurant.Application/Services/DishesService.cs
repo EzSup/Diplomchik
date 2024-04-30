@@ -52,6 +52,14 @@ namespace Restaurant.Application.Services
 
             decimal priceAfterDiscount = discountedPrice < 0 ? 0 : discountedPrice;
 
+
+            double rating = 0;
+            try
+            {
+                rating = dish.Reviews.Average(r => r.Rate);
+            }
+            catch { }
+
             DishDataPageResponse response = new()
             {
                 Id = dish.Id,
@@ -66,7 +74,7 @@ namespace Restaurant.Application.Services
                 Category = dish?.Category?.Name ?? string.Empty,
                 Cuisine = dish?.Cuisine?.Name ?? string.Empty,
                 ReviewsCount = dish.Reviews?.Count ?? 0,
-                Rating = dish?.Reviews?.Average(x => x.Rate) ?? 0
+                Rating = rating
             };
             return response;
         }

@@ -7,6 +7,8 @@ using Mapster;
 using Restaurant.Core.Dtos.Reviews;
 using Restaurant.API.Contracts.Reviews;
 using Restaurant.Core.Models;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 
 namespace Restaurant.API.Controllers
 {
@@ -15,10 +17,14 @@ namespace Restaurant.API.Controllers
     public class ReviewsController : ControllerBase
     {
         private readonly IReviewsService _reviewsService;
+        private readonly ICustomersService _customersService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ReviewsController(IReviewsService reviewsService)
+        public ReviewsController(IReviewsService reviewsService, ICustomersService customersService, IHttpContextAccessor httpContextAccessor)
         {
             _reviewsService = reviewsService;
+            _httpContextAccessor = httpContextAccessor;
+            _customersService = customersService;
         }
 
         // GET: api/<BlogsController>
@@ -69,7 +75,10 @@ namespace Restaurant.API.Controllers
             }
             try
             {
+                var userId = Guid.Parse(_httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+                var customer = await _customersService.GetByUser(userId);
                 var review = request.Adapt<Review>();
+                review.AuthorId = customer.Id;
                 return Ok(await _reviewsService.Add(review));
             }
             catch (Exception ex)
