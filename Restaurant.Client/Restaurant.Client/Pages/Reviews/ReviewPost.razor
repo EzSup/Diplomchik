@@ -1,0 +1,39 @@
+﻿@inject IReviewsService reviewsService
+@using Restaurant.Client.Contracts.Reviews
+
+<div class="review-form">
+    <h3>Залиште свій відгук</h3>
+    <EditForm Model="obj" OnValidSubmit="Send">        
+        <div class="rating-input">
+            <label>Оцінка:</label>
+            <MudRating @bind-SelectedValue="obj.Rate" />
+        </div>
+        <div class="title-input">
+            <label>Заголовок:</label>
+            <InputText @bind-Value="obj.Title" />
+        </div>
+        <div class="content-input">
+            <label>Текст відгуку:</label>
+            <InputTextArea @bind-Value="obj.Content" />
+        </div>
+        <button type="submit">Надіслати</button>
+    </EditForm>
+</div>
+
+@code {
+    [Parameter]
+    public Guid DishId { get; set; }
+    ReviewCreateRequest obj = new();
+    protected override void OnInitialized()
+    {
+        obj.DishId = DishId;
+    }
+
+    private async Task Send()
+    {
+        if(await reviewsService.Post(obj))
+        {
+            NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
+        }
+    }
+}

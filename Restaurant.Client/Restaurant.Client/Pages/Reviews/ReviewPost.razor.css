@@ -1,0 +1,22 @@
+﻿.review-form {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+    .review-form h3 {
+        margin-bottom: 10px;
+    }
+
+.rating-input,
+.title-input,
+.content-input {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}

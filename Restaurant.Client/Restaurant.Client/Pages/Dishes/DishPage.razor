@@ -1,8 +1,11 @@
 ﻿@page "/dishPage/{id:guid}"
 @inject IDishesService dishesService
 @inject ICartsService cartsService
+@inject IReviewsService reviewsService
 @inject AuthenticationStateProvider provider
 @using Restaurant.Client.Contracts.Dishes
+@using Restaurant.Client.Contracts.Reviews
+@using Restaurant.Client.Pages.Reviews
 <body>
     @if (dish != null)
     {
@@ -59,7 +62,13 @@
 
             </div>
         </div>
-
+        <div class="dish-maindata-container">
+            <ReviewPost DishId="id"></ReviewPost>
+            @foreach(var review in reviews)
+            {
+                <ReviewRead Review="review"></ReviewRead>
+            }
+        </div>
     }
 
 </body>
@@ -73,6 +82,7 @@
     private int countToAdd { get; set; } = 1;
     private string availableLable { get; set; } = string.Empty;
     private string availableLableColor { get; set; } = string.Empty;
+    private ICollection<ReviewOfDishResponse> reviews;
     Guid currentUserId = Guid.Empty;
 
     private void SetMainImageLink(string link)
@@ -94,6 +104,7 @@
         }
         availableLable = dish.Available ? "У продажі" : "Вичерпано";
         availableLableColor = dish.Available ? "#97cba9" : "#f95959";
+        reviews = await reviewsService.GetByDishId(id, 1, 5);
     }
 
     private async Task AddDishAndGoToCart()
