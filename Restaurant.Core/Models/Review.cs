@@ -5,8 +5,8 @@ public class Review
     public Guid Id { get; set; }
     public string? Title { get; set; } = string.Empty;
     public string? Content { get; set; } = string.Empty;
-    public double? Rate { get; set; } = 0;
-    public DateTime? Posted { get; private set; }
+    public double Rate { get; set; } = 0;
+    public DateTime Posted { get; private set; }
 
     public Review()
     {

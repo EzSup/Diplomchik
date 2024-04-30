@@ -51,6 +51,15 @@ namespace Restaurant.Persistense.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id) ?? throw new KeyNotFoundException("Review not found!");
         }
 
+        public async Task<ICollection<Review>> GetByDishId(Guid dishId)
+        {
+            return await _context.Reviews.AsNoTracking()
+                .Include(x => x.Dish)
+                .Include(x => x.Author)
+                .Where(x => x.DishId == dishId)
+                .ToListAsync();
+        }
+
         public async Task<ICollection<Review>> GetByPage(int page, int pageSize)
         {
             if (pageSize > 0 && page > 0)
@@ -61,22 +70,28 @@ namespace Restaurant.Persistense.Repositories
             throw new ArgumentException("Page size and number has to be greater than 0!");
         }
 
-        public async Task<ICollection<Review>> GetByFilter(Guid? DishId = null, Guid? AuthorId = null, double minRate = 1, double maxRate = 5)
+        public async Task<ICollection<Review>> GetByFilter(int pageIndex, int pageSize,Guid? DishId = null, Guid? AuthorId = null, double minRate = 0, double maxRate = 5)
         {
-            var query = _context.Reviews.AsNoTracking();
-            if(DishId != null)
+            var query = _context.Reviews.Include(r => r.Author).AsNoTracking();
+            if (DishId != null)
             {
                 query = query.Where(x => x.DishId == DishId);
             }
-            if(AuthorId != null)
+            if (AuthorId != null)
             {
                 query = query.Where(x => x.AuthorId == AuthorId);
             }
-            if(minRate <= maxRate && minRate > 0 && maxRate <= 5)
+            if (minRate <= maxRate && minRate >= 0 && maxRate <= 5)
             {
-                query = query.Where(x => x.Rate > minRate && x.Rate < maxRate);
+                query = query.Where(x => x.Rate >= minRate && x.Rate <= maxRate);
             }
-            return await query.ToListAsync();
+            if (pageSize > 0 && pageIndex > 0)
+            {
+                return (await query.ToListAsync())
+                    .Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+            }
+            throw new ArgumentException("Page size and number has to be greater than 0!");
+            //return await query.ToListAsync();
         }
 
         public async Task<int> Purge(IEnumerable<Guid> values)

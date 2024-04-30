@@ -54,6 +54,7 @@ namespace Restaurant.API
             builder.Services.AddScoped<IReservationsRepository, ReservationsRepository>();
             builder.Services.AddScoped<IDeliveryDatasRepository, DeliveryDatasRepository>();
             builder.Services.AddScoped<IDiscountsRepository, DiscountsRepository>();
+            builder.Services.AddScoped<IReviewsRepository, ReviewsRepository>();
 
             builder.Services.AddScoped<IBillsService, BillsService>();
             builder.Services.AddScoped<IBlogsService, BlogsService>();
@@ -65,6 +66,7 @@ namespace Restaurant.API
             builder.Services.AddScoped<ICartsService, CartsService>();
             builder.Services.AddScoped<ICustomersService, CustomersService>();
             builder.Services.AddScoped<IDeliveriesService, DeliveriesService>();
+            builder.Services.AddScoped<IReviewsService, ReviewsService>();
 
             builder.Services.AddScoped<IJwtProvider, JwtProvider>();
             builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
