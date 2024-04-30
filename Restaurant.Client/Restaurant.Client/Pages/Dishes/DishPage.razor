@@ -9,7 +9,7 @@
 <body>
     @if (dish != null)
     {
-        <div class="dish-maindata-container">
+        <div class="half-page-block-container">
             <div class="images-block">
                 <div class="small-images-container">
                     @foreach (var imageLink in dish.PhotoLinks)
@@ -62,9 +62,21 @@
 
             </div>
         </div>
-        <div class="dish-maindata-container">
-            <ReviewPost DishId="id"></ReviewPost>
-            @foreach(var review in reviews)
+        <div class="half-page-block-container">
+            <h5>Відгуки (@dish.ReviewsCount)</h5>
+            <AuthorizeView Roles="User">
+                <Authorized>
+                    @if (!ownReview.Item1)
+                    {
+                        <ReviewPost DishId="id"></ReviewPost>
+                    }
+                    else
+                    {
+                        <ReviewRead Review="ownReview.Item2"></ReviewRead>
+                    }
+                </Authorized>
+            </AuthorizeView>
+            @foreach (var review in reviews)
             {
                 <ReviewRead Review="review"></ReviewRead>
             }
@@ -83,6 +95,7 @@
     private string availableLable { get; set; } = string.Empty;
     private string availableLableColor { get; set; } = string.Empty;
     private ICollection<ReviewOfDishResponse> reviews;
+    private (bool, ReviewOfDishResponse?) ownReview;
     Guid currentUserId = Guid.Empty;
 
     private void SetMainImageLink(string link)
@@ -105,6 +118,12 @@
         availableLable = dish.Available ? "У продажі" : "Вичерпано";
         availableLableColor = dish.Available ? "#97cba9" : "#f95959";
         reviews = await reviewsService.GetByDishId(id, 1, 5);
+        ownReview = await reviewsService.HasOwnReview(id);
+        //reviews.Any(x => x.AuthorName == ownReview.Item2.AuthorName && x.Title == ownReview.Item2.Title)
+        if (ownReview.Item1 && reviews.Contains(ownReview.Item2))
+        {
+            reviews.Remove(ownReview.Item2);
+        }
     }
 
     private async Task AddDishAndGoToCart()

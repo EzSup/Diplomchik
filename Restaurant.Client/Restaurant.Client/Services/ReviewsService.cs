@@ -2,6 +2,7 @@
 using Restaurant.Client.Contracts.Reviews;
 using Restaurant.Client.Contracts.Tables;
 using Restaurant.Client.Services.Interfaces;
+using System.Drawing.Printing;
 
 namespace Restaurant.Client.Services
 {
@@ -27,6 +28,30 @@ namespace Restaurant.Client.Services
         {
             var response = await _httpClient.PostAsJsonAsync($"api/Reviews/Post", request);
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<(bool ifHas, ReviewOfDishResponse? obj)> HasOwnReview(Guid dishId)
+        {
+            var response = await _httpClient.GetAsync($"api/Reviews/GetReviewOfUser/{dishId}");
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return (false, null);
+            }
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ReviewOfDishResponse>(responseBody);
+            return (true, result);
+        }
+
+        public async Task<ReviewOfDishResponse?> GetOwnReviewOnDish(Guid dishId)
+        {
+            var response = await _httpClient.GetAsync($"api/Reviews/GetReviewOfUser/{dishId}");
+            if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                return null;
+            }
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<ReviewOfDishResponse>(responseBody);
+            return result;
         }
     }
 }
