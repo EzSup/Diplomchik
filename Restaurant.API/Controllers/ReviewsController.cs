@@ -54,6 +54,30 @@ namespace Restaurant.API.Controllers
             return Ok(reviews);
         }
 
+        [HttpGet("{dishId:guid}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ReviewOfDishResponse>> GetReviewOfUser(Guid dishId)
+        {
+            try
+            {
+                var userId = Guid.Parse(_httpContextAccessor.HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value);
+                var customer = await _customersService.GetByUser(userId);
+                var review = await _reviewsService.GetResponseByFilter(1, 1, dishId, customer.Id);
+                if (review.Count < 1)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    return Ok(review.First());
+                }
+            }
+            catch
+            {
+                return BadRequest();
+            }
+        }
+
         // GET api/<BlogsController>/5
         [HttpGet("{id:guid}")]
         [AllowAnonymous]

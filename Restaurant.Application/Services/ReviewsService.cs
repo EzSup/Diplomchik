@@ -39,22 +39,39 @@ namespace Restaurant.Application.Services
         public async Task<bool> Update(Review entity)
             => await _reviewsRepository.Update(entity);
 
+        public async Task<ICollection<ReviewOfDishResponse>> GetResponseByFilter(int pageIndex, int pageSize, Guid? DishId = null, Guid? AuthorId = null, double minRate = 1, double maxRate = 5)
+        { 
+
+            var reviews = await _reviewsRepository.GetByFilter(pageIndex, pageSize, DishId, AuthorId, minRate, maxRate);
+            List<ReviewOfDishResponse> response = new();
+            foreach(var review in reviews)
+            {
+                response.Add(ReviewToResponse(review));
+            }
+            return response;
+        }
+
         public async Task<ICollection<ReviewOfDishResponse>> GetReviewsOfDish(Guid id, int pageIndex, int pageSize)
         {
             var reviews =  await GetByFilter(pageIndex, pageSize, id);
             List<ReviewOfDishResponse> result = new();
             foreach(var review in reviews)
             {
-                result.Add(new ReviewOfDishResponse()
-                {
-                    Title = review.Title,
-                    Content = review.Content,
-                    Rate = review.Rate,
-                    Posted = review.Posted,
-                    AuthorName = review?.Author?.Name ?? string.Empty
-                });
+                result.Add(ReviewToResponse(review));
             }
             return result;
+        }
+
+        private ReviewOfDishResponse ReviewToResponse(Review entity)
+        {
+            return new ReviewOfDishResponse()
+            {
+                Title = entity.Title,
+                Content = entity.Content,
+                Rate = entity.Rate,
+                Posted = entity.Posted,
+                AuthorName = entity?.Author?.Name ?? string.Empty
+            };
         }
     }
 }
