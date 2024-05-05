@@ -256,17 +256,69 @@ button:focus-visible {
     align-items: center;
 }
 
-.Container {
+.Container.slider {
+    display: flex;
+    overflow-x: hidden;
     width: 1300px;
     height: 623px;
+    flex-direction: row;
+    position: relative;
+    background: none;
+    box-shadow: none;
 }
 
+.slide {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    margin: 0;
+    transition: all 1s,  transform 1s ease, opacity 2s ease;
+    background: #A7A293;
+    box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.5);
+}
+
+.slide.active {
+    transform: translateX(0);
+}
+
+/*.slide.next {
+    transform: translateX(100%);
+}
+
+.slide.prev {
+    transform: translateX(-100%);
+}*/
+
 .Container-wrap {
-    margin: 0em 4em;
+    margin: 0em 4em;   
+    
+}
+.slide .Container-wrap {
+    opacity: 0;
+    transform: translateY(-30px);
+    transition: all 1s;
+    transition-delay: 0.5s;
+}
+
+.active .Container-wrap {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .Container-content {
-    margin: 2em 0 0;
+    margin: 2em 0 0;    
+}
+.slide .Container-content {
+    opacity: 0;
+    transform: translateX(-15px);
+    transition: all 1s;
+    transition-delay: 0.6s;
+}
+.active .Container-content {
+    opacity: 1;
+    transform: translateX(0px);
 }
 
 .Container-content h3 {
@@ -321,6 +373,7 @@ button:focus-visible {
 }
 .ellipse.active {
     background: #FFF8E0;
+    transform: scale(1.1);
 }
 
 .Container.min-container {
