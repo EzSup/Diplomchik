@@ -48,7 +48,6 @@ namespace Restaurant.Client
                 config.JsonSerializerOptions.ReadCommentHandling = JsonCommentHandling.Skip;
                 config.JsonSerializerOptions.WriteIndented = false;
             });
-
             builder.Services.AddTransient<Services.Interfaces.ILocalStorageService, LocalStorageService>();
             builder.Services.AddTransient<ICookiesService, CookiesService>();
             builder.Services.AddTransient<IPhotoService, PhotoService>();

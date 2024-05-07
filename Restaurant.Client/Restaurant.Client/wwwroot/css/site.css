@@ -192,8 +192,8 @@ button, a {
     justify-content: center;
 }
 
-    .Main-Content >  *:first-child {
-        margin-top: 200px;
+    .Main-Content > *:first-child {
+        margin-top: 200px !important;
     }
 
     .Main-Content > body#index {
@@ -201,11 +201,12 @@ button, a {
     }
 
     .Main-Content .Title {
-        width: 100%;
+        width: 70%;
         max-height: 150px;
         padding: 4px 0;
         background: linear-gradient(90deg, rgba(36, 33, 33, 0) 0%, #878477 10%, #878477 90%, rgba(36, 33, 33, 0) 100%);
         display: flex;
+        margin: 0 auto;
     }
 
 .Title .content {
@@ -213,7 +214,8 @@ button, a {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 15em;
+    padding: 0 10em;
+    width: 100%;
 }
 
 .Title .content.min-content {
@@ -224,7 +226,7 @@ button, a {
     font-family: 'Aleo';
     font-style: normal;
     font-weight: 400;
-    font-size: 60px;
+    font-size: 50px;
     line-height: 72px;
     display: flex;
     align-items: center;
@@ -232,9 +234,33 @@ button, a {
     margin: 0;
 }
 
+    .Anim-Title {
+        transform: scaleX(0);
+        transition: all 1s;
+        opacity: 0;
+    }
+
+    .Anim-Title-text {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: all 0.5s ease;
+        transition-delay:  0.7s;
+    }
+
+        .Animated-Title {
+            transform: scaleX(1);
+            opacity: 1;
+        }
+
+        .Animated-Title-Text{
+            opacity: 1;
+            transform: translateY(0);
+        }
+
 .Content-wrap {
     display: flex;
     width: 100%;
+    padding: 0 10%;
     justify-content: center;
     /*height: min-content;*/
     align-items: center;
@@ -291,7 +317,7 @@ button, a {
     margin: 2em 0;
     box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.5);
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-evenly;  
 }
 
 .Container-wrap {

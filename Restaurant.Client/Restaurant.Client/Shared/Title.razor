@@ -1,16 +1,16 @@
 ﻿@if (IsMinContent)
 {
-    <div class="Title">
+    <div class="Title Anim-Title">
         <div class="Title content min-content">
-            <h1>@ChildContent</h1>
+            <h1 class="Anim-Title-text">@ChildContent</h1>
         </div>
     </div>
 }
 else
 {
-    <div class="Title">
+    <div class="Title Anim-Title">
         <div class="Title content">
-            <h1>@ChildContent</h1>
+            <h1 class="Anim-Title-text">@ChildContent</h1>
         </div>
     </div>
 }
@@ -27,5 +27,15 @@ else
     {
         get => IsMinContent;
         set => IsMinContent = value;
+    }
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("AddClassInView", "Anim-Title", "Animated-Title", 0.5);
+            await JS.InvokeVoidAsync("AddClassInView", "Anim-Title-text", "Animated-Title-Text", 0.5);
+        }catch{}
+    
     }
 }

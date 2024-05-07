@@ -48,7 +48,7 @@
                     </NavLink>
                 </NotAuthorized>
             </AuthorizeView>
-            <AuthorizeView>@*Коли хтось зерганий незалежно від ролі*@
+            <AuthorizeView>@*Коли хтось зриганий незалежно від ролі*@
                 <Authorized>
                     <button style="color: black" @onclick="accountService.LogoutAsync">
                         розлогін
@@ -59,26 +59,13 @@
     </div>
 </div>
 @code {
-
     protected override async void OnAfterRender(bool firstRender)
     {
-        await JS.InvokeVoidAsync("fadeInElement", "fade-in");
+        try
+        {
+            await JS.InvokeVoidAsync("fadeInElement", "fade-in");
+        }catch{}   
     }
-
-    // [Inject]
-    // private NavigationManager NavigationManager { get; set; }
-
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     NavigationManager.LocationChanged += HandleLocationChanged;
-    // }
-
-    // private async void HandleLocationChanged(object sender, LocationChangedEventArgs e)
-    // {
-    //     try
-    //     {
-    //         await JS.InvokeVoidAsync("fadeInElement", "fade-in");
-    //     }catch{}
-    // }
-
 }
+
+

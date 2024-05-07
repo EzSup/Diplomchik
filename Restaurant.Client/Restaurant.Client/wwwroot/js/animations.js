@@ -10,6 +10,26 @@
     }, timeout);
 }
 
+function AddClassInView(element, className, threshold = 1, root = null) {
+    let elements = document.querySelectorAll("."+ element);
+    let observer = new IntersectionObserver(function (entries, observer) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add(className);
+                observer.observe(entry.target);
+            }
+            //else {
+            //    entry.target.classList.remove(className);
+            //}
+        });
+    }, { threshold: threshold, root: root });
+
+    elements.forEach(function (element) {
+        observer.observe(element);
+    });
+}
+
+
 function fadeInElement(elementId) {
     var element = document.getElementById(elementId);
     element.style.opacity = 0;
@@ -20,8 +40,6 @@ function fadeInElement(elementId) {
             fadeInElement(element);
         }, 1);
     }, 50);
-    
-
     
     setTimeout(function () {
         var options = {
@@ -49,3 +67,4 @@ function fadeInElement(elementId) {
         });
     }
 };
+
