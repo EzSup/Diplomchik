@@ -28,7 +28,26 @@
     color: #A7A293;
     margin-top: 1.5em;
     margin-bottom: 3em;
+    position: relative;
 }
+
+    .Header .Content h1::before {
+        position: absolute;
+        content: " ";
+        transform: translate(50px, 25px);
+        top: 2.5em;
+        width: 1px;
+        height: 2px;
+        left: 50%;
+        background: #A7A293;
+        transition: all 1s;
+    }
+
+    .Header .Content h1.Animated-header-text::before {
+        left: 10%;
+        width: 80%;
+        transform: translate(0, 0);
+    }
 
 .Header .Content h2 {
     font-family: 'Aleo';
@@ -39,6 +58,23 @@
     text-align: center;
     color: #878477;
     margin-bottom: 3em;
+}
+
+.Anim-header-h1 {
+    opacity: 0;
+    transform: translate(-50px, -25px);
+    transition: all 1s;
+}
+
+.Anim-header-h2 {
+    opacity: 0;
+    transform: translate(50px, 25px);
+    transition: all 1s;
+}
+
+.Animated-header-text{
+    opacity: 1;
+    transform: translate(0, 0);
 }
 
 .Header .Content a, .Content-wrap a {
@@ -98,14 +134,35 @@ button:focus-visible {
     height:auto;
 }
 
-.Content-wrap{
+.Anim-Steps{
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 1s;
+}
+
+.Steps-wrap .wrap-col:nth-of-type(1) .Anim-Steps {
+    transition-delay: 0s;
+}
+.Steps-wrap .wrap-col:nth-of-type(2) .Anim-Steps {
+    transition-delay: 0.25s;
+}
+.Steps-wrap .wrap-col:nth-of-type(3) .Anim-Steps {
+    transition-delay: 0.5s;
+}
+
+.Animated-Steps {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.Content-wrap {
     align-items: normal;
 }
 
 .mid-col {
-    border-width: 0px 4px;
+    /*border-width: 0px 4px;
     border-style: solid;
-    border-color: #878477;
+    border-color: #878477;*/
     padding-top: calc(2em + 100px);
 }
 .end-col {
@@ -122,7 +179,7 @@ button:focus-visible {
     font-family: 'Aleo';
     font-style: normal;
     font-weight: 700;
-    font-size: 50px;
+    font-size: 40px;
     line-height: 60px;
     display: flex;
     align-items: center;
@@ -136,7 +193,7 @@ button:focus-visible {
     font-family: 'Merriweather Sans';
     font-style: normal;
     font-weight: 300;
-    font-size: 40px;
+    font-size: 35px;
     line-height: 50px;
     display: flex;
     align-items: center;
@@ -148,7 +205,7 @@ button:focus-visible {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
-    font-size: 30px;
+    font-size: 25px;
     line-height: 36px;
     display: flex;
     align-items: center;
@@ -168,8 +225,7 @@ button:focus-visible {
     font-family: 'Aleo';
     font-style: normal;
     font-weight: 700;
-    font-size: 50px;
-    line-height: 60px;
+    font-size: 40px;
     display: flex;
     align-items: center;
     text-align: center;
@@ -181,8 +237,7 @@ button:focus-visible {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
-    font-size: 50px;
-    line-height: 61px;
+    font-size: 30px;
     display: flex;
     align-items: center;
     color: #A7A293;
@@ -195,31 +250,32 @@ button:focus-visible {
 }
 
 .wrap-row-content a {
-    width: 440px;
-    height: 70px;
+    width: 350px;
+    height: 60px;
     filter: drop-shadow(0px 0px 11.9px rgba(0, 0, 0, 0.54));
     border-radius: 50px;
     font-family: 'Merriweather Sans';
     font-style: normal;
     font-weight: 300;
-    font-size: 40px;
+    font-size: 30px;
     line-height: 50px;
     display: flex;
     align-items: center;
     text-align: center;
     color: #878477;
-    background: #232020;   
+    background: #232020;
 }
 
-.pl15{padding-left: 15em;}
+.pl15{padding-left: 10%;}
 
-.pr15{padding-right: 15em;}
+.pr15{padding-right: 10%;}
 
 .gradient-line {
-    width: 100%;
+    width: 90%;
     height: 4px;
     background: linear-gradient(90deg, rgba(36, 33, 33, 0) 0%, #878477 10%, #878477 90%, rgba(36, 33, 33, 0) 100%);
     display: flex;
+    margin: 0 auto;
 }
 
 .image-wrap {
@@ -231,7 +287,7 @@ button:focus-visible {
 }
 
 .image-wrap .img {
-    width: 600px;
+    width: 450px;
     height: 300px;
     border: 20px solid #242121;
     object-fit: cover;
@@ -259,8 +315,9 @@ button:focus-visible {
 .Container.slider {
     display: flex;
     overflow-x: hidden;
-    width: 1300px;
-    height: 623px;
+    width: 1200px;
+    height: 600px;
+    border-color: #ffffff00;
     flex-direction: row;
     position: relative;
     background: none;
@@ -274,9 +331,10 @@ button:focus-visible {
     height: 100%;
     display: flex;
     margin: 0;
-    transition: all 1s,  transform 1s ease, opacity 2s ease;
+    transition: all 1s, transform 1s ease, opacity 2s ease;
     background: #A7A293;
-    box-shadow: 0px 0px 35px rgba(0, 0, 0, 0.5);
+    box-shadow: none !important;
+    border-radius: 25px;
 }
 
 .slide.active {
@@ -300,6 +358,7 @@ button:focus-visible {
     transform: translateY(-30px);
     transition: all 1s;
     transition-delay: 0.5s;
+    position: absolute;
 }
 
 .active .Container-wrap {
@@ -387,7 +446,7 @@ button:focus-visible {
 }
 
 .Container-content.min-content, .Container-wrap.left, .Container-wrap.right {
-    margin: 0 7.5em;
+    margin: 0 5em;
 }
 
 .Container-content.min-content p {
@@ -400,4 +459,28 @@ button:focus-visible {
     align-items: center;
     text-align: center;
     color: #A7A293;
+}
+
+.TopToBot{
+    opacity: 0;
+    transform: translateY(-50px);
+    transition: all 1s ease;
+}
+.BotToTop{
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1s ease;
+}
+.NormalTranslateX{
+    opacity: 1;
+    transform: translateX(0);
+}
+.ScaledPlus{
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 1s ease-in-out, transform 0.5s;
+}
+.NormalScale{
+    opacity: 1;
+    transform: scale(1);
 }
