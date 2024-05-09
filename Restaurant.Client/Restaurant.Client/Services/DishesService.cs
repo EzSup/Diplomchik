@@ -94,10 +94,28 @@ namespace Restaurant.Client.Services
             return pageCount;
         }
 
-        public async Task<bool> Update(DishRequest request)
+        public async Task<bool> Update(IEnumerable<IBrowserFile> files, DishRequest request)
         {
+            var results = new List<string>();
+            if (files != null && files.Count() > 0)
+            {
+                results = (await _photoService.AddPhotosAsync(files)).Select(x => x.Uri.ToString()).ToList();
+            }
+            request.PhotoLinks = request.PhotoLinks.Concat(results).ToList();
             var response = await _httpClient.PutAsJsonAsync($"api/Dishes/Put/{request.Id}", request);
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> RemoveImage(string imageLink, DishRequest request)
+        {
+            if(!String.IsNullOrWhiteSpace(imageLink))
+            {
+                await _photoService.DeletePhotoAsync(imageLink);
+                request.PhotoLinks.Remove(imageLink);
+                var response = await _httpClient.PutAsJsonAsync($"api/Dishes/Put/{request.Id}", request);
+                return response.IsSuccessStatusCode;
+            }
+            return false;
         }
 
         public async Task<bool> AddDiscount(Guid dishId, double PercentsAmount)

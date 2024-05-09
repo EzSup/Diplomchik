@@ -13,6 +13,7 @@
     <None Remove="Pages\Tables\TwoSeatsTable.razor.css" />
     <None Remove="Pages\Tables\TwoSeatsTableHorizontal.razor.css" />
     <None Remove="Shared\EmptyLayout.razor.css" />
+    <None Remove="Shared\ServicingComponents\ImageForAdmin.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,6 +23,7 @@
     <Content Include="Pages\Tables\TwoSeatsTableHorizontal.razor.css" />
     <Content Include="Pages\Tables\TwoSeatsTable.razor.css" />
     <Content Include="Shared\EmptyLayout.razor.css" />
+    <Content Include="Shared\ServicingComponents\ImageForAdmin.razor.css" />
   </ItemGroup>
 
   <ItemGroup>

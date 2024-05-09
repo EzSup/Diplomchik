@@ -3,6 +3,7 @@
 @using Restaurant.Client.Contracts.Categories
 @using Restaurant.Client.Contracts.Cuisines
 @using Restaurant.Client.Services.Interfaces
+@using Restaurant.Client.Shared.ServicingComponents
 @using Mapster
 @inject IDishesService dishesService
 @inject ICategoriesService categoriesService
@@ -56,8 +57,11 @@
                         {
                             @foreach (var image in dishEditingObject.PhotoLinks)
                             {
-                                <img src="@image" width="100px" height="80px" />
+                                <ImageForAdmin ImageLink="@image" OnDeleteAction="() => RemoveImage(image)"></ImageForAdmin>
+                                @* <img src="@image" width="100px" height="80px" /> *@
                             }
+                            <InputFile accept=".png,.jpg,.jpeg,.gif"  class="form-control" OnChange="HandleFileChange" multiple />
+                            @* <img src="/images/plusik.jpg" width="200px" height="160px" style=" position: relative; display: inline-block;" /> *@
                         }
                         @* <InputFile accept=".png,.jpg,.jpeg,.gif" OnChange="HandleFileChange" class="form-control" multiple /> *@
                         @if (cuisines != null)
@@ -65,7 +69,7 @@
                             <MudSelect T="Guid" Label="Cuisine" @bind-Value="@dishEditingObject.CuisineId" AdornmentIcon="@Icons.Material.Filled.FoodBank">
                                 @foreach (var cuisine in cuisines)
                                 {
-                                    <MudSelectItem Value="@cuisine.Id">@cuisine.Name</MudSelectItem>
+                                    <MudSelectItem Value="@cuisine.Id" >@cuisine.Name</MudSelectItem>
                                 }
                             </MudSelect>
                         }
@@ -122,6 +126,7 @@
     CuisineResponse[] cuisines;
     Dish dishEditingObject;
     string ingredients;
+    ICollection<IBrowserFile> uploadedPhotos = [];
 
     private class Dish()
     {
@@ -176,15 +181,19 @@
     }
     private async Task Update()
     {
-        //var results = dish.PhotoLinks;
-        // if (photos != null && photos.Count > 0)
-        // {
-        //     results = (await photoService.AddPhotosAsync(photos)).Select(x => x.Uri.ToString()).ToList();
-        // }
-        //dishEditingObject.PhotoLinks = results;
         dishEditingObject.IngredientsList = ingredients.Split(", ");
         _itemToUpdate = dishEditingObject.Adapt<DishRequest>();
-        if (await dishesService.Update(_itemToUpdate))
+        if (await dishesService.Update(uploadedPhotos, _itemToUpdate))
+        {
+            snackbar.Add("ОНОВИЛИ", Severity.Success);
+            NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
+        }
+    }
+
+    private async Task RemoveImage(string? imageLink)
+    {
+        _itemToUpdate = dishEditingObject.Adapt<DishRequest>();
+        if (await dishesService.RemoveImage(imageLink, _itemToUpdate))
         {
             snackbar.Add("ОНОВИЛИ", Severity.Success);
             NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
@@ -201,6 +210,12 @@
     protected override async Task OnInitializedAsync()
     {
         await Refresh();
+    }
+
+    private async Task HandleFileChange(InputFileChangeEventArgs e)
+    {
+        uploadedPhotos = e.GetMultipleFiles().ToList();
+        await Update();
     }
 
     // private async Task HandleFileChange(InputFileChangeEventArgs e)

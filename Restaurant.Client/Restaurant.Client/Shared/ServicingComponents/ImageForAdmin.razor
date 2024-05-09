@@ -1,0 +1,11 @@
+﻿<div style="position: relative; display: inline-block;">
+    <img src="@ImageLink" width="200px" height="160px" style="display: block;" />
+    <MudButton OnClick="OnDeleteAction.Invoke" class="delete-button" Color="Color.Error" Variant="Variant.Outlined" >Видалити</MudButton>
+</div>
+
+@code {
+    [Parameter]
+    public string ImageLink { get; set; }
+    [Parameter]
+    public Action OnDeleteAction { get; set; }
+}
