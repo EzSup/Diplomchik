@@ -45,7 +45,7 @@ html, body, button {
     overflow-x: hidden;
 }
 
-    body#index {
+    body {
         overflow: hidden;
     }
 

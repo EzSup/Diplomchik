@@ -1,13 +1,20 @@
 ﻿.wrap-row{    
     margin: 0 0 5em;
     img
-    {
-        min-width: 700px;
-        border-radius: 10px;
-        transition: all 0.3s;
-    }
-    img:hover{
+{
+    min-width: 700px;
+    border-radius: 10px;
+    transition: all 0.3s;
+    width: 90%;
+    height: 600px;
+    object-fit: cover;
+    margin: 0 auto;
+    transition: all 0.5s, filter 1.5s;
+    filter: brightness(0.8) grayscale(0.2);
+}
+    img:hover {
         border-radius: 30px;
+        filter: brightness(0.7) grayscale(0.0);
     }
 }
 .wrap-row-content {
