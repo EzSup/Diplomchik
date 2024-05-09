@@ -322,6 +322,7 @@ button:focus-visible {
     position: relative;
     background: none;
     box-shadow: none;
+    overflow: hidden;
 }
 
 .slide {
@@ -459,28 +460,4 @@ button:focus-visible {
     align-items: center;
     text-align: center;
     color: #A7A293;
-}
-
-.TopToBot{
-    opacity: 0;
-    transform: translateY(-50px);
-    transition: all 1s ease;
-}
-.BotToTop{
-    opacity: 0;
-    transform: translateY(50px);
-    transition: all 1s ease;
-}
-.NormalTranslateX{
-    opacity: 1;
-    transform: translateX(0);
-}
-.ScaledPlus{
-    opacity: 0;
-    transform: scale(1.05);
-    transition: opacity 1s ease-in-out, transform 0.5s;
-}
-.NormalScale{
-    opacity: 1;
-    transform: scale(1);
 }

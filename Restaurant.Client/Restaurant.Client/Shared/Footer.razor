@@ -1,9 +1,9 @@
-﻿<footer>
-	<div class="Container-wrap left">
+﻿<footer id="fade-in-footer">
+	<div class="Container-wrap left RepeatLeftToRight LeftToRight">
 		<p>Nash Diplom</p>
 	</div>
 	<div class="Container-content footer-content flex-col">
-		<div class="col">
+		<div class="col RepeatTopToBot TopToBot">
 			<h5>Lorem</h5>
 			<ul>
 				<li>Lorem1</li>
@@ -11,7 +11,7 @@
 				<li>Lorem3</li>
 			</ul>
 		</div>
-		<div class="col">
+		<div class="col RepeatScaledPlus ScaledPlus">
 			<h5>Ipsum</h5>
 			<ul>
 				<li>Ipsum1</li>
@@ -19,7 +19,7 @@
 				<li>Ipsum3</li>
 			</ul>
 		</div>
-		<div class="col">
+		<div class="col RepeatBotToTop BotToTop">
 			<h5>Dolor</h5>
 			<ul>
 				<li>Dolor1</li>
@@ -28,11 +28,23 @@
 			</ul>
 		</div>
 	</div>
-	<div class="Container-wrap right">
+	<div class="Container-wrap right RepeatRightToLeft RightToLeft">
 		<p>© All rights reserved</p>
 	</div>
 </footer>
 
 @code {
+	protected override async void OnAfterRender(bool firstRender)
+	{
+		try
+		{
+			await JS.InvokeVoidAsync("fadeInElement", "fade-in-footer", "50px");
+			await JS.InvokeVoidAsync("AddClassInView", "RepeatTopToBot", "NormalTranslate", 0.5, true);
+			await JS.InvokeVoidAsync("AddClassInView", "RepeatBotToTop", "NormalTranslate", 0.5, true);
+			await JS.InvokeVoidAsync("AddClassInView", "RepeatLeftToRight", "NormalTranslate", 0.5, true);
+			await JS.InvokeVoidAsync("AddClassInView", "RepeatRightToLeft", "NormalTranslate", 0.5, true);
+			await JS.InvokeVoidAsync("AddClassInView", "RepeatScaledPlus", "NormalScale", 0.7, true);
 
+		}catch{}
+	}
 }

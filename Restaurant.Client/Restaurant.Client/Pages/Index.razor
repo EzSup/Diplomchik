@@ -365,6 +365,26 @@
 
 		ellipses[currentSlide].classList.add("active");
 	}
+
+	function setAnimStyles() {
+		const lines = document.querySelectorAll(".gradient-line");
+		const img1 = document.querySelector(".img1");
+		const img3 = document.querySelector(".img3");
+		const Containers = document.querySelectorAll(".Container");
+		lines.forEach(function (line) {
+			line.style.opacity = 0;
+			// line.style.transitionDelay = "0.5s";
+			line.style.transition = "all 1.5s";
+		});
+		Containers.forEach(function (Container) {
+			Container.classList.add("BotToTop");
+		});
+		img1.classList.add("LeftToRight");
+		img3.classList.add("RightToLeft");
+	}
+	setAnimStyles();
+
+
 </script>
 
 @code{
@@ -377,9 +397,12 @@
 				await JS.InvokeVoidAsync("AddClassInView", "Anim-header-h1", "Animated-header-text", 0.5);
 				await JS.InvokeVoidAsync("AddClassInView", "Anim-header-h2", "Animated-header-text", 0.5);
 				await JS.InvokeVoidAsync("AddClassInView", "Anim-Steps", "Animated-Steps", 0.7);
-				await JS.InvokeVoidAsync("AddClassInView", "TopToBot", "NormalTranslateX", 0.5);
-				await JS.InvokeVoidAsync("AddClassInView", "BotToTop", "NormalTranslateX", 0.5);
+				await JS.InvokeVoidAsync("AddClassInView", "TopToBot", "NormalTranslate", 0.5);
+				await JS.InvokeVoidAsync("AddClassInView", "BotToTop", "NormalTranslate", 0.5);
+				await JS.InvokeVoidAsync("AddClassInView", "LeftToRight", "NormalTranslate", 0.5);
+				await JS.InvokeVoidAsync("AddClassInView", "RightToLeft", "NormalTranslate", 0.5);
 				await JS.InvokeVoidAsync("AddClassInView", "ScaledPlus", "NormalScale", 0.7);
+				await JS.InvokeVoidAsync("AddClassInView", "gradient-line", "NormalScale", 1);
 			}
 			catch{}		
 			}

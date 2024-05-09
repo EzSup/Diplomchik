@@ -10,17 +10,17 @@
     }, timeout);
 }
 
-function AddClassInView(element, className, threshold = 1, root = null) {
-    let elements = document.querySelectorAll("."+ element);
+function AddClassInView(element, className, threshold = 1, bool = false, root = null) {
+    let elements = document.querySelectorAll("." + element);
     let observer = new IntersectionObserver(function (entries, observer) {
         entries.forEach(function (entry) {
             if (entry.isIntersecting) {
                 entry.target.classList.add(className);
-                observer.observe(entry.target);
+            } else {
+            if (bool) {
+                entry.target.classList.remove(className);
             }
-            //else {
-            //    entry.target.classList.remove(className);
-            //}
+            }
         });
     }, { threshold: threshold, root: root });
 
@@ -30,7 +30,9 @@ function AddClassInView(element, className, threshold = 1, root = null) {
 }
 
 
-function fadeInElement(elementId) {
+
+
+function fadeInElement(elementId, translateYValue) {
     var element = document.getElementById(elementId);
     element.style.opacity = 0;
     element.style.transform = "translateY(-130px)";
@@ -62,7 +64,7 @@ function fadeInElement(elementId) {
                 element.style.transform = "translateY(0)";
             } else {
                 element.style.opacity = 0;
-                element.style.transform = "translateY(-50px)";
+                element.style.transform = "translateY(" + translateYValue + ")";
             }
         });
     }

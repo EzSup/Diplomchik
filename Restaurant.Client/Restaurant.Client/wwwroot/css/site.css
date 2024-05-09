@@ -44,6 +44,11 @@ html, body, button {
     --bs-body-bg: #242121;
     overflow-x: hidden;
 }
+
+    body#index {
+        overflow: hidden;
+    }
+
 button {
     overflow: hidden;
     display: flex;
@@ -381,4 +386,47 @@ button[type="submit"]:hover {
 
 button[type="submit"]:focus-visible {
     outline: none !important;
+}
+
+
+
+
+.TopToBot {
+    opacity: 0;
+    transform: translateY(-50px);
+    transition: all 1s ease;
+}
+
+.BotToTop {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 1s ease;
+}
+
+.LeftToRight {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 1s ease;
+}
+
+.RightToLeft {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: all 1s ease;
+}
+
+.NormalTranslate {
+    opacity: 1 !important;
+    transform: translate(0, 0) !important;
+}
+
+.ScaledPlus {
+    opacity: 0;
+    transform: scale(1.05);
+    transition: opacity 1s ease-in-out, transform 0.5s;
+}
+
+.NormalScale {
+    opacity: 1 !important;
+    transform: scale(1) !important;
 }
