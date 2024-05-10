@@ -7,12 +7,14 @@
 <Title>Choose the table</Title>
 <div class="Container">
     <div style="display: flex;">
-        <InputDate @oninput="DatePicked" @bind-Value="date"></InputDate>
+        <InputDate @oninput="DatePicked" @bind-Value="date"
+            min="@DateTime.Today.ToString("yyyy-MM-dd")"
+            max="@DateTime.Today.AddMonths(3).ToString("yyyy-MM-dd")"></InputDate>
         <select @onchange="TimePicked">
             @for (int i = 8; i <= 20; i++)
             {
                 TimeOnly time = new TimeOnly(i, 0, 0);
-                <option value="@time">
+                <option value="@time" disabled="@(date.Date == DateTime.Today.Date && time.Hour <= DateTime.Now.Hour )" selected="@(time.Hour == DateTime.Now.Hour+1)">@*  *@
                     @time.Hour:00
                 </option>
             }

@@ -29,12 +29,15 @@
                         <h3 style="text-decoration: line-through;">@dish.OriginalPrice ₴</h3>
                     }
                 </div>
-                <div class="add-to-cart-selector">
-                    <button @onclick="Substract">-</button>
+                @if (dish.Available)
+                {
+                    <div class="add-to-cart-selector">
+                        <button @onclick="Substract">-</button>
                     <h6 class="item-input">@countToAdd</h6>
                     <button @onclick="Add">+</button>
                     <button @onclick="AddDishAndGoToCart"> До кошика</button>
                 </div>
+                }
                 <hr />
                 <div class="reviewsdata-block">
                     <MudRating Disabled="true" SelectedValue="@((int)dish.Rating)" />
