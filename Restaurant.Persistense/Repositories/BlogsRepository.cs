@@ -26,7 +26,7 @@ namespace Restaurant.Persistense.Repositories
         {
             return await _context.Blogs
                 .AsNoTracking()
-                .FirstOrDefaultAsync(t => t.Id == id) ?? throw new KeyNotFoundException("Blog not found!");
+                .FirstOrDefaultAsync(t => t.Id == id) ?? throw new KeyNotFoundException("Блог не знайдено!");
         }
 
         public async Task<ICollection<Blog>> GetByFilter(DateTime after, string? AuthorName, string? TitleContains)
@@ -56,7 +56,7 @@ namespace Restaurant.Persistense.Repositories
                 return await _context.Blogs.AsNoTracking()
                     .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             }
-            throw new ArgumentException("Page size and number has to be greater than 0!");
+            throw new ArgumentException("Кількість і номер сторінок повинні бути більші за 0!");
         }
 
         public async Task<Guid> Add(Blog obj)

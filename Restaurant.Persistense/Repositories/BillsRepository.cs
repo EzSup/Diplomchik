@@ -122,62 +122,6 @@ namespace Restaurant.Persistense.Repositories
             return bill;
         }
 
-
-
-        //public async Task<Bill> GetById(Guid id)
-        //{
-        //    var bill = await _context.Bills
-        //        .Include(x => x.Cart)
-        //        .ThenInclude(c => c.DishCarts)
-        //        .ThenInclude(dc => dc.Dish)
-        //        .AsNoTracking()
-        //        .Select(x => new Bill()
-        //        {
-        //            Id = x.Id,
-        //            Cart = new Cart()
-        //            {
-        //                Id = x.CartId,
-        //            },
-        //            CartId = x.CartId,
-        //            CustomerId = x.CustomerId,
-        //            DeliveryId = x.DeliveryId,
-        //            ReservationId = x.ReservationId,
-        //            OrderDateAndTime = x.OrderDateAndTime,
-        //            IsPaid = x.IsPaid,
-        //            PaidAmount = x.PaidAmount,
-        //            Tips = x.Tips,
-        //            TotalPrice = x.TotalPrice,
-        //            Type = x.Type,
-        //        })
-        //        .SingleOrDefaultAsync(x => x.Id == id);
-
-        //    var dishCarts = await _context.DishCarts.Include(dc => dc.Dish).AsNoTracking().Where(x => x.CartId == bill.CartId)
-        //        .Select(x => new DishCart()
-        //        {
-        //            CartId = x.CartId,
-        //            DishId = x.DishId,
-        //            Count = x.Count
-        //        }).ToListAsync();
-        //    var dishIds = dishCarts.Select(dc => dc.DishId).ToList();
-        //    var dishes = await _context.Dishes
-        //        .ToListAsync();
-        //    dishes = dishes.Where(x => dishIds.Any(id => id == x.Id)).ToList();
-
-        //    foreach (var dishCart in dishCarts)
-        //    {
-        //        dishCart.Dish = dishes.FirstOrDefault(x => x.Id == dishCart.DishId);
-        //    }
-
-        //    bill.Cart.DishCarts = dishCarts;
-
-        //    if (bill == null)
-        //    {
-        //        throw new KeyNotFoundException("No bills with this id!");
-        //    }
-
-        //    return bill;
-        //}
-
         public async Task<ICollection<Bill>> GetByPage(int page, int pageSize)
         {
             if (page > 0 && pageSize > 0)
@@ -216,65 +160,32 @@ namespace Restaurant.Persistense.Repositories
             _context.Bills.Update(bill);
             await _context.SaveChangesAsync();
             return true;
-
-            //entity.Cart = _context.Carts.FirstOrDefault(x => x.Id == entity.CartId);
-            //entity.Reservation = _context.Reservations.FirstOrDefault(x => x.Id == entity.ReservationId);
-            //entity.DeliveryData = _context.DeliveryDatas.FirstOrDefault(x => x.Id == entity.DeliveryId);
-
-            //return await _context.Bills
-            //    .ExecuteUpdateAsync(x => x
-            //        .SetProperty(r => r.TotalPrice, totalPrice)
-            //        .SetProperty(r => r.PaidAmount, entity.PaidAmount)
-            //        //.SetProperty(r => r.OrderDateAndTime, entity.OrderDateAndTime.ToUniversalTime())
-            //        .SetProperty(r => r.Tips, entity.Tips)
-            //        .SetProperty(r => r.Type, entity.Type)
-            //        .SetProperty(r => r.CustomerId, entity.CustomerId)
-            //        .SetProperty(r => r.CartId, entity.CartId)
-            //        .SetProperty(r => r.Cart, entity.Cart)
-            //        .SetProperty(r => r.ReservationId, entity.ReservationId)
-            //        .SetProperty(r => r.Reservation, entity.Reservation)
-            //        .SetProperty(r => r.DeliveryId, entity.DeliveryId)
-            //        .SetProperty(r => r.DeliveryData, entity.DeliveryData)
-            //        .SetProperty(r => r.IsPaid, entity.IsPaid)) == 1;
         }
 
         public async Task<Guid> Add(Bill entity)
         {
             if (entity.Type == null)
-            {
-                throw new ArgumentException("Type has to be set!");
-            }
+                throw new ArgumentException("Тип не обрано!");
             if (!await _context.Reservations.AnyAsync(x => x.Id == entity.ReservationId)
                 && !await _context.DeliveryDatas.AnyAsync(x => x.Id == entity.DeliveryId))
-            {
-                throw new ArgumentException("Reservation or delivery has to be set!");
-            }
-
-            //Guid? CartId = (await _context.Customers
-            //    .FirstOrDefaultAsync(x => x.Id == entity.CustomerId)).CartId;
-
-            //if (CartId == null || CartId == Guid.Empty)
-            //{
-            //    throw new KeyNotFoundException("Cart not found");
-            //}
-
-
-            //var sum = totalPrice + totalPrice * entity.TipsPercents;
-
-            //if(sum > entity.PaidAmount)
-            //{
-            //    throw new ArgumentException("Resulting sum is more than paid amount!");
-            //}            
+                throw new ArgumentException("Резерватія або доставка повинні бути обрані!");            
+            if(entity.CustomerId == Guid.Empty)
+                throw new ArgumentException("Чек повинен мати покупця!");
+            if (entity.CartId == Guid.Empty)
+                throw new ArgumentException("Чек повинен корзину!");       
 
             var totalPrice = await CalcPrice(entity.CartId);
+            
+            if(totalPrice <= 0)
+            {
+                throw new ArgumentException("Кошик пустий!");
+            }            
 
             var bill = new Bill()
             {
                 TotalPrice = totalPrice,
                 IsPaid = false,
-                //PaidAmount = entity.PaidAmount,
-                OrderDateAndTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
-                //TipsPercents = entity.TipsPercents,
+                OrderDateAndTime = DateTime.UtcNow,// .SpecifyKind(DateTime.Now, DateTimeKind.Utc),
                 Type = entity.Type,
                 CustomerId = entity.CustomerId,
                 CartId = entity.CartId,

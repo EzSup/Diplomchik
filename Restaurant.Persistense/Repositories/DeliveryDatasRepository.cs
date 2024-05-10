@@ -51,7 +51,7 @@ namespace Restaurant.Persistense.Repositories
             return await _context.DeliveryDatas
                 .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == id)
-                ?? throw new KeyNotFoundException("No deliveries with this id!");
+                ?? throw new KeyNotFoundException("Немає доставок за цим id!");
         }
 
         public async Task<ICollection<DeliveryData>> GetByPage(int page, int pageSize)
@@ -62,7 +62,7 @@ namespace Restaurant.Persistense.Repositories
                     .Skip(pageSize * page - 1)
                     .Take(pageSize).ToListAsync();
             }
-            throw new ArgumentException("Page size and number has to be greater than 0!");
+            throw new ArgumentException("Кількість і номер сторінок повинні бути більші за 0!");
         }
         public async Task<ICollection<DeliveryData>> GetByFilter(int page, int pageSize, Guid? customerId = null)
         {
@@ -86,7 +86,7 @@ namespace Restaurant.Persistense.Repositories
                         StreetNum = x.StreetNum
                     }).ToListAsync();
             }
-            throw new ArgumentException("Page size and number has to be greater than 0!");
+            throw new ArgumentException("Кількість і номер сторінок повинні бути більші за 0!");
         }
 
         public async Task<int> Purge(IEnumerable<Guid> values)

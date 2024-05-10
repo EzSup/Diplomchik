@@ -68,7 +68,7 @@ namespace Restaurant.Persistense.Repositories
                     Id = x.Id,
                     Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(), dc.Count, dc.Dish.Price*dc.Count)).ToList()
                 })
-                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Cart not found!");
+                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Корзину не знайдено!");
             return cart;
         }
 
@@ -85,7 +85,7 @@ namespace Restaurant.Persistense.Repositories
                     Id = x.Id,
                     Dishes = x.DishCarts.Select(dc => new DishOfCart(dc.Dish.Id, dc.Dish.Name, dc.Dish.PhotoLinks.First(),dc.Count, dc.Dish.Price * dc.Count)).ToList()
                 })
-                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Cart not found!");
+                .FirstOrDefaultAsync() ?? throw new KeyNotFoundException("Корзину не знайдено!");
 
             return cart;
         }
@@ -102,7 +102,7 @@ namespace Restaurant.Persistense.Repositories
                     })
                     .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             }
-            throw new ArgumentException("Page size and number has to be greater than 0!");
+            throw new ArgumentException("Кількість і номер сторінок повинні бути більші за 0!");
         }
 
         public async Task<int> Purge(IEnumerable<Guid> values)

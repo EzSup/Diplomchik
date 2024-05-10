@@ -50,18 +50,7 @@ namespace Restaurant.Persistense.Repositories
         {
             return await _context.Cuisines.AsNoTracking()
                 .Include(x => x.Discount)
-                //.Include(x => x.Dishes).ThenInclude(d => new Dish()
-                //{
-                //    Id = d.Id,
-                //    Name = d.Name,
-                //    Available = d.Available,
-                //    Weight = d.Weight,
-                //    IngredientsList = d.IngredientsList,
-                //    CategoryId = d.CategoryId,
-                //    CuisineId = d.CuisineId,
-                //    DiscountId = d.DiscountId
-                //})
-                .FirstOrDefaultAsync(x => x.Id == id) ?? throw new KeyNotFoundException("Cuisine not found!");
+                .FirstOrDefaultAsync(x => x.Id == id) ?? throw new KeyNotFoundException("Кухня не знайдена!");
         }
 
         public async Task<ICollection<Cuisine>> GetByPage(int page, int pageSize)
@@ -71,7 +60,7 @@ namespace Restaurant.Persistense.Repositories
                 return await _context.Cuisines.AsNoTracking()
                     .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
             }
-            throw new ArgumentException("Page size and number has to be greater than 0!");
+            throw new ArgumentException("Кількість і номер сторінок повинні бути більші за 0!");
         }
 
         public async Task<int> Purge(IEnumerable<Guid> values)

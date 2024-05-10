@@ -21,7 +21,7 @@ namespace Restaurant.Persistense.Repositories
         public async Task<Guid> Add(Customer entity)
         {
             if (!_context.Users.Any(x => x.Id == entity.UserId))
-                throw new KeyNotFoundException("You have to create user first!");
+                throw new KeyNotFoundException("Вам потрібно створити користувача спочатку!");
             if (!_context.Carts.Any(x => x.Id == entity.CartId)){
                 var cart = new Cart();
                 await _context.Carts.AddAsync(cart);

@@ -25,6 +25,11 @@ namespace Restaurant.Persistense.Repositories
                 entity.Start.Month, entity.Start.Day,
                 entity.Start.Hour, 0, 0);
 
+            if(entity.Start < DateTime.Today)
+            {
+                throw new ArgumentException("Не можна резервувати столик раніше ніж на сьогодні!");
+            }
+
             entity.Start = DateTime.SpecifyKind(entity.Start, DateTimeKind.Utc);
 
             var reservation = new Reservation()
