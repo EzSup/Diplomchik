@@ -126,6 +126,7 @@
         <button @onclick="() => GoToPage(currentPageIndex + 1)">Next</button>
     }
 </div>
+
 @code {
     DishPaginationRequest filter;
     ICollection<DishPaginationResponse> dishes;
@@ -148,7 +149,6 @@
         {
             currentUserId = userId;
         }
-
     }
 
     private async Task GoToPage(int page)
@@ -176,4 +176,20 @@
         NavManager.NavigateTo($"/cart/{currentUserId}");
     }
 
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        try
+        {
+            await JS.InvokeAsync<object>("AnimateMenuButtons");
+        }catch{}
+    if (firstRender)
+        {
+            try
+            {
+                Thread.Sleep(1000);
+                await JS.InvokeVoidAsync("AddClassInView", "ScaledPlus", "NormalScale", 0.7);
+            }
+            catch { }
+        }
+    }
 }

@@ -238,6 +238,17 @@ button, a {
     color: #FFF8E0;
     margin: 0;
 }
+.Title svg {
+    transform: rotate(90deg) scale(0.75);
+    position: absolute;
+    left: 100px;
+    transition: all 0.5s;
+    cursor: pointer !important;
+}
+    .Title svg:hover {
+        transform: rotate(90deg) scale(0.7);
+        filter: brightness(50%);
+    }
 
     .Anim-Title {
         transform: scaleX(0);

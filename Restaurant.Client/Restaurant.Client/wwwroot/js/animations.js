@@ -70,3 +70,38 @@ function fadeInElement(elementId, translateYValue) {
     }
 };
 
+
+//function AnimateMenuButtons() {
+//    const objects = document.querySelectorAll(".filter input, .filter label", ".filter label");
+//        const objectsArray = Array.from(objects);
+//        const shuffledObjects = objectsArray.sort(() => Math.random() - 0.5);
+
+//        setTimeout(() => {
+//            shuffledObjects.forEach((obj, index) => {
+//                setTimeout(() => {
+//                    obj.style.opacity = 1;
+//                }, Math.pow((index * 100), 0.8));
+//            });
+//        }, 1000);
+//}
+
+function AnimateMenuButtons() {
+    const observer = new MutationObserver((mutationsList, observer) => {
+        const objects = document.querySelectorAll(".filter input, .filter label");
+        if (objects.length > 0) {
+            observer.disconnect(); 
+            const objectsArray = Array.from(objects);
+            const shuffledObjects = objectsArray.sort(() => Math.random() - 0.5);
+
+            setTimeout(() => {
+                shuffledObjects.forEach((obj, index) => {
+                    setTimeout(() => {
+                        obj.style.opacity = 1;
+                    }, Math.pow((index * 100), 0.8));
+                });
+            }, 1000);
+        }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+
