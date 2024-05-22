@@ -2,7 +2,7 @@
 @using Restaurant.Client.Contracts.Blogs
 @inject IBlogsService blogsSerivce
 @page "/blogDetails/{blogId:guid}"
-<Title>BlogDetails</Title>
+<Title BackButton>BlogDetails</Title>
     @if (blog != null)
     {
     <div class="wrap-row">
