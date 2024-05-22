@@ -23,21 +23,29 @@ namespace Restaurant.Client.Services
         {
             _httpClient = factory.CreateClient("API");
             _localStorage = localStorage;
-            _jsruntime= runtime;
+            _jsruntime = runtime;
             _toastService = toastService;
             _navManager = navManager;
         }
 
-        public async Task<Guid> AddBill(Guid ReservationOrDeliveryId, OrderType Type)
+        public async Task AddBill(Guid ReservationOrDeliveryId, OrderType Type)
         {
-            var customerId = Guid.Parse( await _localStorage.GetItem("customerId"));
+            var customerId = Guid.Parse(await _localStorage.GetItem("customerId"));
             var request = new BillAddRequest(customerId, Type, ReservationOrDeliveryId);
             var response = await _httpClient.PostAsJsonAsync("api/Bills/Post", request);
-            response.EnsureSuccessStatusCode();
-            var content = await response.Content.ReadAsStringAsync();
-            content = content.Trim('\"');
-            var result = Guid.Parse(content);
-            return result;
+            try
+            {
+                response.EnsureSuccessStatusCode();
+                var content = await response.Content.ReadAsStringAsync();
+                content = content.Trim('\"');
+                var result = Guid.Parse(content);
+                _navManager.NavigateTo($"/billData/{result}");
+            }
+            catch (Exception ex)
+            {
+                _toastService.ShowError($"Помилка! {ex.Message}");
+                _navManager.NavigateTo("/");
+            }
         }
 
         public async Task<BillResponse> Get(Guid id)
@@ -51,7 +59,7 @@ namespace Restaurant.Client.Services
 
         public async Task<bool> Delete(Guid id)
         {
-            var response = await _httpClient.DeleteAsync($"api/Bills/Delete/{id}");            
+            var response = await _httpClient.DeleteAsync($"api/Bills/Delete/{id}");
             return response.IsSuccessStatusCode;
         }
 
@@ -83,10 +91,10 @@ namespace Restaurant.Client.Services
         }
 
         public async Task PayBill(BillPayRequest request)
-        {            
+        {
             var response = await _httpClient.PutAsJsonAsync("api/Bills/Pay", request);
             var rest = await response.Content.ReadAsStringAsync();
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
                 _toastService.ShowSuccess("Succes! The rest equals " + rest);
                 _navManager.NavigateTo("/");

@@ -99,8 +99,7 @@
         var result = await tablesService.Reserve(request);
         if (result != Guid.Empty)
         {
-            var billId = await billsService.AddBill(result, OrderType.InRestaurant);
-            NavManager.NavigateTo($"/billData/{billId}");
+            await billsService.AddBill(result, OrderType.InRestaurant);
         }
     }
 

@@ -41,8 +41,7 @@
         var deliveryId = await deliveriesService.RegisterDelivery(delivery);
         if(deliveryId != Guid.Empty)
         {
-            var billId = await billsService.AddBill(deliveryId, OrderType.Delivery);
-            NavManager.NavigateTo($"/billData/{billId}");
+            await billsService.AddBill(deliveryId, OrderType.Delivery);
         }
     }
 }
