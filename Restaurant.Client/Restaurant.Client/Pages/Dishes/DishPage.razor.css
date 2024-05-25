@@ -1,12 +1,15 @@
 ﻿
 
-.small-image{
+.small-image {
     width: 80px;
     height: 80px;
     margin: 5px;
     border-radius: 2px;
+    transition: all 0.3s;
+    border: 2px solid #242121;
 }
     .small-image:hover {
+        transform: scale(0.98);
         border: 2px solid #ffc93c;
     }
 
@@ -23,7 +26,7 @@
 }
 
 .small-images-container {
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     border-radius: 5px;
     width: 100px;
     height: 500px;

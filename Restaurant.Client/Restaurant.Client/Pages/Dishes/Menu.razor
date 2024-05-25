@@ -12,22 +12,12 @@
 
 <Title Min>Menu</Title>
 
-<!-- Вікно з фільтрами -->
 <EditForm Model="@filter" OnSubmit="Filter" class="filters-container">
     <div class="filters-container">
         <div class="filter">
             <InputText placeholder="Назва" @bind-Value="filter.Name"></InputText>
             <div class="on-checked"></div>
-        </div>@*
-        <div class="filter">
-        <label for="category">Категорія:</label>
-        <select id="category">
-        <option value="all">Усі</option>
-        <option value="main">Основні страви</option>
-        <option value="dessert">Десерти</option>
-        <!-- Додайте інші категорії за необхідності -->
-        </select>
-        </div> *@
+        </div>
         <div class="filter">
             <label for="minPrice">Ціна від:</label>
             <InputNumber id="minPrice" @bind-Value="@filter.MinPrice"></InputNumber>
@@ -48,6 +38,7 @@
             <InputNumber id="maxWeight" @bind-Value="@filter.MaxWeight"></InputNumber>
             <div class="on-checked"></div>
         </div>
+        <div class="radio-filters">
         <div class="filter radio">
             <label for="cuisine">Кухня:</label>
             <InputRadioGroup id="cuisine" @bind-Value="@filter.Cuisine">
@@ -98,14 +89,12 @@
                 }
             </InputRadioGroup>
         </div>
-        <!-- Додайте інші фільтри за необхідності -->
+        </div>
         <button type="submit" style="width: 100vw; height: 60px; border-radius: 0px">Застосувати фільтри</button>
     </div>
 </EditForm>
 
-<!-- Вікно зі стравами -->
 <div class="menu-container">
-    <!-- Приклад однієї картки страви -->
     @if (dishes != null)
     {
         @foreach (var dish in dishes)

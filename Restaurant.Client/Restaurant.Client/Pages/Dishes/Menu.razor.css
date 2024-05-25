@@ -2,13 +2,48 @@
     all: unset;
 }
 
+.filters-container::before, .filters-container::after {
+    position: absolute;
+    content: " ";
+    top: 0;
+    width: 50%;
+    height: 500px;
+    background: url(images/Menu-Top-Bg.png) no-repeat top left;
+    background-size: contain;
+}
+.filters-container::before {
+    left: 0;
+}
+.filters-container::after {
+    transform: scaleX(-1);
+    right: 0;
+}
 /* Контейнер для вікна зі стравами */
 .menu-container {
     width: 70%;
     padding: 20px;
-    display: flex; /* Використовуємо flexbox */
-    flex-wrap: wrap; /* Розбиваємо на рядки, якщо не вміщається */
-    justify-content: space-around; /* Рівномірне розподілення між карточками */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+}
+
+.menu-container::before, .menu-container::after{
+    position: absolute;
+    content: " ";
+    top: calc(50% - 400px);
+    width: 50%;
+    height: 800px;
+    background: url(images/Menu-Mid-Bg.png) no-repeat center left;
+    background-size: contain;
+}
+
+.menu-container::before{
+    left: -400px;
+}
+.menu-container::after{
+    transform: scaleX(-1);
+    right: -400px;
 }
 
 /* Контейнер для вікна з фільтрами */
@@ -39,7 +74,7 @@
 
 ::deep .filter input {
     width: 200px;
-    background: #56524c;
+    background: #242121;
     border-radius: 5px;
     color: white;
     border: 1px solid #fff8e0;
@@ -76,7 +111,7 @@
         height: 1px;
         position: absolute;
         right: 0;
-        background: #242121;
+        background: #423f3b;
         border-radius: 6px;
         transition: all 0.3s;
         bottom: 0;
@@ -85,7 +120,9 @@
     }
 
     .filters-container > .filter > input:focus ~ .on-checked,
-    .filters-container > .filter > input:focus-visible ~ .on-checked
+    .filters-container > .filter > input:focus-visible ~ .on-checked,
+    .filters-container > .radio-filters > .filter > input:focus ~ .on-checked,
+    .filters-container > .radio-filters > .filter > input:focus-visible ~ .on-checked
     {
         height: 100%;
         opacity: 1;
@@ -94,13 +131,13 @@
 
 
     .filter.radio {
-        display: flex;
-        flex-direction: row;
-        align-content: center;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-    }
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
 
     ::deep .filter.radio input{
         width: auto;
@@ -161,7 +198,9 @@
         height: 100%;
     }
 
-    .filters-container > .filter.radio > label > .hidden:checked ~ .on-checked::after {
+    .filters-container > .filter.radio > label > .hidden:checked ~ .on-checked::after,
+    .filters-container > .radio-filters > .filter.radio > label > .hidden:checked ~ .on-checked::after
+    {
         opacity: 0.3;
         height: 100%;
     }
@@ -216,4 +255,14 @@
     opacity: 0;
     transition: all 0.5s;
     cursor: pointer;
+}
+
+.radio-filters {
+    width: min-content;
+    max-width: 70%;
+    margin: 0 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
 }
