@@ -50,7 +50,7 @@
         width: 100%;
     }
 
-.navigation a {
+::deep .navigation a {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 400;
@@ -63,7 +63,7 @@
     position: relative;
 }
 
-    .navigation a::before {
+    ::deep .navigation a::before {
         position: absolute;
         content: " ";
         left: 0;
@@ -74,11 +74,11 @@
         transition: all 0.3s;
     }
 
-    .navigation a:hover {
+    ::deep .navigation a:hover {
         color: #FFF8E0;
     }
 
-    .navigation a:hover::before{
+   ::deep .navigation a:hover::before{
         width: 100%;
     }
 
@@ -91,28 +91,56 @@
     opacity: 0.7;
 }
 
+::deep .login.button, .logout.button{
+    background: none;
+    border: none;
+    transition: all 0.5s;
+    padding-right: 10px;
+}
+    ::deep .login.button path, .logout.button path{
+        transition: all 0.5s;
+    }
 
-.mobile-nav{
-    display:none;
+::deep .login.button:hover, .logout.button:hover{
+    transform:scale(0.95);
+}
+    ::deep .login.button:hover path, .logout.button:hover path {
+        fill: #FFF8E0;
+    }
+
+.mobile-right {
+    display: flex;
+    align-items: center;
+}
+.mobile-right .right-part{
+    padding-right: 20px;
+}
+.mobile-nav {
+    display: none;
 }
 .mobile-nav .btn{
-    transition: all 0.5s;
     padding: 0;
+    z-index:2;
 }
 .mobile-nav .btn #svg1{
+    display:block !important;
     opacity:1;
+    transition: all 0.5s;
 }
 .mobile-nav .btn #svg2{
+    display:block !important;
+    top: 0px;
+    left: 0px;
     opacity:0;
+    transform: rotate(90deg);
+    transition: all 0.5s;
 }
-.mobile-nav.active .btn{
-     transform: rotate(-90deg);     
- }
 .mobile-nav.active .btn #svg1{
+    transform:rotate(-25deg);
     opacity: 0;
 }
 .mobile-nav.active .btn #svg2{
-    transform: rotate(-90deg);
+    transform: rotate(0deg);
     opacity: 1;
 }
 .mobile-nav .mobile-navmenu {
@@ -124,28 +152,39 @@
     align-content: center;
     align-items: center;
     height: 0px;
-    opacity: 0;
-    transition: all 0.5s;
-    z-index:-1;
+    opacity: 0;    
+    transition: all 0.5s;       
 }
 .mobile-nav.active .mobile-navmenu{
     padding-top: 90px;
-    height: 270px;
+    height: 50px;
     background: #7c786f;
     transition: all 0.5s;
     opacity: 1;
 }
-.mobile-nav.active .mobile-navmenu ul li{
-    opacity: 1;
-}
-.mobile-navmenu ul, li{
+.mobile-navmenu ul, .mobile-navmenu li {
     padding: 0;
-    text-align:center;    
+    text-align: center;
 }
-.mobile-navmenu ul li{
+.mobile-navmenu ul li {
     transition: all 0.5s;
+    position: relative;
     opacity: 0;
+    width: 100px;
+    min-height: 25px;
+    a{
+         display:none;
+     }
 }
+.mobile-nav.active .mobile-navmenu ul li{
+    position: static;
+    opacity: 1;
+    background: #7c786f;
+    a{
+         display:inline;
+     }
+}
+
 .mobile-navmenu li a{
     white-space: nowrap;
 }
