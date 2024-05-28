@@ -57,6 +57,53 @@
             </AuthorizeView>
         </div>
     </div>
+    <div class="navbar-content mobile-nav">
+        <div class="btn" id="nav-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#ffffff" viewBox="0 0 256 256" id="svg1">
+                <path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z">
+                </path>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#ffffff" viewBox="0 0 256 256" id="svg2">
+                <path d="M140,128a12,12,0,1,1-12-12A12,12,0,0,1,140,128Zm56-12a12,12,0,1,0,12,12A12,12,0,0,0,196,116ZM60,116a12,12,0,1,0,12,12A12,12,0,0,0,60,116Z">
+                </path>
+            </svg>
+        </div>
+        <div class="navigation mobile-navmenu">
+            <ul>
+            <li><a href="/blogslist">@Localizer["blogsListNavLink"]</a></li>
+            <li><a href="/menu">@Localizer["menuNavLink"]</a></li>
+            <li><a href="/selectTable">@Localizer["tablesNavLink"]</a></li>
+            <li><a href="#">option</a></li>
+            <li><a href="#">option</a></li>
+            </ul>
+        </div>
+        <script>
+            (function () {
+                const btn = document.querySelector(".btn");
+                const navmenu = document.querySelector(".mobile-nav");
+                const menuItems = document.querySelectorAll(".mobile-navmenu ul li");
+                const svg1 = document.getElementById("svg1");
+                const svg2 = document.getElementById("svg2");
+                svg2.classList.add("hidden");
+                btn.addEventListener("click", () => {
+                    navmenu.classList.toggle("active");
+
+                    // Перемикаємо видимість SVG
+                    if (svg1.classList.contains("hidden")) {
+                        svg1.classList.remove("hidden");
+                        svg2.classList.add("hidden");
+                    } else {
+                        svg1.classList.add("hidden");
+                        svg2.classList.remove("hidden");
+                    }
+                });
+
+                menuItems.forEach((item, index) => {
+                    item.style.transitionDelay = `${index * 0.15}s`;
+                });
+            })();
+        </script>
+    </div>
 </div>
 @code {
     protected override async void OnAfterRender(bool firstRender)
