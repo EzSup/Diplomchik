@@ -326,7 +326,7 @@ button:focus-visible {
     display: flex;
     margin: 0;
     transition: all 1s, transform 1s ease, opacity 2s ease;
-    background: #A7A293;
+    background: linear-gradient(324.76deg, #A7A293 13.36%, #878477 84.29%);
     box-shadow: none !important;
     border-radius: 25px;
 }
@@ -503,6 +503,38 @@ button:focus-visible {
     .wrap-row-content .image-wrap ~ a{
         margin-top: 75px;
     }
+    .Container.slider {
+        width: 70vw;
+        height: 40vw;
+    }
+    .wrap h2, .Container-content h3 {
+        font-size: 3vw;
+    }
+    .Container-content p {
+        font-size: 2.5vw;
+        line-height: 40px;
+    }
+    .Container .Container-wrap .wrap svg {
+        width: 15vw;
+    }
+    .Container .Container-wrap:first-child .wrap svg{
+        width: 4vw !important;
+    }
+    .review-bar{
+        height:auto;
+        padding-bottom: 2em !important;
+    }
+    .Container.min-container {
+        width: 65vw;
+        height: 40vw;
+    }
+    .Container-content.min-content p {
+        font-size: 2.5vw;
+        line-height: normal;
+    }
+    .min-container .Container-wrap svg {
+        width: 5vw;
+    }
 }
 @media screen and (max-width: 1300px){
     .wrap-row {
@@ -541,6 +573,23 @@ button:focus-visible {
         height: 270px;
     }
 }
+@media screen and (max-width: 1100px) {
+    .Container .Container-wrap:first-child .wrap svg {
+        width: 3vw !important;
+    }
+
+    .Container-content p {
+        font-size: 2.25vw;
+        line-height: 30px;
+    }
+    .ellipse {
+        width: 3.5vw;
+        height: 3.5vw;
+    }
+    .Container-content.min-content, .Container-wrap.left, .Container-wrap.right {
+        margin: 0px 2em;
+    }
+}
 @media screen and (max-width: 1000px){
     .Header {
         height: 700px;
@@ -560,10 +609,26 @@ button:focus-visible {
         width: 40vw;
         height: 27vw;
     }
+    .Container.min-container {
+        margin: 2em 0;
+    }
 }
 @media screen and (max-width: 900px){
     .Header .Content a, .Content-wrap a {
         font-size: 20px;
+    }
+    .slide .Container-content {
+        margin: 0;
+    }
+    .wrap h2, .Container-content h3 {
+        font-size: 3vw;
+        line-height: normal;
+        margin: 0 0 0.2em;
+    }
+    .Container-content p {
+        font-size: 2.25vw;
+        line-height: normal;
+        margin: 0;
     }
 }
 @media screen and (max-width: 800px){
@@ -617,6 +682,11 @@ button:focus-visible {
     .image-wrap .img {
         width: 45vw;
         height: 30vw;
+    }
+    .slide .Container-wrap {
+        margin-left: 2em;
+        margin-right: 2em;
+        width: calc(100% - 4em) !important;
     }
 }
 @media screen and (max-width: 600px){
@@ -674,6 +744,48 @@ button:focus-visible {
         width: 50vw;
         height: 35vw;
     }
+    .Container.slider {
+        width: 85vw;
+        height: 50vw;
+        margin-bottom: 1em;
+    }
+    .wrap h2, .Container-content h3 {
+        font-size: 4vw;
+    }
+    .Container .Container-wrap:first-child .wrap svg {
+        width: 4vw !important;
+    }
+    .Container .Container-wrap {
+        margin: 0em 1em 0 !important;
+        width: calc(100% - 2em) !important;
+    }
+    .Container .Container-wrap:first-child {
+        top: 0 !important;
+    }
+    .Container .Container-wrap:last-child{
+        bottom: 0 !important;
+    }
+    .Container-content p {
+        font-size: 3vw;
+        width: 90%;
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400;
+    }
+    .Container .Container-wrap .wrap svg {
+        width: 20vw;
+    }
+    .ellipse{
+        width: 5vw;
+        height: 5vw;
+    }
+    .Container.min-container {
+        width: 80vw;
+        height: 55vw;
+    }
+    .Container-content.min-content p {
+        font-size: 3.5vw;
+    }
 }
 @media screen and (max-width: 500px){
     .Header .Content h1::before {
@@ -709,5 +821,12 @@ button:focus-visible {
         height: 40vw;
         border-width: 15px;
         margin: 0px -65px 0;
+    }
+    .min-container .Container-wrap.left{
+        margin-bottom: -1em !important;
+        margin-top: 0 !important;
+    }
+    .min-container .Container-wrap.right {
+        margin-top: -1em !important;
     }
 }

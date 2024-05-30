@@ -90,6 +90,9 @@
     padding-right: 5px;
     transition: all 0.5s;
 }
+::deep .navbar.right-part a path{
+    transition: all 0.5s;
+}
 ::deep .navbar.right-part a:hover {
     transform:scale(0.95);
 }
@@ -217,14 +220,24 @@
         height: 100px;
     }
 }
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 450px){
     .navbar-wrap .navbar-content:first-child {
-        margin: 10px 0 0;
+        margin: 0 auto;
     }
+
+    .navbar-content h1 {
+        margin: 0;
+        font-size: 25px;
+    }
+
     .mobile-right {
-        margin: -10px 0 0 auto;
+        margin: -10px 15px 0 auto;
     }
-    .mobile-right .navbar-content{
-        margin: 0 !important;
-    }
+
+        .mobile-right .navbar-content {
+            margin: 0 !important;
+        }
+}
+@media screen and (max-width: 400px) {
+    
 }
