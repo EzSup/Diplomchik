@@ -441,3 +441,43 @@ button[type="submit"]:focus-visible {
     opacity: 1 !important;
     transform: scale(1) !important;
 }
+
+@media screen and (max-width: 1100px){
+    .Title h1 {
+        font-size: 4vw;
+        line-height: 130%;
+    }
+    .Main-Content .Title{
+        width: max-content;
+    }
+}
+@media screen and (max-width: 900px){
+    .Main-Content .Title {
+        width: 100%;
+        padding: 3px 0;
+    }
+    .Title .content{
+        padding: 0 10em;
+    }
+    .Title h1 {
+        font-size: 5vw;
+    }
+}
+@media screen and (max-width: 700px){
+    .Title .content {
+        padding: 0px 5em;
+    }
+}
+@media screen and (max-width: 600px){
+    .Title h1 {
+        font-size: 6vw;
+    }
+}
+@media screen and (max-width: 500px){
+    .Title .content {
+        padding: 0px 2em;
+    }
+    .Title h1 {
+        font-size: 7vw;
+    }
+}

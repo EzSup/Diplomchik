@@ -15,16 +15,18 @@
             <a href="/selectTable">@Localizer["tablesNavLink"]</a>
             <a href="#">option</a>
             <a href="#">option</a>
-        </div>
-    </div>
-    <div class="navbar-content">
-        <div class="navbar right-part">
-            @* <div class="LangSwitch"><CultureSelector /></div> *@
-            <AuthorizeView Roles="Admin">@*Коли зареганий адмін він бачить це*@
+            <AuthorizeView Roles="Admin">
+                @*Коли зареганий адмін він бачить це*@
                 <Authorized>
-                    <NavLink href="/dishesManage">Admin page</NavLink>
+                    <NavLink href="/dishesManage">Admin</NavLink>
                 </Authorized>
             </AuthorizeView>
+        </div>
+    </div>
+    <div class="mobile-right">
+    <div class="navbar-content">
+        <div class="navbar right-part">
+            @* <div class="LangSwitch"><CultureSelector /></div> *@           
             <AuthorizeView Roles="User">@*Коли зареганий юзер він бачить це*@
                 <Authorized>
                     <NavLink href="@($"/cart/{context.User.Identity.Name}")">
@@ -41,7 +43,7 @@
                     
                 </Authorized>
                 <NotAuthorized>
-                    <NavLink href="login">
+                    <NavLink href="login" class="login button">
                         <svg width="34" height="33" viewBox="0 0 34 33" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M33.6056 30.5224C31.1333 26.2483 27.3234 23.1835 22.8772 21.7306C25.0765 20.4214 26.7852 18.4264 27.741 16.052C28.6967 13.6776 28.8466 11.0552 28.1676 8.58738C27.4887 6.11956 26.0184 3.94285 23.9826 2.39152C21.9468 0.840181 19.4581 0 16.8986 0C14.3391 0 11.8504 0.840181 9.81456 2.39152C7.77878 3.94285 6.30852 6.11956 5.62956 8.58738C4.95061 11.0552 5.10051 13.6776 6.05624 16.052C7.01197 18.4264 8.72069 20.4214 10.92 21.7306C6.47377 23.1819 2.66389 26.2467 0.191608 30.5224C0.100945 30.6703 0.0408091 30.8348 0.014748 31.0062C-0.0113132 31.1777 -0.00277141 31.3526 0.0398693 31.5207C0.0825099 31.6888 0.158386 31.8466 0.26302 31.9849C0.367655 32.1232 0.498927 32.2391 0.649094 32.3259C0.799261 32.4126 0.96528 32.4684 1.13735 32.4899C1.30943 32.5115 1.48408 32.4983 1.65099 32.4513C1.8179 32.4042 1.9737 32.3242 2.10919 32.216C2.24468 32.1077 2.35712 31.9735 2.43988 31.8211C5.49817 26.5356 10.9038 23.3799 16.8986 23.3799C22.8934 23.3799 28.299 26.5356 31.3573 31.8211C31.4401 31.9735 31.5525 32.1077 31.688 32.216C31.8235 32.3242 31.9793 32.4042 32.1462 32.4513C32.3131 32.4983 32.4878 32.5115 32.6598 32.4899C32.8319 32.4684 32.9979 32.4126 33.1481 32.3259C33.2983 32.2391 33.4295 32.1232 33.5342 31.9849C33.6388 31.8466 33.7147 31.6888 33.7573 31.5207C33.8 31.3526 33.8085 31.1777 33.7824 31.0062C33.7564 30.8348 33.6963 30.6703 33.6056 30.5224ZM7.80813 11.6922C7.80813 9.89424 8.34127 8.13669 9.34015 6.64177C10.339 5.14685 11.7588 3.9817 13.4198 3.29366C15.0809 2.60563 16.9087 2.42561 18.6721 2.77636C20.4354 3.12712 22.0552 3.99291 23.3265 5.26423C24.5979 6.53556 25.4636 8.15532 25.8144 9.9187C26.1652 11.6821 25.9851 13.5099 25.2971 15.1709C24.6091 16.832 23.4439 18.2517 21.949 19.2506C20.4541 20.2495 18.6965 20.7826 16.8986 20.7826C14.4884 20.7801 12.1777 19.8215 10.4735 18.1173C8.76928 16.413 7.8107 14.1023 7.80813 11.6922Z" fill="#1E1E1E" />
                         </svg>
@@ -50,12 +52,68 @@
             </AuthorizeView>
             <AuthorizeView>@*Коли хтось зриганий незалежно від ролі*@
                 <Authorized>
-                    <button style="color: black" @onclick="accountService.LogoutAsync">
-                        розлогін
+                    <button style="color: black" @onclick="accountService.LogoutAsync" class="logout button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#1e1e1e" viewBox="0 0 256 256">
+                            <path d="M120,216a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V40a8,8,0,0,1,8-8h64a8,8,0,0,1,0,16H56V208h56A8,8,0,0,1,120,216Zm109.66-93.66-40-40a8,8,0,0,0-11.32,11.32L204.69,120H112a8,8,0,0,0,0,16h92.69l-26.35,26.34a8,8,0,0,0,11.32,11.32l40-40A8,8,0,0,0,229.66,122.34Z"></path>
+                        </svg>
                     </button>
                 </Authorized>               
             </AuthorizeView>
         </div>
+    </div>
+    <div class="navbar-content mobile-nav">
+        <div class="btn" id="nav-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#ffffff" viewBox="0 0 256 256" id="svg1">
+                <path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z">
+                </path>
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" fill="#ffffff" viewBox="0 0 256 256" id="svg2">
+                <path d="M140,128a12,12,0,1,1-12-12A12,12,0,0,1,140,128Zm56-12a12,12,0,1,0,12,12A12,12,0,0,0,196,116ZM60,116a12,12,0,1,0,12,12A12,12,0,0,0,60,116Z">
+                </path>
+            </svg>
+        </div>
+        <div class="navigation mobile-navmenu">
+            <ul>
+            <li><a href="/blogslist">@Localizer["blogsListNavLink"]</a></li>
+            <li><a href="/menu">@Localizer["menuNavLink"]</a></li>
+            <li><a href="/selectTable">@Localizer["tablesNavLink"]</a></li>
+            <li><a href="#">option</a></li>
+            <li><a href="#">option</a></li>
+            <li><AuthorizeView Roles="Admin">
+                @*Коли зареганий адмін він бачить це*@
+                <Authorized>
+                    <NavLink href="/dishesManage">Admin</NavLink>
+                </Authorized>
+            </AuthorizeView></li>
+            </ul>
+        </div>
+        <script>
+            (function () {
+                const btn = document.querySelector(".btn");
+                const navmenu = document.querySelector(".mobile-nav");
+                const menuItems = document.querySelectorAll(".mobile-navmenu ul li");
+                const svg1 = document.getElementById("svg1");
+                const svg2 = document.getElementById("svg2");
+                svg2.classList.add("hidden");
+                btn.addEventListener("click", () => {
+                    navmenu.classList.toggle("active");
+
+                    // Перемикаємо видимість SVG
+                    if (svg1.classList.contains("hidden")) {
+                        svg1.classList.remove("hidden");
+                        svg2.classList.add("hidden");
+                    } else {
+                        svg1.classList.add("hidden");
+                        svg2.classList.remove("hidden");
+                    }
+                });
+
+                menuItems.forEach((item, index) => {
+                    item.style.transitionDelay = `${index * 0.15}s`;
+                });
+            })();
+        </script>
+    </div>
     </div>
 </div>
 @code {

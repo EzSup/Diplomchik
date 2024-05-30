@@ -55,13 +55,13 @@
         transform: scale(-1,-1)
     }
 
-.oi-account-login:before {
+/*.oi-account-login:before {
     content: '\e000'
 }
 
 .oi-account-logout:before {
     content: '\e001'
-}
+}*/
 
 .oi-action-redo:before {
     content: '\e002'
