@@ -55,11 +55,9 @@ namespace Restaurant.Client.Services
 
         public async Task<DeletionResult> DeletePhotoAsync(string imageLink)
         {
-            // Розділити рядок за останнім входженням символу '/'
             var lastSlashIndex = imageLink.LastIndexOf('/');
             var publicId = imageLink.Substring(lastSlashIndex + 1);
 
-            // Викликати метод видалення з використанням publicId
             var deleteParams = new DeletionParams(publicId);
             var result = await _cloudinary.DestroyAsync(deleteParams);
 

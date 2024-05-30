@@ -27,7 +27,10 @@ namespace Restaurant.Client
 
             // Add services to the container.
             builder.Services.AddRazorPages();
-            builder.Services.AddServerSideBlazor();
+            builder.Services.AddServerSideBlazor().AddCircuitOptions(options =>
+            {
+                options.DetailedErrors = true;
+            });
             builder.Services.AddAuthorizationCore();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddMudServices();
@@ -68,7 +71,7 @@ namespace Restaurant.Client
 
             builder.Services.AddHttpClient("API", client =>
             {
-                client.BaseAddress = new Uri("https://localhost:7248/");
+                client.BaseAddress = new Uri("https://tevhni.realhost-free.net");
             });//.AddHttpMessageHandler<JwtTokenHandler>();
 
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7248/") });
