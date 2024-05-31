@@ -442,14 +442,34 @@ button[type="submit"]:focus-visible {
     opacity: 1 !important;
     transform: scale(1) !important;
 }
-
+@media screen and (max-width: 1500px){
+    h1 {
+        font-size: 3vw;
+        line-height: 50px;
+    }
+    h2 {
+        font-size: 3vw;
+        line-height: 50px;
+        letter-spacing: 0.1em;
+    }
+    h3 {
+        font-size: 2.5vw;
+        line-height: 50px;
+    }
+}
 @media screen and (max-width: 1100px){
     .Title h1 {
         font-size: 4vw;
         line-height: 130%;
     }
+    .Title svg {
+        height: 50%;
+    }
     .Main-Content .Title{
         width: max-content;
+    }
+    h2, h3 {
+        line-height: normal;
     }
 }
 @media screen and (max-width: 900px){
@@ -464,14 +484,25 @@ button[type="submit"]:focus-visible {
         font-size: 5vw;
     }
 }
+@media screen and (max-width: 800px){
+    .Main-Content {
+        margin-bottom: 100px;
+    }
+}
 @media screen and (max-width: 700px){
     .Title .content {
         padding: 0px 5em;
+    }
+    .Title svg {
+        left: 25px;
     }
 }
 @media screen and (max-width: 600px){
     .Title h1 {
         font-size: 6vw;
+    }
+    h3 {
+        font-size: 3.5vw;
     }
 }
 @media screen and (max-width: 500px){
@@ -480,5 +511,8 @@ button[type="submit"]:focus-visible {
     }
     .Title h1 {
         font-size: 7vw;
+    }
+    .Title svg {
+        left: -10px;
     }
 }
