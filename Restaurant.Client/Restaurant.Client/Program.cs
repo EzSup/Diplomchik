@@ -71,7 +71,7 @@ namespace Restaurant.Client
 
             builder.Services.AddHttpClient("API", client =>
             {
-                client.BaseAddress = new Uri("https://tevhni.realhost-free.net");
+                client.BaseAddress = new Uri("https://localhost:7248/"); //https://tevhni.realhost-free.net
             });//.AddHttpMessageHandler<JwtTokenHandler>();
 
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7248/") });
