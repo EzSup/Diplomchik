@@ -1,6 +1,6 @@
 ﻿.dish-card {
     width: 300px;
-    height: 400px;
+    /*height: 400px;*/
     border: 1px solid #878477;
     border-radius: 8px;
     padding: 10px;
@@ -14,7 +14,10 @@
 .dish-card:hover,.dish-card:active {
     transform: scale(1.01);
     img{
-    transform: scale(0.95);
+        transform: scale(0.95);
+    }
+    button {
+        background: #77756a;
     }
 }
 
@@ -26,10 +29,26 @@
 
 .add-to-cart-button {
     position: absolute;
-    top: 0;
-    right: 0;
-    margin: 10px;
-    padding: 3px 6px;
+    top: -1px;
+    right: -1px;
+    /* margin: 10px; */
+    padding: 10px 10px;
+    border: 0;
+    border-radius: 0 8px 0 0;
+    background: #878477;
+    transition: all 0.5s;
+    svg{
+           transition: all 0.3s;
+       }
+}
+
+.add-to-cart-button:hover {
+    border-radius: 0 8px 0 8px;
+    transform: scale(0.98);
+    background: #A7A293 !important;
+    svg{
+           transform: scale(0.95);
+       }
 }
 
 .promotion-label {

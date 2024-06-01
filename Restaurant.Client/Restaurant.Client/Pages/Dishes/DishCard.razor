@@ -1,5 +1,5 @@
 ﻿@using Restaurant.Client.Contracts.Dishes
-<div @onclick="OnClick.Invoke" class="dish-card">
+<div @onclick="OnClick.Invoke" class="dish-card ScaledPlus">
     <img src="@Dish.PhotoLink" alt="Страва 1">
     <AuthorizeView Roles="User">
         <Authorized>
@@ -30,4 +30,17 @@
     public Action OnClickCart { get; set; }
     [Parameter]
     public Action OnClick { get; set; }
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                Thread.Sleep(1000);
+                await JS.InvokeVoidAsync("AddClassInView", "ScaledPlus", "NormalScale", 0.25);
+            }
+            catch { }
+        }
+    }
 }
