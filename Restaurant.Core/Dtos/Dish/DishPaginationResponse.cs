@@ -5,6 +5,7 @@
         string Name,
         string PhotoLink,
         decimal OriginalPrice,
-        decimal ResultingPrice
+        decimal ResultingPrice,
+        double Rate
         );
 }

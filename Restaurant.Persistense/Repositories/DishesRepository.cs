@@ -88,7 +88,8 @@ namespace Restaurant.Persistense.Repositories
             IQueryable<Dish> query = _context.Dishes.AsNoTracking()
                 .Include(x => x.Discount)
                 .Include(x => x.Category)
-                .Include(x => x.Cuisine);
+                .Include(x => x.Cuisine)
+                .Include(x => x.Reviews);
             if (!string.IsNullOrWhiteSpace(Name))
             {
                 Name = Name.ToLower();
@@ -136,7 +137,8 @@ namespace Restaurant.Persistense.Repositories
                 .Select(x => new DishPaginationResponse(x.Id, x.Name, x.PhotoLinks.FirstOrDefault(), x.Price, 
                 x.Price - (x.Price * 0.01m * (decimal)(x.Discount.PecentsAmount != null ? x.Discount.PecentsAmount : 0))
                 - (x.Price * 0.01m * (decimal)(x.Category.Discount.PecentsAmount != null ? x.Category.Discount.PecentsAmount : 0))
-                - (x.Price * 0.01m * (decimal)(x.Cuisine.Discount.PecentsAmount != null ? x.Cuisine.Discount.PecentsAmount : 0))))
+                - (x.Price * 0.01m * (decimal)(x.Cuisine.Discount.PecentsAmount != null ? x.Cuisine.Discount.PecentsAmount : 0)), 
+                x.Reviews.Count > 0 ? x.Reviews.Select(r => r.Rate).Average() : 0))//
                 .ToListAsync();
             //розібратись чому tolistasync викликає помилку
             return s;

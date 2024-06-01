@@ -48,7 +48,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpGet("{dateTime:datetime}")]
-        [AllowAnonymous]
+        [AllowAnonymous]        
         public async Task<ActionResult<ICollection<TableResponse>>> GetTablesOfTime(DateTime dateTime)
         {
             var tables = await _tablesService.GetTablesOfTime(dateTime);

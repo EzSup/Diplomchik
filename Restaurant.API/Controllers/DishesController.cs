@@ -82,11 +82,16 @@ namespace Restaurant.API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<int>> GetPagesCount([FromBody] DishPaginationRequest request)
         {
-            var dishes = await _dishesService.PagesCount(request);
-
-            //List<DishPaginationResponse> response = ToPaginationResponse(dishes);
-
-            return Ok(dishes);
+            try
+            {
+                var pagesCount = await _dishesService.PagesCount(request);
+                return Ok(pagesCount);
+            }
+            catch(Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
+            
         }
 
         [HttpPost]
