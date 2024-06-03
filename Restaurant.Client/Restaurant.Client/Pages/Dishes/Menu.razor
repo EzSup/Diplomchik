@@ -91,7 +91,7 @@
         </div>
         </div>      
     </div>
-    <button type="submit" style="width: 100vw; height: 60px; border-radius: 0px">Застосувати фільтри</button>
+    <button type="submit" class="apply-btn Opacity0" @onclick="checkdishescount">Застосувати фільтри</button>
 </EditForm>
 
 <div class="menu-container">
@@ -115,7 +115,20 @@
         <button @onclick="() => GoToPage(currentPageIndex + 1)">Next</button>
     }
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const menuContainer = document.querySelector('.menu-container');
+        const dishes = menuContainer.querySelectorAll('.dish');
 
+        if (dishes.length < 6) {
+            menuContainer.classList.add('less-than-six');
+            menuContainer.classList.remove('more-than-six');
+        } else {
+            menuContainer.classList.add('more-than-six');
+            menuContainer.classList.remove('less-than-six');
+        }
+    });
+</script>
 @code {
     DishPaginationRequest filter;
     ICollection<DishPaginationResponse> dishes;
@@ -164,12 +177,19 @@
         await cartsService.AddDishToCartOfCustomerByUserId(currentUserId, dishId, 1);
         NavManager.NavigateTo($"/cart/{currentUserId}");
     }
-
+    private async Task checkdishescount()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("checkDishesCount");
+        }catch{}
+    }
     protected override async void OnAfterRender(bool firstRender)
     {
         try
         {
             await JS.InvokeAsync<object>("AnimateMenuButtons");
+            
         }catch{}
         if (firstRender)
         {
@@ -179,6 +199,8 @@
                 await JS.InvokeVoidAsync("AddClassInView", "ScaledPlus", "NormalScale", 0.7);
                 await JS.InvokeVoidAsync("AddClassInView", "filters-container", "animated", 0.5);
                 await JS.InvokeVoidAsync("AddClassInView", "menu-container", "animated", 1);
+                Thread.Sleep(1000);
+                await JS.InvokeVoidAsync("AddClassInView", "Opacity0", "Opacity1", 0.5);
             }
             catch { }
         }

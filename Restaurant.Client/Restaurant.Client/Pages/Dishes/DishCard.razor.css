@@ -70,3 +70,50 @@
     margin: 5px 0;
     color: #A7A293;
 }
+
+@media screen and (max-width: 1500px){
+    .dish-card{
+        width: 30%;
+
+    }
+    .dish-card p {
+        font-size: 1.5vw !important;
+    }
+    .dish-card p:last-child, .dish-card span{
+        font-size: 1.25vw !important;
+    }
+    ::deep .mud-icon-root{
+        width: 2.3vw !important;
+        height: 2.3vw !important;
+    }
+    .add-to-cart-button{
+        padding: 3.5%;
+    }
+    .add-to-cart-button svg{
+        width: 3vw;
+        height: 3vw;
+    }
+}
+@media screen and (max-width: 1200px){
+    .dish-card p {
+        font-size: 1.75vw !important;
+    }
+
+    .dish-card p:last-child, .dish-card span {
+        font-size: 1.5vw !important;
+    }
+}
+@media screen and (max-width: 900px){
+    .dish-card p {
+        font-size: 2.25vw !important;
+    }
+
+        .dish-card p:last-child, .dish-card span {
+            font-size: 2vw !important;
+        }
+}
+@media screen and (max-width: 800px){
+    .dish-card {
+        width: 40%;
+    }
+}

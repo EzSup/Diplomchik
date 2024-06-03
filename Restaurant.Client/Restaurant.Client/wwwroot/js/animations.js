@@ -45,7 +45,7 @@ async function fadeInElement(elementId, translateYValue) {
     
     setTimeout(function () {
         var options = {
-            threshold: 0.5
+            threshold: 0.3
         };
 
         var observer = new IntersectionObserver(handleIntersection, options);

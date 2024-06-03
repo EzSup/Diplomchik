@@ -442,6 +442,13 @@ button[type="submit"]:focus-visible {
     opacity: 1 !important;
     transform: scale(1) !important;
 }
+.Opacity0 {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+.Opacity1{
+    opacity:1;
+}
 @media screen and (max-width: 1500px){
     h1 {
         font-size: 3vw;
