@@ -1,4 +1,4 @@
-﻿function animateElement(element, transition, timeout) {
+﻿async function animateElement(element, transition, timeout) {
     const myElement = document.getElementById(element);
     myElement.style.transition = `all ${transition}`;
     myElement.style.transform = `translateY(15%)`;
@@ -10,7 +10,7 @@
     }, timeout);
 }
 
-function AddClassInView(element, className, threshold = 1, bool = false, root = null) {
+async function AddClassInView(element, className, threshold = 1, bool = false, root = null) {
     let elements = document.querySelectorAll("." + element);
     let observer = new IntersectionObserver(function (entries, observer) {
         entries.forEach(function (entry) {
@@ -32,7 +32,7 @@ function AddClassInView(element, className, threshold = 1, bool = false, root = 
 
 
 
-function fadeInElement(elementId, translateYValue) {
+async function fadeInElement(elementId, translateYValue) {
     var element = document.getElementById(elementId);
     element.style.opacity = 0;
     element.style.transform = "translateY(-130px)";
@@ -85,7 +85,7 @@ function fadeInElement(elementId, translateYValue) {
 //        }, 1000);
 //}
 
-function AnimateMenuButtons() {
+async function AnimateMenuButtons() {
     const observer = new MutationObserver((mutationsList, observer) => {
         const objects = document.querySelectorAll(".filter input, .filter label");
         if (objects.length > 0) {
