@@ -87,7 +87,7 @@ async function fadeInElement(elementId, translateYValue) {
 
 async function AnimateMenuButtons() {
     const observer = new MutationObserver((mutationsList, observer) => {
-        const objects = document.querySelectorAll(".filter input, .filter label");
+        const objects = document.querySelectorAll(".filter input, .filter label, .scrollbar label");
         if (objects.length > 0) {
             observer.disconnect(); 
             const objectsArray = Array.from(objects);

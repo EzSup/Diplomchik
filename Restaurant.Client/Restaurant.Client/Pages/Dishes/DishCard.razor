@@ -13,7 +13,7 @@
     <p style="font-size: 20px;">@Dish.Name</p>
     <MudRating Disabled="true" SelectedValue="@((int)Dish.Rate)" />
     <p style="font-size: 16px;">
-        Ціна: <span style="color: yellow;">@Dish.ResultingPrice ₴</span>
+        Ціна: <span style="color: #ffc107;">@Dish.ResultingPrice ₴</span>
         @if (Dish.OriginalPrice > Dish.ResultingPrice)
         {
             <span style="color: gray; text-decoration: line-through;"> @Dish.OriginalPrice ₴</span>

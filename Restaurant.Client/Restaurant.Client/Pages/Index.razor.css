@@ -361,7 +361,7 @@ button:focus-visible {
 }
 
 .Container-content {
-    margin: 2em 0 0;    
+    margin: 1em 0 0;
 }
 .slide .Container-content {
     opacity: 0;
@@ -504,21 +504,23 @@ button:focus-visible {
         margin-top: 75px;
     }
     .Container.slider {
-        width: 70vw;
-        height: 40vw;
+        width: 60vw;
+        height: 35vw;
     }
     .wrap h2, .Container-content h3 {
         font-size: 3vw;
+        line-height: normal;
+        margin-bottom: 0;
     }
     .Container-content p {
-        font-size: 2.5vw;
-        line-height: 40px;
+        font-size: 2vw;
+        line-height: normal;
     }
     .Container .Container-wrap .wrap svg {
         width: 15vw;
     }
-    .Container .Container-wrap:first-child .wrap svg{
-        width: 4vw !important;
+    .Container .Container-wrap:first-child .wrap svg {
+        width: 3vw !important;
     }
     .review-bar{
         height:auto;
