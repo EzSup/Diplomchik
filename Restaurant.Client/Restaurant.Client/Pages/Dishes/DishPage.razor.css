@@ -39,6 +39,12 @@
     align-items: center;
 }
 
+.half-page-block-container.reviews {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .images-block {
     margin: 10px;
     display: flex;
@@ -50,13 +56,48 @@
     display: block;
     align-items: center;
     position: relative;
-    
+    h1
+{
+    text-align: left;
+}
 }
 
 .add-to-cart-selector {
     display: flex;
     align-items:center;
+    margin-top: 10px;
 }
+    .add-to-cart-selector button {
+        margin: 0 5px;
+        padding: 0 5px;
+        border-color: #131313;
+        background: none !important;
+        transition: all 0.5s;
+        position: relative;
+        z-index:2;
+    }
+
+        .add-to-cart-selector button::after {
+            position: absolute;
+            height: 120%;
+            width: 0px;
+            transition: all 0.3s;
+            content: " ";
+            left: 0;
+            top: -5px;
+            border-radius: 2px;
+            opacity: 0;
+            background: #131313;
+            z-index: -1;
+        }
+
+        .add-to-cart-selector button:hover{
+            transform: scale(0.98);
+        }
+        .add-to-cart-selector button:hover::after{
+            width: 100%;
+            opacity :1;
+        }
 
 .available-label {
     color: #fff; /* Білий колір тексту підказки */
@@ -85,7 +126,7 @@
 
 .ingredient {
     display: inline-block; /* зміна display */
-    border: 1px solid #ccc;
+    border: 1px solid #FFF8E0;
     padding: 0px 6px;
     line-height: 25px;
     border-radius: 50px;
@@ -98,9 +139,10 @@
     width: 40px;
     height: 40px;
     border-radius: 5px;
-    border: 2px solid #ccc;
+    border: 1px solid #FFF8E0;
     display: flex;
     justify-content: center;
     align-items: center;
+    margin: 0;
 }
 
