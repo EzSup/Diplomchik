@@ -117,3 +117,28 @@
         width: 40%;
     }
 }
+@media screen and (max-width: 600px){
+    .dish-card {
+        width: 45%;
+        margin: 2%;
+    }
+    .dish-card p {
+        font-size: 3.5vw !important;
+        line-height: normal;
+        margin: 5px 0 0;
+    }
+    .add-to-cart-button {
+        padding: 5%;
+    }
+    .add-to-cart-button svg {
+        width: 4vw;
+        height: 4vw;
+    }
+    ::deep .mud-icon-root {
+        width: 4.5vw !important;
+        height: 4.5vw !important;
+    }
+    .dish-card p:last-child, .dish-card span {
+        font-size: 3vw !important;
+    }
+}

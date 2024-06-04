@@ -9,6 +9,7 @@
 <body>
     @if (dish != null)
     {
+        <Title BackButton>@dish.Name</Title>
         <div class="half-page-block-container">
             <div class="images-block">
                 <div class="small-images-container">
@@ -18,10 +19,10 @@
                     }
                 </div>
                 <img src="@mainImageLink" class="main-image" />
-            </div>
+            </div>          
             <div class="data-block">
                 <span class="available-label" style='@($"background-color: {availableLableColor};")'>@availableLable</span>
-                <h1>@dish.Name</h1>
+                @* <h1>@dish.Name</h1> *@
                 <div class="reviewsdata-block">
                     <h3>@dish.ResultingPrice ₴</h3>
                     @if (dish.ResultingPrice != dish.OriginalPrice)

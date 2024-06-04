@@ -497,4 +497,60 @@
         fill: #878477;
         transform:scale(0.99);
     }
+    .pagination-buttons button, button[type="submit"] {
+        font-size: 3.5vw !important;
+    }
+    .menu-container {
+        width: 95%;
+    }
+    .dish-card {
+        width: 45%;
+    }
+.add-to-cart-button {
+    padding: 5%;
+}
+.add-to-cart-button svg {
+    width: 4vw;
+    height: 4vw;
+}
+.dish-card p {
+    font-size: 3.5vw !important;
+}
+ .mud-icon-root {
+    width: 5vw !important;
+    height: 5vw !important;
+}
+.dish-card p {
+    font-size: 3.5vw !important;
+    line-height: normal;
+}
+.dish-card p:last-child, .dish-card span {
+    font-size: 3vw !important;
+}
+}
+.animated.filters-container::before, .animated.filters-container::after {
+    top: -50px;
+}
+@media screen and (max-width: 500px){
+    .filters-container::before, .filters-container::after {
+        display: none;
+    }
+    .menu-container{
+        padding: 0;
+    }
+    .form-filters-container.active {
+        height: 450px;
+    }
+}
+@media screen and (max-width: 400px){
+    .form-filters-container.active {
+        height: 420px;
+    }
+    .button-svg {
+        width: 40px;
+        height: 40px;
+    }
+    .pagination-buttons button, button[type="submit"] {
+        font-size: 4.5vw !important;
+    }
 }
