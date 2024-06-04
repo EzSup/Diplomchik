@@ -520,6 +520,9 @@ button[type="submit"]:focus-visible {
         font-size: 7vw;
     }
     .Title svg {
-        left: -10px;
+        left: 30px;
+    }
+    .Title .content:has(svg) {
+        padding: 0px 4em;
     }
 }

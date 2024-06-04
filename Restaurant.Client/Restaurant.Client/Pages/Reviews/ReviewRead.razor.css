@@ -67,3 +67,32 @@
         font-size: 2vw;
     }
 }
+@media screen and (max-width: 600px){
+    .date, .author {
+        font-size: 3.4vw;
+    }
+    .title{
+        font-size: 4vw;
+    }
+    .content {
+        font-size: 3vw;
+    }
+    .review-card {
+        min-width: 80vw;
+        width: 85vw;
+    }
+        .review-card:before {
+            left: 0px !important;
+        }
+}
+@media screen and (max-width: 400px){
+    .date, .author {
+        font-size: 4vw;
+    }
+    .title {
+        font-size: 5vw;
+    }
+    .content {
+        font-size: 4vw;
+    }
+}

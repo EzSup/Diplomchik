@@ -254,3 +254,119 @@
         min-width: 70vw;
     }
 }
+@media screen and (max-width: 600px){
+    .images-block{
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column-reverse;
+    }
+    .main-image   {
+        width: 40vw;
+        height: 40vw;
+    }
+    .small-images-container {
+        margin-right: 0;
+        margin-left: -2vw;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+        width: 40vw;
+        min-height: max-content;
+        margin-top: 10px;
+        position: relative;
+        overflow-x: scroll;
+    }
+        .small-images-container::-webkit-scrollbar {
+            display: none;
+        }
+    .small-image   {
+        width: 12vw;
+        height: 12vw;
+    }
+    .available-label   {
+        font-size: 3vw;
+    }
+    .reviewsdata-block   {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .data-block   {
+        margin: 0px;
+        margin-top: 10px;
+        width: 50vw;
+    }
+    .reviewsdata-block > *   {
+        font-size: 3.5vw;
+    }
+    .add-to-cart-selector button   {
+        font-size: 3vw;
+    }
+    ::deep .mud-rating-item.mud-disabled * {
+        width: 4vw;
+        height: 4vw;
+    }
+    .param-row {
+        font-size: 3vw;
+    }
+    .ingredients-block * {
+        font-size: 3vw !important;
+    }
+    .half-page-block-container h5 {
+        font-size: 4vw;
+        line-height: normal;
+    }   
+}
+@media screen and (max-width: 500px) {
+    .images-block {
+        align-items: center;
+        width: 45vw;
+    }
+}
+@media screen and (max-width: 400px) {
+    .small-images-container {
+        margin-left: -5vw;
+        margin-top: 0px;
+    }
+    .images-block  {
+        margin: 10px 0px 0;
+    }    
+    .available-label  {
+        font-size: 4vw;
+    }
+    .reviewsdata-block > *  {
+        font-size: 4vw;
+    }
+    .param-row  {
+        font-size: 3.5vw;
+    }
+    ::deep .mud-rating-item.mud-disabled * {
+        width: 4.5vw;
+        height: 4.5vw;
+    }
+    .small-image {
+        width: 14vw;
+        height: 14vw;
+    }
+    .add-to-cart-selector {
+        flex-wrap: wrap;
+        width: min-content;
+        justify-content: center;
+    }
+    .add-to-cart-selector button:nth-of-type(3){
+        margin-top: 5px;
+        width: 30vw;
+    }
+    .main-image {
+        width: 45vw;
+        height: 45vw;
+    }
+    .ingredients-block * {
+        font-size: 3.5vw !important;
+    }
+    .half-page-block-container h5 {
+        font-size: 5vw;
+    }
+}
