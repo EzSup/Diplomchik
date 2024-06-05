@@ -3,11 +3,76 @@
     justify-content: center;
 }
 
-.Container{
-    width: 1400px;
+.Container {
+    width: 1200px;
     height: 750px;
+    border-radius: 0 30px 30px;
+    position: relative;
+    background: #878477;
 }
-
+.Container div:not(.pillars){
+    z-index: 2;
+}
+    .Container > div:nth-of-type(2) > select {
+        background-color: #242121;
+        color: #878477;
+        border: 1px solid #242121 !important;
+        transition: all 0.3s;
+        outline: none;
+        appearance: none;
+        padding-right: 20px;
+        background-image: url(/images/SelectArrow.png);
+        background-position: right 1px top 50%, 0 0;
+        background-repeat: no-repeat;
+        background-size: 20px 20px;
+        transition: all 0.5s;
+    }
+    .Container > div:nth-of-type(2) > select:hover{
+        background-image: url(/images/SelectArrow_Hover.png);
+        color: #FFF8E0;
+    }
+    .Container .pillars {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        right: 0;
+        z-index: 1;
+    }
+        .Container .pillars::before, .Container .pillars::after,
+        .Container::before, .Container::after {
+            position: absolute;
+            content: " ";
+            width: 200px;
+            height: 200px;
+            background-size: contain;
+            z-index: 0;
+        }
+    .Container::before {
+        background: url(/images/reception.png) no-repeat top left;
+        top:0;
+        left: 300px;
+        width: 300px !important;
+        background-size: 100% !important;
+    }
+    .Container::after {
+        background: url(/images/entrance.png) no-repeat right center;
+        right: 0;
+        background-size: auto 100% !important;
+        height: 250px !important;
+    }
+        .Container .pillars::before {
+            background: url(/images/Left_pillars.png) no-repeat left top;
+            top: 0;
+            height: 600px !important;
+        }
+        .Container .pillars::after {
+            background: url(/images/Bottom_pillars.png) no-repeat bottom right;
+            bottom: 150px;
+            right: 0;
+            width: 600px !important;
+            height: 100px !important;
+        }
 .Content-wrap{
     height: 100%;
     align-items: normal;

@@ -6,8 +6,9 @@
 @page "/selectTable"
 <Title>Choose the table</Title>
 <div class="Container">
+    <div class="pillars"></div>
     <div style="display: flex;">
-        <InputDate @oninput="DatePicked" @bind-Value="date"
+        <InputDate @oninput="DatePicked" @bind-Value="date" style="background: #242121; color: #878477; outline: none;"
             min="@DateTime.Today.ToString("yyyy-MM-dd")"
             max="@DateTime.Today.AddMonths(3).ToString("yyyy-MM-dd")"></InputDate>
         <select @onchange="TimePicked">
