@@ -132,14 +132,19 @@
     }
 
 .ingredients-block {
-    display: initial;
-    align-items: initial;
-    position: initial;
+    display: flex;
+    width: 40vw;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
+    .ingredients-block * {
+        margin: 5px 10px 0 0 !important;
+        padding: 0 !important;
+    }
 
 .ingredient {
     display: inline-block; /* зміна display */
-    border: 1px solid #FFF8E0;
+    /*border: 1px solid #FFF8E0;*/
     padding: 0px 6px;
     line-height: 25px;
     border-radius: 50px;
@@ -185,6 +190,7 @@
     }
     .ingredients-block * {
         font-size: 1.5vw !important;
+        line-height: normal;
     }
     .half-page-block-container h5{
         font-size: 3vw;

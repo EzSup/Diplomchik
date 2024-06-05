@@ -121,14 +121,13 @@
         z-index: 0;
     }
 
-    .filters-container > .filter > input:focus ~ .on-checked,
-    .filters-container > .filter > input:focus-visible ~ .on-checked,
-    .filters-container > .radio-filters > .filter > input:focus ~ .on-checked,
-    .filters-container > .radio-filters > .filter > input:focus-visible ~ .on-checked
-    {
-        height: 100%;
-        opacity: 1;
-    }
+.filters-container > .filter > input:focus ~ .on-checked,
+.filters-container > .filter > input:focus-visible ~ .on-checked,
+.filters-container > .radio-filters > .scrollbar > .filter > input:focus ~ .on-checked,
+.filters-container > .radio-filters > .scrollbar > .filter > input:focus-visible ~ .on-checked {
+    height: 100%;
+    opacity: 1;
+}
 
 
 
@@ -200,12 +199,11 @@
         height: 100%;
     }
 
-    .filters-container > .filter.radio > label > .hidden:checked ~ .on-checked::after,
-    .filters-container > .radio-filters > .filter.radio > label > .hidden:checked ~ .on-checked::after
-    {
-        opacity: 0.3;
-        height: 100%;
-    }
+.filters-container > .filter.radio > label > .hidden:checked ~ .on-checked::after,
+.filters-container > .radio-filters > .scrollbar > .filter.radio > label > .hidden:checked ~ .on-checked::after {
+    opacity: 0.3;
+    height: 100%;
+}
 
 .filter label {
     font-weight: bold;

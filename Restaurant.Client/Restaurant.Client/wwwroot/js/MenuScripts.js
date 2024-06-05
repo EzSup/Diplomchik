@@ -10,3 +10,12 @@
         menuContainer.classList.remove('less-than-six');
     }
 };
+
+function StopPropagation(className) {
+    const element = document.querySelector("." + className);
+    if (element) {
+        element.addEventListener("click", function (event) {
+            event.stopPropagation();
+        });
+    }
+}
