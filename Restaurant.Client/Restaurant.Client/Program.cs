@@ -12,6 +12,10 @@ using Restaurant.Client.Contracts;
 using System.Configuration;
 using MudBlazor.Services;
 using Blazored.Toast;
+using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Diagnostics;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
+using Blazored.Toast.Services;
 
 namespace Restaurant.Client
 {
@@ -69,10 +73,12 @@ namespace Restaurant.Client
 
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
+            //builder.Services.AddScoped<UnauthorizedResponseHandler>();
+
             builder.Services.AddHttpClient("API", client =>
             {
-                client.BaseAddress = new Uri("https://tevhni.realhost-free.net"); //https://localhost:7248/
-            });//.AddHttpMessageHandler<JwtTokenHandler>();
+                client.BaseAddress = new Uri("https://tevhni.realhost-free.net/"); //https://localhost:7248/
+            });//.AddHttpMessageHandler<UnauthorizedResponseHandler>();
 
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7248/") });
 
@@ -86,10 +92,12 @@ namespace Restaurant.Client
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
+                //app.UseCustomExceptionHandler(app.Services.GetRequiredService<IToastService>());
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
 
             app.UseHttpsRedirection();
 

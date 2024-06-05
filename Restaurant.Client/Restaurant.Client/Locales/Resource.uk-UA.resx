@@ -129,4 +129,13 @@
   <data name="tablesNavLink" xml:space="preserve">
     <value>Столики</value>
   </data>
+  <data name="orderTypeName" xml:space="preserve">
+    <value>За назвою</value>
+  </data>
+  <data name="orderTypePriceFromCheap" xml:space="preserve">
+    <value>Спочатку дешевші</value>
+  </data>
+  <data name="orderTypePriceFromExpensive" xml:space="preserve">
+    <value>Спочатку дорожчі</value>
+  </data>
 </root>

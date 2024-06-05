@@ -110,7 +110,7 @@
                     {
                         <label for="@(orderType.ToString() +"order")">
                             <InputRadio Value="@orderType" id="@(orderType.ToString() + "order")" class="hidden"></InputRadio>
-                            @orderType.ToString()
+                            @Localizer[$"orderType{@orderType.ToString()}"]
                             <div class="on-checked"></div>
                         </label>
                     }
@@ -217,7 +217,7 @@
 
     private async Task AddDishAndGoToCart(Guid dishId)
     {
-        //await cartsService.AddDishToCartOfCustomerByUserId(currentUserId, dishId, 1);
+        await cartsService.AddDishToCartOfCustomerByUserId(currentUserId, dishId, 1);
         NavManager.NavigateTo($"/cart/{currentUserId}");
     }
 

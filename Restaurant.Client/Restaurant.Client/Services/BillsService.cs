@@ -96,12 +96,12 @@ namespace Restaurant.Client.Services
             var rest = await response.Content.ReadAsStringAsync();
             if (response.IsSuccessStatusCode)
             {
-                _toastService.ShowSuccess("Succes! The rest equals " + rest);
+                _toastService.ShowSuccess("Успішно оплачено!");
                 _navManager.NavigateTo("/");
             }
             else
             {
-                _toastService.ShowError("Error! " + rest);
+                _toastService.ShowError("Помилка при оплаті! " + rest);
             }
         }
     }

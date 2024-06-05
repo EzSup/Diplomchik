@@ -43,13 +43,13 @@ namespace Restaurant.Client.Services
             var result = await response.Content.ReadFromJsonAsync<LoginUserResponse>();
             if (!result!.Flag)
             {
-                _toastService.ShowError("An error occured while logging in!");
+                _toastService.ShowError("Помилка при авторизації!");
                 return;
             }
             await _authStateProv.UpdateAuthenticationState(result.JWTToken);
             if (result.Flag)
             {
-                _toastService.ShowSuccess("Successfully logged in!");
+                _toastService.ShowSuccess("Успішно авторизовано!");
                 _navManager.NavigateTo("/");
             }
         }
@@ -70,10 +70,10 @@ namespace Restaurant.Client.Services
             if (result.Flag && await _customersService.Add(customerCreateRequest))
             {
                 _navManager.NavigateTo("/login");
-                _toastService.ShowSuccess("Registered Successfully!");
+                _toastService.ShowSuccess("Успішно зареєстровано!");
             }
             else { 
-                _toastService.ShowError("An error occured while registration!"); 
+                _toastService.ShowError("Помилка при реєстрації!"); 
             }
         }
 
@@ -81,7 +81,7 @@ namespace Restaurant.Client.Services
         {
             var response = await _httpClient.DeleteAsync("api/Users/Logout");
             await _authStateProv.UpdateAuthenticationState(null);            
-            _toastService.ShowInfo("Successfully logged out!");
+            _toastService.ShowInfo("Успішно вийшли з акаунта!");
             _navManager.NavigateTo("/");
         }
     }

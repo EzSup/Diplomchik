@@ -129,4 +129,13 @@
   <data name="tablesNavLink" xml:space="preserve">
     <value>Tables</value>
   </data>
+  <data name="orderTypeName" xml:space="preserve">
+    <value>By Name</value>
+  </data>
+  <data name="orderTypePriceFromCheap" xml:space="preserve">
+    <value>Cheaper first</value>
+  </data>
+  <data name="orderTypePriceFromExpensive" xml:space="preserve">
+    <value>Expensive first</value>
+  </data>
 </root>
