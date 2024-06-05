@@ -2,6 +2,7 @@
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    flex-direction: column;
 }
 
 .item-image {
@@ -28,9 +29,9 @@
 
 .item-buttons {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     margin-left: 10px;
-    justify-content: center; /* Центруємо кнопки по вертикалі */
+    justify-content: center;
 }
 
 .increment-button,

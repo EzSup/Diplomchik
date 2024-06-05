@@ -4,7 +4,7 @@
 @using Restaurant.Client.Contracts.Enums
 @inject ICartsService cartService
 @inject ICustomersService customersService
-
+<div>
 @if (cart != null && cart.Dishes.Count > 0)
 {
     @foreach (var dish in cart.Dishes)
@@ -27,7 +27,7 @@ else
 {
     <h1>Корзина пуста, <a href="/menu">оберіть собі щось смачненьке!</a></h1>
 }
-
+</div>
 @code {
 
     [Parameter]

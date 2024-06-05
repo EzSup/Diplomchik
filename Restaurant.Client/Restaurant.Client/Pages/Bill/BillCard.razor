@@ -2,7 +2,7 @@
 @using Restaurant.Client.Contracts.Enums
 @if (Bill != null)
 {
-    <div @onclick="MoveToDetails" style="border: 1px solid #ccc; border-radius: 5px; padding: 10px;  margin: 20px; width: 300px; height: 400px; background-color: @(Bill.IsPaid ?"#b5e7a0":"#eca1a6");">
+    <div @onclick="MoveToDetails" style="border: 1px solid #ccc; border-radius: 5px; padding: 10px;  margin: 20px; width: 300px; height: 400px; background-color: @(Bill.IsPaid ?"#242e1f":"#131313");">
         <h6>@Bill.OrderDateAndTime</h6>
         <hr />
         <div >
