@@ -36,14 +36,14 @@ async function fadeInElement(elementId, translateYValue) {
     var element = document.getElementById(elementId);
     element.style.opacity = 0;
     element.style.transform = "translateY(-130px)";
-    setTimeout(function () {
+    setTimeout(async function () {
         element.style.transition = "opacity ease 0.3s, transform ease 1s";
-        setTimeout(function () {
+        setTimeout(async function () {
             fadeInElement(element);
         }, 1);
     }, 50);
     
-    setTimeout(function () {
+    setTimeout(async function () {
         var options = {
             threshold: 0.3
         };
@@ -52,13 +52,13 @@ async function fadeInElement(elementId, translateYValue) {
         observer.observe(element);
     }, 52);
 
-    function fadeInElement(el) {
+    async function fadeInElement(el) {
             el.style.opacity = 1;
             el.style.transform = "translateY(0)";
     }
 
-    function handleIntersection(entries) {
-        entries.forEach(function (entry) {
+    async function handleIntersection(entries) {
+        entries.forEach(async function (entry) {
             if (entry.isIntersecting) {
                 element.style.opacity = 1;
                 element.style.transform = "translateY(0)";

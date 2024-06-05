@@ -31,13 +31,12 @@
     [Parameter]
     public Action OnClick { get; set; }
 
-    protected override async void OnAfterRender(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             try
-            {
-                Thread.Sleep(1000);
+            {          
                 await JS.InvokeVoidAsync("AddClassInView", "Opacity0", "Opacity1", 0.25);
             }
             catch { }

@@ -1,4 +1,4 @@
-﻿function checkDishesCount() {
+﻿async function checkDishesCount() {
     const menuContainer = document.querySelector(".menu-container");
     const dishes = menuContainer.querySelectorAll(".dish-card"); // припускаємо, що ваш компонент має клас 'dish-card'
 

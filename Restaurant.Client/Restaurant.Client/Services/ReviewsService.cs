@@ -33,7 +33,8 @@ namespace Restaurant.Client.Services
         public async Task<(bool ifHas, ReviewOfDishResponse? obj)> HasOwnReview(Guid dishId)
         {
             var response = await _httpClient.GetAsync($"api/Reviews/GetReviewOfUser/{dishId}");
-            if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            if (response.StatusCode == System.Net.HttpStatusCode.NotFound ||
+                response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 return (false, null);
             }
@@ -45,7 +46,8 @@ namespace Restaurant.Client.Services
         public async Task<ReviewOfDishResponse?> GetOwnReviewOnDish(Guid dishId)
         {
             var response = await _httpClient.GetAsync($"api/Reviews/GetReviewOfUser/{dishId}");
-            if(response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            if(response.StatusCode == System.Net.HttpStatusCode.NotFound ||
+                response.StatusCode == System.Net.HttpStatusCode.BadRequest)
             {
                 return null;
             }

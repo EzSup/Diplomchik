@@ -143,7 +143,7 @@
     {
         @foreach (var dish in dishes)
         {
-            <DishCard Dish="dish" OnClick="() => GoToDishPage(dish.Id)" OnClickCart="() => AddDishAndGoToCart(dish.Id)" />
+            <DishCard Dish="dish" OnClick="async () => await GoToDishPage(dish.Id)" OnClickCart="async () => await AddDishAndGoToCart(dish.Id)" />
         }
     }
 </div>
@@ -203,7 +203,7 @@
         await Filter();
     }
 
-    private void GoToDishPage(Guid dishId)
+    private async Task GoToDishPage(Guid dishId)
     {
         NavManager.NavigateTo($"/dishPage/{dishId}");
     }
@@ -217,7 +217,7 @@
 
     private async Task AddDishAndGoToCart(Guid dishId)
     {
-        await cartsService.AddDishToCartOfCustomerByUserId(currentUserId, dishId, 1);
+        //await cartsService.AddDishToCartOfCustomerByUserId(currentUserId, dishId, 1);
         NavManager.NavigateTo($"/cart/{currentUserId}");
     }
 
