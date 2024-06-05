@@ -9,11 +9,17 @@
     border-radius: 0 30px 30px;
     position: relative;
     background: #878477;
+    /*overflow: scroll;*/
+    display: flex;
+    justify-content: flex-start;
 }
+    /*.Container::-webkit-scrollbar {
+        background: #242121;
+    }*/
 .Container div:not(.pillars){
     z-index: 2;
 }
-    .Container > div:nth-of-type(2) > select {
+    .Container > div:nth-of-type(3) > select {
         background-color: #242121;
         color: #878477;
         border: 1px solid #242121 !important;
@@ -27,20 +33,20 @@
         background-size: 20px 20px;
         transition: all 0.5s;
     }
-    .Container > div:nth-of-type(2) > select:hover{
+    .Container > div:nth-of-type(3) > select:hover{
         background-image: url(/images/SelectArrow_Hover.png);
         color: #FFF8E0;
     }
-    .Container .pillars {
+    .Container .pillars, .Container .RestItems {
         position: absolute;
         width: 100%;
         height: 100%;
         left: 0;
-        right: 0;
+        top: 0;
         z-index: 1;
     }
         .Container .pillars::before, .Container .pillars::after,
-        .Container::before, .Container::after {
+        .Container .RestItems::before, .Container .RestItems::after {
             position: absolute;
             content: " ";
             width: 200px;
@@ -48,19 +54,20 @@
             background-size: contain;
             z-index: 0;
         }
-    .Container::before {
-        background: url(/images/reception.png) no-repeat top left;
-        top:0;
-        left: 300px;
-        width: 300px !important;
-        background-size: 100% !important;
-    }
-    .Container::after {
-        background: url(/images/entrance.png) no-repeat right center;
-        right: 0;
-        background-size: auto 100% !important;
-        height: 250px !important;
-    }
+        .Container .RestItems::before {
+            background: url(/images/reception.png) no-repeat top left;
+            top: 0;
+            left: 25%;
+            width: 300px !important;
+            background-size: 100% !important;
+        }
+        .Container .RestItems::after {
+            background: url(/images/entrance.png) no-repeat right center;
+            right: 0;
+            background-size: auto 100% !important;
+            height: 250px !important;
+            top: 30%;
+        }
         .Container .pillars::before {
             background: url(/images/Left_pillars.png) no-repeat left top;
             top: 0;
@@ -68,14 +75,20 @@
         }
         .Container .pillars::after {
             background: url(/images/Bottom_pillars.png) no-repeat bottom right;
-            bottom: 150px;
+            bottom: 20%;
             right: 0;
-            width: 600px !important;
+            width: 45% !important;
             height: 100px !important;
+            background-size: 100%;
         }
-.Content-wrap{
-    height: 100%;
+.Content-wrap {
     align-items: normal;
+    width: 100%;
+    height: 100% !important;
+    position: absolute;
+    padding: 5% 5% 1% 10%;
+    top: 0;
+    left: 0;
 }
 .wrap-col {
     display: flex;
@@ -141,4 +154,130 @@ label svg{
 ::deep .wrap-col > .wrap-col-content > .wrap > .hidden:checked ~ svg,
 ::deep .wrap-col > .wrap-col-content > .horizontal > .hidden:checked ~ svg {
     opacity: 1;
+}
+
+.Container button {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    z-index: 10;
+    width: 50%;
+    height: 50px;
+    color: white !important;
+    margin: 0 25%;
+}
+.Container button:hover{
+    background: #242121;
+}
+@media screen and (max-width: 1500px){
+    .Container{
+        width: 80vw;
+        height: 50vw;
+    }
+    ::deep label:not(.horizontal) svg {
+        height: auto;
+        width: 10vw;
+    }
+    ::deep .horizontal svg {
+        height: 10vw;
+        width: auto;
+    }
+}
+@media screen and (max-width: 1300px){
+    .Content-wrap {
+        padding: 5% 5% 1% 12%;
+    }
+        .Content-wrap .wrap-col:nth-of-type(2) .wrap-col-content:first-child {
+            margin-left: 20%;
+        }
+    .Container .RestItems::before {
+        width: 250px !important;
+    }
+    .Container .pillars::before {
+        background-size: auto 90%;
+    }
+    .Container .pillars::after {
+        bottom: 20%;
+    }
+    .Container .pillars::before {
+        height: 100% !important;
+    }
+    .Container .RestItems::after {
+        right: -1px;
+        background-size: auto 100% !important;
+        height: 40% !important;
+        top: 30%;
+    }
+    .Container div:nth-of-type(3) {
+        font-size: 1.5vw;
+    }
+}
+@media screen and (max-width: 1100px){
+    .mid {
+        width: 300px;
+    }
+}
+@media screen and (max-width: 900px){
+    .mid {
+        width: 250px;
+    }
+    ::deep label:not(.horizontal) svg {
+        width: 8vw;
+    }
+    ::deep .horizontal svg {
+        height: 9vw;
+    }
+    .Container .RestItems::before {
+        width: 35% !important;
+    }
+    .Container .pillars::after {
+        bottom: 20%;
+    }
+    .Container .RestItems::before {
+        width: 25% !important;
+        left: 30%;
+    }
+    .Content-wrap {
+        padding: 7% 5% 1% 12%;
+    }
+}
+@media screen and (max-width: 600px){
+    .Container[b-dd2rzri0up] {
+        width: 95vw;
+        height: 65vw;
+    }
+    .Container button[b-dd2rzri0up] {
+        height: 30px;
+        font-size: 3vw;
+        margin-bottom: -40px;
+    }
+    .Container div:nth-of-type(3) {
+        font-size: 2.5vw;
+    }
+    .Container .pillars[b-dd2rzri0up]::after {
+        width: 50% !important;
+    }
+    .Container .RestItems[b-dd2rzri0up]::before {
+        width: 30% !important;
+        left: 35%;
+    }
+    .Container .RestItems[b-dd2rzri0up]::after {
+        height: 45% !important;
+        top: 27.5%;
+    }
+    ::deep label:not(.horizontal) svg {
+        width: 15vw;
+        max-height: 12vw;
+    }
+    .mid[b-dd2rzri0up] {
+        width: 250px;
+        margin-left: 0;
+        height: auto;
+    }
+    ::deep .horizontal svg {
+        height: 15vw;
+    }
+    .Content-wrap .wrap-col:nth-of-type(2) .wrap-col-content:first-child[b-dd2rzri0up] {
+        margin-left: 0%;
+    }
 }

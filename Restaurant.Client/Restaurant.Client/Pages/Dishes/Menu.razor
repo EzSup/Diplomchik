@@ -228,7 +228,7 @@
             await JS.InvokeVoidAsync("checkDishesCount");
         }catch{}
     }
-    protected override async void OnAfterRender(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         try
         {
@@ -239,11 +239,9 @@
         {
             try
             {
-                Thread.Sleep(1000);
                 await JS.InvokeVoidAsync("AddClassInView", "ScaledPlus", "NormalScale", 0.7);
                 await JS.InvokeVoidAsync("AddClassInView", "filters-container", "animated", 0.5);
                 await JS.InvokeVoidAsync("AddClassInView", "menu-container", "animated", 1);
-                Thread.Sleep(1000);
                 await JS.InvokeVoidAsync("AddClassInView", "Opacity0", "Opacity1", 0.5);
             }
             catch { }
