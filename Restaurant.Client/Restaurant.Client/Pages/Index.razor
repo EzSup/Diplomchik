@@ -298,10 +298,10 @@
 			</div>
 		</div>
 			<div class="img-nav">
-				<div class="ellipse active" onclick="showSlide(0)"></div>
-				<div class="ellipse" onclick="showSlide(1)"></div>
-				<div class="ellipse" onclick="showSlide(2)"></div>
-				<div class="ellipse" onclick="showSlide(3)"></div>
+			<div class="ellipse active" @onclick="@(async () => await ShowSlide(0))"></div>
+			<div class="ellipse" @onclick="@(async () => await ShowSlide(1))"></div>
+			<div class="ellipse" @onclick="@(async () => await ShowSlide(2))"></div>
+			<div class="ellipse" @onclick="@(async () => await ShowSlide(3))"></div>
 			</div>
 	</div>
 	<Title Min>make your reservations right away.</Title>
@@ -327,63 +327,15 @@
 			</a>
 		</div>
 </body>
-
-<script>
-	function showSlide(index) {
-		const slides = document.querySelectorAll(".slide");
-		const ellipses = document.querySelectorAll(".ellipse");
-		const currentSlide = (index + slides.length) % slides.length;
-		const slideWidth = slides[0].getBoundingClientRect().width;
-
-		slides.forEach(function (slide) {
-			slide.classList.remove("active");
-			slide.classList.remove("prev");
-			slide.classList.remove("next");
-		});
-
-		ellipses.forEach(function (ellipse) {
-			ellipse.classList.remove("active");
-			ellipse.style.transition = "all 1s ease";
-		});
-
-		slides.forEach(function (slide, i) {
-			const distance = Math.min(Math.abs(i - currentSlide), Math.abs(slides.length + i - currentSlide), Math.abs(i - slides.length - currentSlide));
-			slide.style.zIndex = slides.length - distance;
-			const leftPosition = (i - currentSlide) * slideWidth;
-			slide.style.left = (i - currentSlide) * (slideWidth +100) + "px";
-		});
-
-		slides[currentSlide].classList.add("active");
-
-		slides[(currentSlide + 1) % slides.length].classList.add("next");
-		slides[(currentSlide - 1 + slides.length) % slides.length].classList.add("prev");
-
-		ellipses[currentSlide].classList.add("active");
-	}
-
-	function setAnimStyles() {
-		const lines = document.querySelectorAll(".gradient-line");
-		const img1 = document.querySelector(".img1");
-		const img3 = document.querySelector(".img3");
-		const Containers = document.querySelectorAll(".Container");
-		lines.forEach(function (line) {
-			line.style.opacity = 0;
-			// line.style.transitionDelay = "0.5s";
-			line.style.transition = "all 1.5s";
-		});
-		Containers.forEach(function (Container) {
-			Container.classList.add("BotToTop");
-		});
-		img1.classList.add("LeftToRight");
-		img3.classList.add("RightToLeft");
-	}
-	setAnimStyles();
-
-
-</script>
-
 @code{
-	protected override async void OnAfterRender(bool firstRender)
+	private async Task ShowSlide(int slide)
+	{
+		try{
+			await JS.InvokeVoidAsync("showSlide", slide);
+		}
+		catch { }
+	}
+	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if(firstRender){
 			try

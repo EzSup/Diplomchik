@@ -6,9 +6,16 @@
 }
 
 .item-image {
-    width: 100px;
-    height: auto;
+    width: 500px;
+    height: 300px;
+    object-fit: cover;
+    object-position: center;
     margin-right: 10px;
+    border-radius: 20px;
+}
+.available-label {
+    margin-top: -10px;
+    color: #FFF8E0;
 }
 
 .item-details {
@@ -23,21 +30,91 @@
 }
 
 .item-input {
-    width: 50px;
-    margin-right: 10px; /* Відступ між назвою і полем введення */
+    background: none;
+    color: #FFF8E0;
+    border: 0px;
+    border-radius: 0;
+    text-align: center;
+    transition: all 0.5s;
 }
 
 .item-buttons {
     display: flex;
     flex-direction: row;
-    margin-left: 10px;
     justify-content: center;
+}
+.inc-dec-buttons{
+    border-radius: 5px;
+    border: 2px solid #FFF8E0;
+    display: flex;
+    transition: all 0.5s;
+}
+    .inc-dec-buttons *:not(input) {
+        border: 2px solid #FFF8E0;
+        margin: 0 !important;
+        border-radius: 0 !important;
+    }
+    .inc-dec-buttons input {
+        margin: 0 !important;
+    }
+    .inc-dec-buttons:hover {
+        border-color: #878477;
+    }
+    .inc-dec-buttons:hover input{
+        background: #1E1E1E;
+    }
+.increment-button{
+    border-width: 0px 2px 0px 0px !important;
+    
+}
+.decrement-button{
+    border-width: 0px 0px 0px 2px !important;
 }
 
 .increment-button,
 .decrement-button,
 .remove-button {
     color: black;
-    width: 30px;
-    margin-bottom: 5px;
+    margin: 0 10px;
+    min-width: 50px;
+    position: relative;
+    z-index: 2;
+    color: #FFF8E0;
+    transition: all 0.5s;
+    padding: 0 5px;
 }
+    .increment-button:hover, .decrement-button:hover, .remove-button:hover {
+        background: none;
+        border: 2px solid #878477;        
+        transform: scale(0.99) !important;
+    }
+    .increment-button::before, .decrement-button::before, .remove-button::before {
+        position: absolute;
+        content: " ";
+        background: #1E1E1E;
+        transition: all 0.3s;
+        z-index: -1;
+    }
+    .increment-button::before{
+        left: 0;
+        top: 0;
+        height: 100%;
+        width:0;
+    }
+    .decrement-button::before {
+        right: 0;
+        top: 0;
+        height: 100%;
+        width: 0;
+    }
+    .remove-button::before {
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 0;
+    }
+
+    .increment-button:hover::before, .decrement-button:hover::before, .remove-button:hover::before{
+        width: 100%;
+        height: 100%;
+    }

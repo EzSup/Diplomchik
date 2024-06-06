@@ -14,10 +14,10 @@
 
     <div class="form-group">
         <lable class="form-Label">Тип замовлення</lable>
-        <select @bind="orderType">
-            <option value="@OrderType.InRestaurant">В ресторані</option>
-            <option value="@OrderType.Delivery">Доставка</option>
-        </select>
+        <div @bind="orderType">
+            <p value="@OrderType.InRestaurant">В ресторані</p>
+            <p value="@OrderType.Delivery">Доставка</p>
+        </div>
     </div>
     <button @onclick="Continue">
         Підтвердити і продовжити
