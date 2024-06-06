@@ -14,9 +14,9 @@
 
     <div class="form-group">
         <lable class="form-Label">Тип замовлення</lable>
-        <div @bind="orderType">
-            <p value="@OrderType.InRestaurant">В ресторані</p>
-            <p value="@OrderType.Delivery">Доставка</p>
+        <div >
+            <p @onclick="@(() => orderType = OrderType.InRestaurant)">В ресторані</p>
+                <p @onclick="@(() => orderType = OrderType.Delivery)">Доставка</p>
         </div>
     </div>
     <button @onclick="Continue">
