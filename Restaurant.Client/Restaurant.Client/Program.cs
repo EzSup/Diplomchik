@@ -121,7 +121,7 @@ namespace Restaurant.Client
         {
             var supportedCultures = new List<CultureInfo>()
             {
-                new CultureInfo("uk-UA"), new CultureInfo("en-US")
+                new CultureInfo("uk-UA")//, new CultureInfo("en-US")
             };
 
             services.Configure<RequestLocalizationOptions>(options =>
