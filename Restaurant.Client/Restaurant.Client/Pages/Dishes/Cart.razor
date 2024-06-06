@@ -13,13 +13,13 @@
     }
 
     <div class="form-group">
-        <lable class="form-Label">Тип замовлення</lable>
-        <div >
-            <p @onclick="@(() => orderType = OrderType.InRestaurant)">В ресторані</p>
-                <p @onclick="@(() => orderType = OrderType.Delivery)">Доставка</p>
+        <lable class="form-Label" onclick="showoptions()">Тип замовлення</lable>
+        <div class="options">
+            <button @onclick="@(() => orderType = OrderType.InRestaurant)" id="option-button">В ресторані</button>
+                <button @onclick="@(() => orderType = OrderType.Delivery)" id="option-button">Доставка</button>
         </div>
     </div>
-    <button @onclick="Continue">
+    <button @onclick="Continue" class="confirm">
         Підтвердити і продовжити
     </button>
 }
@@ -28,6 +28,26 @@ else
     <h1>Корзина пуста, <a href="/menu">оберіть собі щось смачненьке!</a></h1>
 }
 </div>
+<script>
+    function showoptions() {
+        const options = document.querySelector(".options");
+        options.classList.toggle("active");
+        const buttons = document.querySelectorAll("#option-button");
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Вимкнути стилі для попередньої активної кнопки
+                const activeButton = document.querySelector('#option-button.active');
+                if (activeButton) {
+                    activeButton.classList.remove('active');
+                }
+
+                // Активувати стилі для нової активної кнопки
+                button.classList.add('active');
+            });
+        });
+    }
+
+</script>
 @code {
 
     [Parameter]
