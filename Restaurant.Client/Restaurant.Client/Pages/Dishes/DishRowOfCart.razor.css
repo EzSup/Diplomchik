@@ -118,3 +118,20 @@
         width: 100%;
         height: 100%;
     }
+
+@media screen and (max-width: 600px) {
+    .item-image {
+        width: 80vw;
+        height: 50vw;
+        margin-right: 0;
+    }
+    .item-row h3 {
+        font-size: 5vw !important;
+    }
+    .item-row span {
+        font-size: 3vw !important;
+    }
+    .item-buttons * {
+        font-size: 3vw !important;
+    }
+}

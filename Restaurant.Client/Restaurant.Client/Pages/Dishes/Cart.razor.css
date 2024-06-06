@@ -78,3 +78,15 @@
     .confirm:hover {
         color: #A7A293;
     }
+
+@media screen and (max-width: 600px){
+    .form-Label {
+        font-size: 4vw !important;
+    }
+    .options * {
+        font-size: 3.5vw !important;
+    }
+    .confirm{
+        font-size: 4vw !important;
+    }
+}

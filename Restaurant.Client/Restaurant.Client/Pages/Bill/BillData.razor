@@ -1,6 +1,7 @@
 ﻿@page "/billData/{billId:guid}"
 @using Restaurant.Client.Contracts.Bill
 @inject IBillsService billsService
+<div class="billData">
 <h3>Bill Data</h3>
 
 @if (bill != null)
@@ -45,13 +46,13 @@
             </table>
         </div>
     </div>
-    <div style="margin-top: 20px; padding: 10px;">
+    <div class="PayData">
         @if (!bill.IsPaid)
         {
             <div>
                 <label>Сума до сплати: @(bill.TotalPrice + bill.TotalPrice * tipsPercents * 0.01m) ₴</label>
             </div>
-            <div>
+                <div class="tips">
                 <label>Чайові, у відсотках від суми:</label>
                 <InputRadioGroup @bind-Value="@tipsPercents" TValue="int">
                     <div>
@@ -83,7 +84,7 @@ else
 {
     <p>Завантаження...</p>
 }
-
+</div>
 @code {
     [Parameter]
     public Guid billId { get; set; }

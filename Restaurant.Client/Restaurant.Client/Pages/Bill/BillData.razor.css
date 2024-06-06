@@ -1,0 +1,71 @@
+﻿.card {
+    background: #FFF8E0;
+}
+.card .card-body * {
+    color: #242121;
+}
+h3{
+    color: #FFF8E0;
+}
+.tips{
+    display: block;
+}
+.PayData {
+    margin-top: 20px;
+    padding: 10px;
+}
+@media screen and (max-width: 1500px) {
+    h3 {
+        font-size: 3.5vw;
+        line-height: 50px;
+    }
+    .card-body h5 {
+        font-size: 3vw;
+        line-height: normal;
+    }
+    .card-body p{
+        font-size: 2vw;
+        line-height: normal;
+    }
+    table thead *{
+        font-size: 2vw;
+    }
+    table tbody *{
+        font-size: 1.75vw;
+    }    
+ }
+@media screen and (max-width: 600px){
+    h3 {
+        font-size: 5vw;
+        line-height: 50px;
+        width: 90%;
+        margin: 0 auto;
+    }
+    .card {
+        width: 90%;
+        margin: 0 auto;
+    }
+    .card-body h5 {
+        font-size: 4.5vw;
+        line-height: normal;
+    }
+
+    .card-body p {
+        font-size: 4vw;
+        line-height: normal;
+    }
+    .PayData{
+        width: 90%;
+        margin: 0 auto;
+    }
+    table thead * {
+        font-size: 3.5vw;
+    }
+
+    table tbody * {
+        font-size: 3vw;
+    }    
+    .PayData * {
+        font-size: 4vw;
+    }
+}
