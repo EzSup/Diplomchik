@@ -10,7 +10,13 @@
     width: 500px;
 }
 }
-
+.wrap-row-content img:first-child{
+    width: 100%;
+    height:500px;
+    object-fit: cover;
+    object-position: center;
+    filter: brightness(0.8);
+}
 .card-text {
     width: auto !important;
     display: flex;

@@ -145,22 +145,23 @@
         outline: none;
     }
 
-    .filter.radio label {
-        margin: 0 0.5em;
-        position: relative;
-        border: 1px solid;
-        border-radius: 5px;
-        border-color: #FFF8E0;
-        min-width: 150px;
-        padding: 0 5px;
-        display: flex;
-        flex-direction: row;
-        align-content: center;
-        justify-content: center;
-        align-items: center;
-        transition: all 0.3s;
-        z-index: 1;
-    }
+.filter.radio label {
+    margin: 0 0.5em;
+    position: relative;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #FFF8E0;
+    min-width: 150px;
+    width: max-content;
+    padding: 0 5px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
+    z-index: 1;
+}
 
     .filter.radio label .on-checked::after {
         content: " ";
