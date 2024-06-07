@@ -4,7 +4,7 @@
 @inject ITablesService tablesService
 @inject IBillsService billsService
 @page "/selectTable"
-<Title>Choose the table</Title>
+<Title>Резервація столика</Title>
 <div class="Container">
     <div class="pillars"></div>
     <div class="RestItems"></div>
@@ -78,7 +78,7 @@
     {
         //await localStorage.AddItem("orderType", ((int)OrderType.InRestaurant).ToString());
         DateTime dateNow = DateTime.Now;
-        date = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, dateNow.Hour + 1, 0, 0);
+        date = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, dateNow.Hour >= 23 ? 0 : dateNow.Hour + 1, 0, 0);
         tables = (await tablesService.GetTablesOfTime(date)).ToArray();
     }
 

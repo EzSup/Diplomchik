@@ -139,13 +139,13 @@
 }
     .ingredients-block * {
         margin: 5px 10px 0 0 !important;
-        padding: 0 !important;
+        padding: 5px 6px !important;
     }
 
 .ingredient {
-    display: inline-block; /* зміна display */
-    /*border: 1px solid #FFF8E0;*/
-    padding: 0px 6px;
+    display: flex; /* зміна display */
+    border: 1px solid #FFF8E0;
+    align-items: center;
     line-height: 25px;
     border-radius: 50px;
     font-size: 13px;

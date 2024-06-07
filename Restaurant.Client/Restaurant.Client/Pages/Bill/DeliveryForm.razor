@@ -7,19 +7,19 @@
 <EditForm Model="@delivery" OnValidSubmit="PostDelivery">
     <DataAnnotationsValidator/>
     <div class="form-group">
-        <lable class="form-Label">Region</lable>
+        <lable class="form-Label">Область</lable>
         <InputText @bind-Value="delivery.Region" class="form-control"></InputText>
     </div>
     <div class="form-group">
-        <lable class="form-Label">Settlement Name</lable>
+        <lable class="form-Label">Населений пункт</lable>
         <InputText @bind-Value="delivery.SettlementName" class="form-control"></InputText>
     </div>
     <div class="form-group">
-        <lable class="form-Label">Street Name</lable>
+        <lable class="form-Label">Назва вулиці</lable>
         <InputText @bind-Value="delivery.StreetName" class="form-control"></InputText>
     </div>
     <div class="form-group">
-        <lable class="form-Label">Street Num</lable>
+        <lable class="form-Label">Номер вулиці</lable>
         <InputText @bind-Value="delivery.StreetNum" class="form-control"></InputText>
     </div>    
     <div class="form-group mt-3">

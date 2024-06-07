@@ -138,4 +138,10 @@
   <data name="orderTypePriceFromExpensive" xml:space="preserve">
     <value>Спочатку дорожчі</value>
   </data>
+  <data name="orderTypeInRestaurant" xml:space="preserve">
+    <value>В ресторані</value>
+  </data>
+  <data name="orderTypeDelivery" xml:space="preserve">
+    <value>Доставка</value>
+  </data>
 </root>

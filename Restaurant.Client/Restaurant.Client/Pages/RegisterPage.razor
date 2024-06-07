@@ -4,37 +4,37 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-4">
-            <h2>Register</h2>
+            <h2>Реєстрація</h2>
             <EditForm Model="@Register" OnValidSubmit="RegisterClicked">
                 <DataAnnotationsValidator />   
                 <div class="form-group">
-                    <lable class="form-Label">Name</lable>
+                    <lable class="form-Label">Ім'я</lable>
                     <InputText @bind-Value="Register.Name" class="form-control"></InputText>
                 </div>
                 <div class="form-group">
-                    <lable class="form-Label">Email Address</lable>
+                    <lable class="form-Label">Ел. пошта</lable>
                     <InputText @bind-Value="Register.Email" class="form-control"></InputText>
                 </div>
                 <div class="form-group">
-                    <lable class="form-Label">Phone number</lable>
+                    <lable class="form-Label">Номер телефону</lable>
                     <InputText @bind-Value="Register.PhoneNum" class="form-control"></InputText>
                 </div>
                 <div class="form-group mt-3">
-                    <lable class="form-Label">Password</lable>
+                    <lable class="form-Label">Пароль</lable>
                     <InputText type="password" @bind-Value="Register.Password" class="form-control"></InputText>
                 </div>
                 <div class="form-group mt-3">
-                    <lable class="form-Label">Confirm password</lable>
+                    <lable class="form-Label">Підтвердження пароля</lable>
                     <InputText type="password" @bind-Value="Register.ConfirmPassword" class="form-control"></InputText>
                 </div>
                 <div class="form-group mt-3">
-                    <button class="btn btn-primary" type="submit">Register</button>
+                    <button class="btn btn-primary" type="submit">Зареєструватись</button>
                 </div>
                 <div class="form-group mt-3">
-                    <a href="/login">Go to login page</a>
+                    <a href="/login">На сторінку входу</a>
                 </div>
                 <div class="form-group mt-3">
-                    <a href="/">Go to main page</a>
+                    <a href="/">На головну</a>
                 </div>
                 <ValidationSummary />
             </EditForm>

@@ -11,7 +11,7 @@
             @if(Bill.Tips > 0){
                 <p style="font-size: 24px;"><strong>Чайові:</strong> @Bill.Tips ₴</p>
             }
-            <p style="font-size: 24px;"><strong>Тип замовлення:</strong> @Bill.Type</p>
+            <p style="font-size: 24px;"><strong>Тип замовлення:</strong> @Localizer["orderType" + Bill.Type]</p>
             @if(Bill.Type == OrderType.InRestaurant)
             {
                 <p style="font-size: 24px;"><strong>Номер столика і час резервації:</strong> @Bill.TableNumOrDeliveryAdress</p>

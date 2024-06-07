@@ -138,4 +138,10 @@
   <data name="orderTypePriceFromExpensive" xml:space="preserve">
     <value>Expensive first</value>
   </data>
+  <data name="orderTypeInRestaurant" xml:space="preserve">
+    <value>In Restaurant</value>
+  </data>
+  <data name="orderTypeDelivery" xml:space="preserve">
+    <value>Delivery</value>
+  </data>
 </root>

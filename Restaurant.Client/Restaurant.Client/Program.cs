@@ -82,7 +82,6 @@ namespace Restaurant.Client
 
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7248/") });
 
-
             builder.Services.AddControllers();
            
             var app = builder.Build();

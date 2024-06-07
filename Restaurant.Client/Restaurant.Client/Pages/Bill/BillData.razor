@@ -2,14 +2,14 @@
 @using Restaurant.Client.Contracts.Bill
 @inject IBillsService billsService
 <div class="billData">
-<h3>Bill Data</h3>
+<h3>Дані про чек</h3>
 
 @if (bill != null)
 {
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Bill ID: @bill.Id</h5>
-            <p class="card-text">Type: @bill.Type</p>
+            <h5 class="card-title">ID: @bill.Id</h5>
+            <p class="card-text">Тип: @Localizer["orderType" + bill.Type]</p>
             @if(bill.Type == Contracts.Enums.OrderType.InRestaurant)
             {
                 <p class="card-text">Номер столика і час резервації: @bill.TableNumOrDeliveryAdress</p>
@@ -18,9 +18,9 @@
             {
                 <p class="card-text">Адреса доставки: @bill.TableNumOrDeliveryAdress</p>
             }
-            <p class="card-text">Date: @bill.OrderDateAndTime</p>
-            <p class="card-text">Total Price: @bill.TotalPrice ₴</p>
-            <p class="card-text">Paid: @bill.IsPaid</p>
+            <p class="card-text">Дата і час замовлення: @bill.OrderDateAndTime</p>
+            <p class="card-text">Загальна сума: @bill.TotalPrice ₴</p>
+            <p class="card-text">Сплачено: @(bill.IsPaid ? "Так" : "Ні")</p>
             <hr />
             <h5 class="card-title">Кошик</h5>
             <table class="table">

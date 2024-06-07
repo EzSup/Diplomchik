@@ -3,15 +3,15 @@
 @if (Bill != null)
 {
     <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 20px;">
-        <h4>Bill Details</h4>
+        <h4>Чек #@Bill.Id</h4>
         <hr />
         <div>
-            <p><strong>Bill ID:</strong> @Bill.Id</p>
-            <p><strong>Total Price:</strong> @Bill.TotalPrice</p>
-            <p><strong>Order Date and Time:</strong> @Bill.OrderDateAndTime</p>
-            <p><strong>Tips:</strong> @Bill.Tips</p>
-            <p><strong>Order Type:</strong> @Bill.Type</p>
-            <p><strong>Is Paid:</strong> @Bill.IsPaid</p>
+            @* <p><strong>ID чеку:</strong> @Bill.Id</p> *@
+            <p><strong>Загальна сума:</strong> @Bill.TotalPrice</p>
+            <p><strong>Дата і час замовлення:</strong> @Bill.OrderDateAndTime</p>
+            <p><strong>Чайові:</strong> @Bill.Tips</p>
+            <p><strong>Тип замовлення:</strong> @Bill.Type</p>
+            <p><strong>Чи оплачено:</strong> @Bill.IsPaid</p>
             @if (Bill.Type == OrderType.InRestaurant)
             {
                 <p><strong>Номер столика і час резервації:</strong> @Bill.TableNumOrDeliveryAdress</p>
