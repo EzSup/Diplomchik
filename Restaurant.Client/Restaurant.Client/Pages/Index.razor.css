@@ -99,7 +99,9 @@
     transition: all 0.3s ease;
     text-decoration: none;
 }
-
+.Header .Content a{
+    width: 420px;
+}
 .Header .Content a:hover, .Content-wrap a:hover{
     transform: translateY(-5px);
     background: #131313;
@@ -305,6 +307,17 @@ button:focus-visible {
     align-items: center;
 }
 
+.top-wrap-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.slide .Container-wrap h3{
+    margin-top: -10px;
+}
+.slide .Container-wrap:first-child{
+    margin-top: 1em;
+}
 .Container.slider {
     display: flex;
     overflow-x: hidden;
@@ -374,7 +387,7 @@ button:focus-visible {
     transform: translateX(0px);
 }
 
-.Container-content h3 {
+.slide .Container-wrap h3 {
     font-family: 'Aleo';
     font-style: normal;
     font-weight: 400;
@@ -469,8 +482,14 @@ button:focus-visible {
         width: max-content;
         height: min-content;
         background: #1E1E1E;
-        font-size: 2vw;      
-        padding: 0.4em 0.8em;
+        font-size: 2vw;
+        padding: 0.4em 1.8em;
+    }
+    .mid-col {
+        padding-top: calc(2em + 50px);
+    }
+    .end-col {
+        padding-top: 100px;
     }
     .wrap-col-content img{
         width: 250px;
@@ -478,12 +497,15 @@ button:focus-visible {
     }
     .wrap-col-content h1 {
         font-size: 3vw;
+        line-height: normal;
     }
     .wrap-col-content h2 {
-        font-size: 2.5vw;
+        font-size: 2.25vw;
+        line-height: normal;
     }
     .wrap-col-content p {
-        font-size: 1.75vw;
+        font-size: 1.55vw;
+        line-height: normal;
     }
     .wrap-row {
         height: 650px;
@@ -507,13 +529,13 @@ button:focus-visible {
         width: 60vw;
         height: 35vw;
     }
-    .wrap h2, .Container-content h3 {
+    .wrap h2, .slide .Container-wrap h3 {
         font-size: 3vw;
         line-height: normal;
         margin-bottom: 0;
     }
     .Container-content p {
-        font-size: 2vw;
+        font-size: 2.25vw;
         line-height: normal;
     }
     .Container .Container-wrap .wrap svg {
@@ -539,6 +561,15 @@ button:focus-visible {
     }
 }
 @media screen and (max-width: 1300px){
+    .wrap h2, .slide .Container-wrap h3 {
+        font-size: 2.5vw;
+        line-height: normal;
+        margin-bottom: 0;
+    }
+    .Container .Container-wrap:first-child .wrap svg {
+        width: 2.5vw !important;
+        height: auto;
+    }
     .wrap-row {
         height: 100%;
     }
@@ -577,7 +608,7 @@ button:focus-visible {
 }
 @media screen and (max-width: 1100px) {
     .Container .Container-wrap:first-child .wrap svg {
-        width: 3vw !important;
+        width: 2.5vw !important;
     }
 
     .Container-content p {
@@ -614,23 +645,35 @@ button:focus-visible {
     .Container.min-container {
         margin: 2em 0;
     }
+    .Container-wrap .top-wrap-content .wrap:first-child {
+        max-width: 60%;
+    }
+    .Container-wrap .top-wrap-content .wrap:last-child{
+        max-width: 40%;
+    } 
 }
 @media screen and (max-width: 900px){
     .Header .Content a, .Content-wrap a {
         font-size: 20px;
     }
     .slide .Container-content {
-        margin: 0;
+        margin: 2em 0 0;
     }
-    .wrap h2, .Container-content h3 {
-        font-size: 3vw;
-        line-height: normal;
-        margin: 0 0 0.2em;
+    .wrap h2, .slide .Container-wrap h3 {
+        font-size: 100%;
+        line-height: 25px;
+        margin: 0em -0.5em 0.2em;
     }
     .Container-content p {
         font-size: 2.25vw;
         line-height: normal;
         margin: 0;
+    }
+    .Container .Container-wrap:first-child .wrap svg {
+        width: 15% !important;
+    }
+    .slide .Container-wrap:last-child{
+        margin-top: 0 !important;
     }
 }
 @media screen and (max-width: 800px){
@@ -690,6 +733,9 @@ button:focus-visible {
         margin-right: 2em;
         width: calc(100% - 4em) !important;
     }
+        .slide .Container-wrap:first-child {
+            margin-top: 0em;
+        }
 }
 @media screen and (max-width: 600px){
     .Header .Content h1 {
@@ -751,7 +797,7 @@ button:focus-visible {
         height: 50vw;
         margin-bottom: 1em;
     }
-    .wrap h2, .Container-content h3 {
+    .wrap h2, .slide .Container-wrap h3 {
         font-size: 4vw;
     }
     .Container .Container-wrap:first-child .wrap svg {
@@ -761,9 +807,9 @@ button:focus-visible {
         margin: 0em 1em 0 !important;
         width: calc(100% - 2em) !important;
     }
-    .Container .Container-wrap:first-child {
-        top: 0 !important;
-    }
+        .Container .Container-wrap:first-child {
+            top: 15px !important;
+        }
     .Container .Container-wrap:last-child{
         bottom: 0 !important;
     }
@@ -800,6 +846,12 @@ button:focus-visible {
         width: 60vw;
         height: 40vw;
         border-width: 15px;
+    }
+    .slide .Container-wrap h3{
+        margin-top: -15px;
+    }
+    .slide .Container-content {
+        margin: 1em 0 0;
     }
 }
 @media screen and (max-width: 400px){
