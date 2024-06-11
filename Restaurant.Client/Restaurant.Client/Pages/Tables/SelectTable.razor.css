@@ -164,11 +164,36 @@ label svg{
     width: 50%;
     height: 50px;
     color: white !important;
-    margin: 0 25%;
+    margin: 0 25% 10px;
+    border: 0;
+    transition: all 0.5s;
+    z-index: 2;
+    border-radius: 0;
 }
-.Container button:hover{
-    background: #242121;
-}
+    .Container button::before {
+        position: absolute;
+        top: 1px;
+        bottom: 1px;
+        width: 100%;
+        content: " ";
+        background: #1e1e1e;
+        z-index: -1;
+    }
+    .Container button::after {
+        left: 50%;
+        top: -1px;
+        bottom: -1px;
+        width: 0;
+        content: " ";
+        position: absolute;
+        z-index: -2;        
+        transition: all 0.5s;
+    }
+    .Container button:hover::after {
+        width: 100%;
+        left: 0;
+        background: linear-gradient(90deg, #1e1e1e 20%, #484742 50%, #1e1e1e 80%);
+    }
 @media screen and (max-width: 1500px){
     .Container{
         width: 80vw;

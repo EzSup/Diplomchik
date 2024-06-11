@@ -10,7 +10,7 @@
 }
 
 footer p {
-    font-family: 'Inter';
+    font-family: "Montserrat Alternates", sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 30px;
@@ -56,7 +56,7 @@ footer p {
     }
 
 .col ul li {
-    font-family: 'Inter';
+    font-family: "Montserrat Alternates", sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 30px;

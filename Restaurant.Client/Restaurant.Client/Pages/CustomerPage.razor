@@ -8,10 +8,15 @@
     <div class="user-data">
         @if (_customer != null)
         {
+            <div class="row">
+
+             </div>
+            <div class="row">
             <h5>Ваші дані:</h5>
             <p style="font-size: 24px;"><strong>Ім'я:</strong> @_customer.Name</p>
             <p style="font-size: 24px;"><strong>Пошта:</strong> @_customer.Email</p>
             <p style="font-size: 24px;"><strong>Телефон:</strong> @_customer.PhoneNum</p>
+            </div>
         }
     </div>
     <br />

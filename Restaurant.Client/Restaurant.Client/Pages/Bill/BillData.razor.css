@@ -1,9 +1,10 @@
 ﻿.card {
-    background: #FFF8E0;
+    background: #878477;
 }
-.card .card-body * {
-    color: #242121;
-}
+    .card .card-body * {
+        color: #242121;
+        border-color: #1e1e1e;
+    }
 h3{
     color: #FFF8E0;
 }
@@ -13,6 +14,13 @@ h3{
 .PayData {
     margin-top: 20px;
     padding: 10px;
+}
+.tipsvalue{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 70%;
 }
 @media screen and (max-width: 1500px) {
     h3 {

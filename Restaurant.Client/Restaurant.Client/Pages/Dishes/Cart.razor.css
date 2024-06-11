@@ -79,7 +79,14 @@
         color: #A7A293;
     }
 
-@media screen and (max-width: 600px){
+.dishcards {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+@media screen and (max-width: 600px) {
     .form-Label {
         font-size: 4vw !important;
     }

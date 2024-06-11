@@ -11,15 +11,7 @@
     src: url('../fonts/MerriweatherSans/MerriweatherSans-Light.ttf')    
 }
 
-@font-face {
-    font-family: "Aleo";
-    src: url('../fonts/Aleo/Aleo-Regular.ttf');
-}
 
-@font-face {
-    font-family: "AleoBold";
-    src: url('../fonts/Aleo/Aleo-Bold.ttf')
-}
 
 html, body {
     min-height: 100vh;
@@ -37,7 +29,7 @@ html, body {
 }
 
 html, body, button {
-    font-family: 'Inter';
+    font-family: "Montserrat Alternates", sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 20px;
@@ -68,7 +60,7 @@ button {
 
 
 h1 {
-    font-family: 'Aleo';
+    font-family: "Alegreya", serif;
     font-style: normal;
     font-weight: 400;
     font-size: 50px;
@@ -78,7 +70,7 @@ h1 {
 }
 
 h2 {
-    font-family: 'Aleo';
+    font-family: "Alegreya", serif;
     font-style: normal;
     font-weight: 700;
     font-size: 50px;
@@ -97,7 +89,7 @@ h3 {
 }
 
 h4 {
-    font-family: 'Inter';
+    font-family: "Montserrat Alternates", sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 50px;
@@ -106,7 +98,7 @@ h4 {
 }
 
 h5 {
-    font-family: 'Inter';
+    font-family: "Montserrat Alternates", sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 40px;
@@ -115,7 +107,7 @@ h5 {
 }
 
 p {
-    font-family: 'Inter';
+    font-family: "Montserrat Alternates", sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 30px;
@@ -231,7 +223,7 @@ button, a {
 }
 
 .Title h1 {
-    font-family: 'Aleo';
+    font-family: "Alegreya", serif;
     font-style: normal;
     font-weight: 400;
     font-size: 50px;

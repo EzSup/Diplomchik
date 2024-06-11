@@ -9,7 +9,7 @@
 }
 
 .navbar-content h1 {
-    font-family: 'Inter';
+    font-family: "Montserrat Alternates", sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 30px;
@@ -51,7 +51,7 @@
     }
 
 ::deep .navigation a {
-    font-family: 'Inter';
+    font-family: "Montserrat Alternates", sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 20px;

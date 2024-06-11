@@ -1,11 +1,32 @@
 ﻿.review-form {
-    border: 1px solid #a7a293;
+    border: 0;
     border-radius: 5px;
     padding: 15px;
     margin-bottom: 20px;
     width: 100%;
+    position: relative;
+    z-index: 2;
 }
+    .review-form::after, .review-form::before {
+        position: absolute;
+        left: -1px;
+        top: -1px;
+        right: -1px;
+        bottom: 10px;
+        content: " ";
+        background: linear-gradient(160deg, #A7A293 0%, #242121 45%);
+        z-index: -2;
+        border-radius: 5px;
+    }
 
+    .review-form:before {
+        top: 0 !important;
+        left: 1px !important;
+        right: 1px !important;
+        background: #242121 !important;
+        height: 100%;
+        z-index: -1 !important;
+    }
     .review-form h3 {
         margin-bottom: 10px;
     }
@@ -22,9 +43,13 @@
     flex-direction: column;
 }
 ::deep .title-input input, ::deep .content-input textarea {
-    background: #1E1E1E;
+    background: linear-gradient(90deg, #1E1E1E 10%, #242121 90%);
     max-width: 90%;
     color: #FFF8E0;
+    /* box-shadow: 0px 0px 15px 0px #131313; */
+    border-width: 0 !important;
+    outline: none;
+    padding-right: 0px;
 }
 label {
     display: block;

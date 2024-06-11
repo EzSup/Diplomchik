@@ -54,6 +54,7 @@
             </div>
                 <div class="tips">
                 <label>Чайові, у відсотках від суми:</label>
+                <div class="tipsvalue">
                 <InputRadioGroup @bind-Value="@tipsPercents" TValue="int">
                     <div>
                         <label>Без чайових</label>
@@ -72,6 +73,7 @@
                         <InputRadio Value="15"></InputRadio>
                     </div>
                 </InputRadioGroup>
+                </div>
                 @* <InputNumber min="0" max="100" @bind-Value="tipsPercents" ValueChanged=""></InputNumber> *@
             </div>
             <div>
