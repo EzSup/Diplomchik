@@ -89,11 +89,6 @@ namespace Restaurant.Application.Services
             return dishes.Count()/request.pageSize + 1;
         }
 
-        //public async Task<ICollection<DishPaginationResponse>> GetByFilter(DishPaginationRequest request)
-        //    => await _dishesRepository.GetByFilter(request.order, request.Name, request.MinWeight, request.MaxWeight,
-        //        request.Ingredients, request.Available, request.MinPrice, request.MaxPrice,
-        //        request.Category, request.Cuisine, request.MinDiscountsPercents);
-
         public async Task<ICollection<Dish>> GetByPage(int page, int pageSize)
             => await _dishesRepository.GetByPage(page, pageSize);
         

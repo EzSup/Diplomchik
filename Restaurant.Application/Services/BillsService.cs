@@ -66,19 +66,6 @@ namespace Restaurant.Application.Services
 
                     return new DishOfBill(x.Dish.Name, x.Count, priceAfterDiscount, totalPriceAfterDiscount);
                 }).ToList();
-            //.Select(x => new DishOfBill(x.Dish.Name, x.Count, 
-            //(x.Dish.Price - x.Dish.Price * 0.01m * (decimal)(x.Dish?.Discount?.PecentsAmount ?? 0)
-            //    - x.Dish.Price * 0.01m * (decimal)(x.Dish?.Category?.Discount?.PecentsAmount ?? 0)
-            //    - x.Dish.Price * 0.01m * (decimal)(x.Dish?.Cuisine?.Discount?.PecentsAmount ?? 0)) 
-            //    < 0 ? 0 : (x.Dish.Price - x.Dish.Price * 0.01m * (decimal)(x.Dish?.Discount?.PecentsAmount ?? 0)
-            //    - x.Dish.Price * 0.01m * (decimal)(x.Dish?.Category?.Discount?.PecentsAmount ?? 0)
-            //    - x.Dish.Price * 0.01m * (decimal)(x.Dish?.Cuisine?.Discount?.PecentsAmount ?? 0)), 
-            //(x.Count * (x.Dish.Price - x.Dish.Price * 0.01m * (decimal)(x.Dish?.Discount?.PecentsAmount ?? 0)
-            //    - x.Dish.Price * 0.01m * (decimal)(x.Dish?.Category?.Discount?.PecentsAmount ?? 0)
-            //    - x.Dish.Price * 0.01m * (decimal)(x.Dish?.Cuisine?.Discount?.PecentsAmount ?? 0))) 
-            //    < 0 ? 0 : (x.Count * (x.Dish.Price - x.Dish.Price * 0.01m * (decimal)(x.Dish?.Discount?.PecentsAmount ?? 0)
-            //    - x.Dish.Price * 0.01m * (decimal)(x.Dish?.Category?.Discount?.PecentsAmount ?? 0)
-            //    - x.Dish.Price * 0.01m * (decimal)(x.Dish?.Cuisine?.Discount?.PecentsAmount ?? 0))))).ToList();
             return response;
         }
 

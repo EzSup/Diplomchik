@@ -18,7 +18,7 @@ namespace Restaurant.Persistense.Repositories
         {
             return await _context.Blogs
                 .AsNoTracking()
-                .OrderBy(t => t.Created)
+                .OrderByDescending(t => t.Created)
                 .ToListAsync();
         }
 
@@ -46,7 +46,7 @@ namespace Restaurant.Persistense.Repositories
                 query = query.Where(t => t.Created > after);
             }
 
-            return await query.ToListAsync();
+            return await query.OrderByDescending(t => t.Created).ToListAsync();
         }
 
         public async Task<ICollection<Blog>> GetByPage(int page, int pageSize)
@@ -54,7 +54,7 @@ namespace Restaurant.Persistense.Repositories
             if (pageSize > 0 && page > 0)
             {
                 return await _context.Blogs.AsNoTracking()
-                    .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+                    .Skip((page - 1) * pageSize).Take(pageSize).OrderByDescending(t => t.Created).ToListAsync();
             }
             throw new ArgumentException("Кількість і номер сторінок повинні бути більші за 0!");
         }
