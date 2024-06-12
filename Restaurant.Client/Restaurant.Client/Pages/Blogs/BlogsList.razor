@@ -18,6 +18,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        blogs = (await blogsService.GetBlogsByPage(1,3)).ToList();
+        blogs = (await blogsService.GetBlogsByPage(1,10)).ToList();
     }
 }
