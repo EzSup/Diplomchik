@@ -1,0 +1,21 @@
+﻿.billsQuery {
+    border: 1px solid #FFF8E0;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 20px;
+    width: 300px;
+    height: 400px;
+}
+
+.billsQuery p{
+    font-size: 24px !important;
+}
+@media screen and (max-width: 400px){
+    .billsQuery p {
+        font-size: 4vw !important;
+        line-height: normal !important;
+    }
+    .billsQuery{
+        height: max-content;
+    }
+}

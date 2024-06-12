@@ -1,4 +1,8 @@
-﻿
+﻿h5{
+    width: 100%;
+    height: min-content;
+    line-height:normal;
+}
 
 .user-data {
     margin-bottom: 20px;
@@ -15,6 +19,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px; /* Відступ між елементами */
+    margin: 0 auto;
 }
 
 .bill-card {

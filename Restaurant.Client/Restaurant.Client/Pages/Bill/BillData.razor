@@ -46,9 +46,9 @@
             </table>
         </div>
     </div>
-    <div class="PayData">
         @if (!bill.IsPaid)
         {
+    <div class="PayData">        
             <div>
                 <label>Сума до сплати: @(bill.TotalPrice + bill.TotalPrice * tipsPercents * 0.01m) ₴</label>
             </div>
@@ -56,31 +56,35 @@
                 <label>Чайові, у відсотках від суми:</label>
                 <div class="tipsvalue">
                 <InputRadioGroup @bind-Value="@tipsPercents" TValue="int">
-                    <div>
-                        <label>Без чайових</label>
-                        <InputRadio Value="0"></InputRadio>
+                    <div class="tipcard">
+                        <label>0%</label>
+                                <InputRadio Value="0" class="hidden"></InputRadio>
+                                <div class="on-checked">0%</div>
                     </div>
-                    <div>
-                        <label>5% чайових</label>
-                        <InputRadio Value="5"></InputRadio>
+                    <div class="tipcard">
+                        <label>5%</label>
+                                <InputRadio Value="5" class="hidden"></InputRadio>
+                                <div class="on-checked">5%</div>
                     </div>
-                    <div>
-                        <label>10% чайових</label>
-                        <InputRadio Value="10"></InputRadio>
+                    <div class="tipcard">
+                        <label>10%</label>
+                                <InputRadio Value="10" class="hidden"></InputRadio>
+                                <div class="on-checked">10%</div>
                     </div>
-                    <div>
-                        <label>15% чайових</label>
-                        <InputRadio Value="15"></InputRadio>
+                    <div class="tipcard">
+                        <label>15%</label>
+                                <InputRadio Value="15" class="hidden"></InputRadio>
+                                <div class="on-checked">15%</div>
                     </div>
                 </InputRadioGroup>
                 </div>
                 @* <InputNumber min="0" max="100" @bind-Value="tipsPercents" ValueChanged=""></InputNumber> *@
-            </div>
-            <div>
-                <button class="btn btn-primary" @onclick="PayForBill">Pay for it</button>
-            </div>
-        }
+            </div>                      
     </div>
+        <div>
+            <button class="submit" @onclick="PayForBill">Pay for it</button>
+        </div>
+    }
 }
 else
 {

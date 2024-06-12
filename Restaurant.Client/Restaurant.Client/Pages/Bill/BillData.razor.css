@@ -8,20 +8,81 @@
 h3{
     color: #FFF8E0;
 }
-.tips{
-    display: block;
+.tips {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
 }
 .PayData {
     margin-top: 20px;
-    padding: 10px;
+    padding: 50px 0;
+    background: url(/images/Tips_Bg.png);
+    background-position: center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 40px;
 }
+
 .tipsvalue{
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: space-between;
-    max-width: 70%;
+    max-width: 70%;  
+    width: max-content;
+    margin-top: 30px;
 }
+.tipcard {
+    height: 60px;
+    width: 200px;
+    margin: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    background: #878477;
+    z-index: 2;
+}
+.tipcard label{
+    color: #FFF8E0;
+    transition: all 0.3s;
+}
+    .tipcard .on-checked {
+        position: absolute;
+        width: 100%;
+        height: 0px;
+        left: 0;
+        top: 0;
+        background: #FFF8E0;
+        z-index: -1;
+        transition: all 0.3s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #131313;
+        opacity: 0;
+    }
+    .tipcard:hover label {
+        color: #878477;
+    }
+.tipsvalue > .tipcard:hover > .on-checked,
+.tipsvalue > .tipcard > .hidden:checked ~ .on-checked {
+    height: 100%;
+    opacity: 1;
+    z-index: 1;
+    color: #878477;
+}
+
+::deep .hidden{
+    display: block !important;
+    opacity: 0;
+    z-index: 5;
+}
+
 @media screen and (max-width: 1500px) {
     h3 {
         font-size: 3.5vw;
@@ -42,6 +103,18 @@ h3{
         font-size: 1.75vw;
     }    
  }
+@media screen and (max-width: 1000px){
+    .Main-Content > *:first-child {
+        width: 90vw;
+    }
+    label{
+        font-size: 4vw !important;
+    }
+    .tipcard {
+        height: 8vw;
+        width: 30vw;
+    }    
+}
 @media screen and (max-width: 600px){
     h3 {
         font-size: 5vw;
@@ -75,5 +148,8 @@ h3{
     }    
     .PayData * {
         font-size: 4vw;
+    }
+    .PayData *:not(.tipcard) {
+        margin: 0 !important;
     }
 }

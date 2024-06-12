@@ -5,8 +5,21 @@
 <div class="navbar navbar-wrap" id="fade-in">
     <div class="navbar-content">
         <NavLink href="/#index" style="text-decoration: none">
-            <h1>Aroma & Taste</h1>
+            <h1 id="navbar-title">Aroma & Taste</h1>
         </NavLink>
+        <script>
+            function updateTitle() {
+                const title = document.getElementById('navbar-title');
+                if (window.innerWidth < 600) {
+                    title.textContent = 'A&T';
+                } else {
+                    title.textContent = 'Aroma & Taste';
+                }
+            }
+
+            window.addEventListener('resize', updateTitle);
+            window.addEventListener('load', updateTitle);
+        </script>
     </div>
     <div class="navbar-content">
         <div class="navigation">

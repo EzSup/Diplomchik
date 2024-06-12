@@ -369,7 +369,7 @@ button, a {
     border-color: #a7a293;
 }
 
-button[type="submit"] {
+button[type="submit"], button.submit {
     margin: 20px auto;
     width: 200px;
     min-width: max-content;
@@ -386,12 +386,12 @@ button[type="submit"] {
     transition: all 0.3s ease;
 }
 
-button[type="submit"]:hover {
+button[type="submit"]:hover, button.submit:hover {
     transform: translateY(-5px);
     background: #131313;
 }
 
-button[type="submit"]:focus-visible {
+button[type="submit"]:focus-visible, button.submit:focus-visible {
     outline: none !important;
 }
 

@@ -20,6 +20,7 @@
     color: #FFF8E0;
     transition: color 0.3s ease;
     position: relative;
+    margin: 0;
 }
 
     .navbar-content h1::before, .navbar-content h1::after {
