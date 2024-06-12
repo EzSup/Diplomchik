@@ -16,7 +16,7 @@
             @for (int i = 8; i <= 20; i++)
             {
                 TimeOnly time = new TimeOnly(i, 0, 0);
-                @if (!(time.Hour <= DateTime.Now.Hour))
+                @if (time.Hour >= date.Hour)
                 {
                     <option value="@time" disabled="@(date.Date == DateTime.Today.Date && time.Hour <= DateTime.Now.Hour )" selected="@(time.Hour == DateTime.Now.Hour+1)">
                         @*  *@
@@ -27,7 +27,7 @@
         </select>
     </div>
     <div class="Content-wrap">
-        @if (tables != null && tables.Length >= 8)
+        @if (tables != null && tables.Length >= 12)
         {
             <InputRadioGroup @bind-Value="table">
                 <div class="wrap-col" style="width: 40%; z-index:3">
@@ -37,23 +37,24 @@
                         @* <TwoSeatsTable Value="@tables[2].Id" Disabled="@(!tables[2].Free)" /> *@
                     </div>
                     <div class="wrap-col-content flex-row mid">
-                        <SixSeatsTable Value="@tables[2].Id" Disabled="@(!tables[2].Free)" />
-                        <SixSeatsTable Value="@tables[3].Id" Disabled="@(!tables[3].Free)" />
+                        <FourSeatsTable Value="@tables[2].Id" Disabled="@(!tables[2].Free)" />
+                        <FourSeatsTable Value="@tables[3].Id" Disabled="@(!tables[3].Free)" />
+                        <FourSeatsTable Value="@tables[4].Id" Disabled="@(!tables[4].Free)" />
+                        <FourSeatsTable Value="@tables[5].Id" Disabled="@(!tables[5].Free)" />
                     </div>
                 </div>
                 <div class="wrap-col" style="width: 60%">
                     <div class="wrap-col-content flex-row justify-center">
-                        <EightSeatsTable Value="@tables[4].Id" Disabled="@(!tables[4].Free)" />
-                        <EightSeatsTable Value="@tables[5].Id" Disabled="@(!tables[5].Free)" />
+                        <EightSeatsTable Value="@tables[6].Id" Disabled="@(!tables[6].Free)" />
+                        <EightSeatsTable Value="@tables[7].Id" Disabled="@(!tables[7].Free)" />
+                        <EightSeatsTable Value="@tables[8].Id" Disabled="@(!tables[8].Free)" />                        
                     </div>
                     <div class="wrap-col-content flex-row mid">
-                        <FourSeatsTable Value="@tables[6].Id" Disabled="@(!tables[6].Free)" />
-                        <FourSeatsTable Value="@tables[7].Id" Disabled="@(!tables[7].Free)" />
+                        <SixSeatsTable Value="@tables[9].Id" Disabled="@(!tables[9].Free)" />
+                        <SixSeatsTable Value="@tables[10].Id" Disabled="@(!tables[10].Free)" />                        
                     </div>
-                    <div class="wrap-col-content flex-row justify-end content-flex-end">
-                        <TwoSeatsTableHorizontal Value="@tables[8].Id" />
-@*                         <TwoSeatsTableHorizontal Value="@tables[10].Id" />
-                        <TwoSeatsTableHorizontal Value="@tables[11].Id" /> *@
+                    <div class="wrap-col-content flex-row justify-end content-flex-end" style="padding-bottom: 1em;">
+                        <TwoSeatsTable Value="@tables[11].Id" Disabled="@(!tables[11].Free)" />
                     </div>
                 </div>
             </InputRadioGroup>
@@ -93,9 +94,12 @@
 
     private async Task DatePicked(ChangeEventArgs e)
     {
+        var now = DateTime.Now;
         var enteredDate = DateTime.Parse(e.Value.ToString());
         date = new DateTime(enteredDate.Year, enteredDate.Month, enteredDate.Day,
-            time.Hour, time.Minute, time.Second);
+            enteredDate > now ? time.Hour : now.Hour, 
+            enteredDate > now ? time.Minute : now.Hour, 
+            enteredDate > now ? time.Second : now.Second);
         tables = (await tablesService.GetTablesOfTime(date)).ToArray();
     }
 

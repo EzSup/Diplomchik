@@ -9,10 +9,12 @@
                 <div class="form-group">
                     <lable class="form-Label">Ел. пошта</lable>
                     <InputText @bind-Value="Login.Email" class="form-control"></InputText>
+                    <ValidationMessage For="() => Login.Email" />
                 </div>
                 <div class="form-group mt-3">
                     <lable class="form-Label">Пароль</lable>
                     <InputText type="password" @bind-Value="Login.Password" class="form-control"></InputText>
+                    <ValidationMessage For="() => Login.Password" />
                 </div>
                 <div class="form-group mt-3">
                     <button class="btn btn-primary" type="submit">Увійти</button>
@@ -23,7 +25,6 @@
                 <div class="form-group mt-3">
                     <a href="/">На головну</a>
                 </div>
-                <ValidationSummary />
             </EditForm>
         </div>
     </div>

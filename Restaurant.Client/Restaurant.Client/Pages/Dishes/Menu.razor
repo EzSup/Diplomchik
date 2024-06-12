@@ -151,12 +151,12 @@
 <div class="pagination-buttons">
     @if (currentPageIndex > 1)
     {
-        <button @onclick="() => GoToPage(currentPageIndex - 1)">Previous</button>
+        <button @onclick="() => GoToPage(currentPageIndex - 1)">Попередні</button>
     }
 
     @if (currentPageIndex < totalPages)
     {
-        <button @onclick="() => GoToPage(currentPageIndex + 1)">Next</button>
+        <button @onclick="() => GoToPage(currentPageIndex + 1)">Далі</button>
     }
 </div>
 <script>
