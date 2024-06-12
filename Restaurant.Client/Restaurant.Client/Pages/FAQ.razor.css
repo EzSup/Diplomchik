@@ -1,0 +1,147 @@
+﻿.faq-wrap {
+    display: flex;
+    /* width: 1400px; */
+    flex-direction: column;
+    margin-top: 50px;
+    align-items: center;
+}
+.faq {
+    width: min-content;
+    height: max-content;
+    position: relative;
+    z-index: 2;
+    margin: 10px 0;
+}
+
+    .faq::before, .faq::after {
+        position: absolute;
+        content: " ";
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: #242121;
+        z-index: -1;
+        border-radius: 15px;
+    }
+
+    .faq::after {
+        top: -1px;
+        bottom: -1px;
+        left: -1px;
+        background: linear-gradient(90deg, #A7A293 0%, #242121 100%);
+        z-index: -2;
+        border-radius: 15px;
+    }
+
+
+    .faq:hover svg path {
+        fill: #878477;
+    }
+
+.answer{
+    height: 0;
+    width: 70%;
+    opacity: 0;
+    transition: all 0.5s;
+    z-index: 1;
+    position: relative;
+    padding:0 0 10px 20px;
+}
+
+.answer.active{
+    height: 250px;
+    opacity: 1;
+}
+.question {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 1000px;
+    z-index: 2;
+    position: relative;
+}
+
+svg{
+    transform: rotate(90deg);
+    height: 50px;
+    width: 50px;
+    margin-right: 20px;
+    transition: all 0.3s;
+}
+path{
+    transition: all 0.3s;
+}
+svg.active{
+    transform: scaleY(-1) rotate(90deg);
+}
+h1 {
+    width: calc(100% - 50px);
+    color: #A7A293;
+}
+
+@media screen and (max-width: 1500px){
+    .question{
+        width: 60vw;
+    }
+    h1{
+        line-height: 40px;
+        margin: 0;
+        padding: 5px 0;
+    }
+    p {
+        font-size: 2vw;
+        line-height: 2vw;
+    }
+}
+@media screen and (max-width: 1100px){
+    .answer.active {
+        height: 200px;
+    }
+}
+@media screen and (max-width: 1000px){
+    .answer.active {
+        height: 170px;
+    }
+    svg {
+        height: 40px;
+        width: 40px;
+    }
+}
+@media screen and (max-width: 700px){
+    .question {
+        width: 80vw;
+    }
+    h1 {
+        font-size: 4vw;
+        line-height: 35px;
+    }
+    p {
+        font-size: 3vw;
+        line-height: 3.5vw;
+    }
+    .answer.active {
+        height: 230px;
+    }
+}
+@media screen and (max-width: 600px){
+    .question {
+        width: 85vw;
+    }
+    h1 {
+        font-size: 4.5vw;
+    }
+    p {
+        font-size: 3.5vw;
+        line-height: 4vw;
+    }
+    .answer.active {
+        height: 41vw;
+        width: 80%;
+    }
+}
+@media screen and (max-width: 400px){
+    h1 {
+        line-height: 25px;
+    }
+}
