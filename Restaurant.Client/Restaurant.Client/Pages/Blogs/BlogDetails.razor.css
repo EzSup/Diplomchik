@@ -5,10 +5,10 @@
     p
 {
     font-size: 20px;
-    margin: 0;
+    /*margin: 0;
     display: flex;
     justify-content: flex-start;
-    width: 500px;
+    width: 500px;*/
 }
 }
 .wrap-row-content img:first-child {
@@ -27,7 +27,7 @@
     justify-content: center !important;
 }
 
-::deep .teaser-cont {
+/*::deep .teaser-cont {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -50,7 +50,7 @@
      h3{
          text-align: center;
      }
-}
+}*/
 
 @media screen and (max-width: 1500px){
     .wrap-row-content {

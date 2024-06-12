@@ -105,3 +105,27 @@ async function AnimateMenuButtons() {
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
+function shuffleShefs(containerID, shefsClass) {
+    const container = document.querySelector("." + containerID);
+    const shefs = Array.from(document.querySelectorAll("." + shefsClass));
+
+    for (let i = shefs.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shefs[i], shefs[j]] = [shefs[j], shefs[i]];
+    }
+
+    shefs.forEach((shef, index) => {
+        container.appendChild(shef);
+        const randomMarginTop = Math.floor(Math.random() * 30) * 0.1 + 0.5;
+        const randomMarginRight = Math.floor(Math.random() * 30) * 0.1 + 0.5;
+        const randomMarginBottom = Math.floor(Math.random() * 30) * 0.1 + 0.5;
+        const randomMarginLeft = Math.floor(Math.random() * 30) * 0.1 + 0.5;
+        const delay = (Math.random() * 0.5).toFixed(1);
+
+        shef.style.marginTop = `${randomMarginTop}%`;
+        shef.style.marginRight = `${randomMarginRight}%`;
+        shef.style.marginBottom = `${randomMarginBottom}%`;
+        shef.style.marginLeft = `${randomMarginLeft}%`;
+        shef.style.transitionDelay = `${delay}s`;
+    });
+}
