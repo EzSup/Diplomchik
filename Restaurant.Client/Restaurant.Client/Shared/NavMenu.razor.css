@@ -181,7 +181,7 @@
     transition: all 0.5s;
     position: relative;
     opacity: 0;
-    width: 100px;
+    width: 100%;
     min-height: 25px;
     a{
          display:none;

@@ -78,8 +78,8 @@
         font-size: 3vw;
     }
     .review-card {
-        min-width: 80vw;
-        width: 85vw;
+        min-width: 100%;
+        width: 100%;
     }
         .review-card:before {
             left: 0px !important;

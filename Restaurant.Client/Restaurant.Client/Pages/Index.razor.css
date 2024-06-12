@@ -10,6 +10,8 @@
     position: relative;
     background: url(images/header-bg.png);
     background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 .Header .Content {
@@ -391,7 +393,7 @@ button:focus-visible {
     font-family: "Alegreya", serif;
     font-style: normal;
     font-weight: 400;
-    font-size: 50px;
+    font-size: 40px;
     line-height: 60px;
     /* identical to box height */
     display: flex;
@@ -534,6 +536,9 @@ button:focus-visible {
         line-height: normal;
         margin-bottom: 0;
     }
+    .slide .Container-wrap h3{
+        font-size: 2.5vw;
+    }
     .Container-content p {
         font-size: 2.25vw;
         line-height: normal;
@@ -565,6 +570,9 @@ button:focus-visible {
         font-size: 2.5vw;
         line-height: normal;
         margin-bottom: 0;
+    }
+    .slide .Container-wrap h3{
+        font-size: 2vw
     }
     .Container .Container-wrap:first-child .wrap svg {
         width: 2.5vw !important;
@@ -664,6 +672,9 @@ button:focus-visible {
         line-height: 25px;
         margin: 0em -0.5em 0.2em;
     }
+    .slide .Container-wrap h3{
+        font-size: 80%;
+    }
     .Container-content p {
         font-size: 2.25vw;
         line-height: normal;
@@ -739,17 +750,17 @@ button:focus-visible {
 }
 @media screen and (max-width: 600px){
     .Header .Content h1 {
-        font-size: 5vw;
+        font-size: 7.5vw;
         padding: 0 2em;
-        line-height: 40px;
+        line-height: normal;
     }
     .Header .Content h2 {
-        font-size: 4vw;
+        font-size: 6vw;
         padding: 0 2em;
-        line-height: 40px;
+        line-height: normal;
     }
     .Header .Content h1::before {
-        top: 120px;
+        top: 160px;
     }
     .wrap-col-content h1 {
         font-size: 5.25vw;
@@ -799,6 +810,9 @@ button:focus-visible {
     }
     .wrap h2, .slide .Container-wrap h3 {
         font-size: 4vw;
+    }
+    .slide .Container-wrap h3{
+        font-size: 3vw;
     }
     .Container .Container-wrap:first-child .wrap svg {
         width: 4vw !important;

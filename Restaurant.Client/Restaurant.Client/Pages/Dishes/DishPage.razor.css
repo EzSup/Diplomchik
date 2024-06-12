@@ -275,21 +275,31 @@
     }
     .half-page-block-container.reviews {
         width: 90%;
-        margin: 0 auto;
-    }
+    }    
     .review-card {
         min-width: 70vw;
     }
 }
 @media screen and (max-width: 600px){
-    .images-block{
+    .half-page-block-container.reviews {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0px 2px;
+    }
+    .images-block {
         display: flex;
         align-items: flex-start;
         flex-direction: column-reverse;
+        margin: 10px auto -5px;
     }
-    .main-image   {
-        width: 40vw;
-        height: 40vw;
+    .half-page-block-container {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    .main-image {
+        width: 60vw;
+        height: 60vw;
     }
     .small-images-container {
         margin-right: 0;
@@ -298,7 +308,7 @@
         flex-direction: row;
         flex-wrap: nowrap;
         align-items: flex-start;
-        width: 40vw;
+        width: 60vw;
         min-height: max-content;
         margin-top: 10px;
         position: relative;
@@ -320,10 +330,14 @@
         flex-direction: row;
         flex-wrap: wrap;
     }
-    .data-block   {
+    .data-block {
         margin: 0px;
         margin-top: 10px;
-        width: 50vw;
+        width: 80vw;
+    }
+    .ingredients-block {
+        width: 100%;
+        margin-bottom: 10px;
     }
     .reviewsdata-block > *   {
         font-size: 3.5vw;
@@ -349,7 +363,7 @@
 @media screen and (max-width: 500px) {
     .images-block {
         align-items: center;
-        width: 45vw;
+        width: 60vw;
     }
 }
 @media screen and (max-width: 400px) {
@@ -357,9 +371,9 @@
         margin-left: -5vw;
         margin-top: 0px;
     }
-    .images-block  {
-        margin: 10px 0px 0;
-    }    
+    .images-block {
+        margin: 10px auto 0;
+    }
     .available-label  {
         font-size: 4vw;
     }
@@ -378,17 +392,13 @@
         height: 14vw;
     }
     .add-to-cart-selector {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         width: min-content;
         justify-content: center;
     }
     .add-to-cart-selector button:nth-of-type(3){
         margin-top: 5px;
         width: 30vw;
-    }
-    .main-image {
-        width: 45vw;
-        height: 45vw;
     }
     .ingredients-block * {
         font-size: 3.5vw !important;

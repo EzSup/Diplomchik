@@ -1,7 +1,7 @@
 ﻿.item-row {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    margin: 0 auto 10px;
     flex-direction: column;
 }
 
