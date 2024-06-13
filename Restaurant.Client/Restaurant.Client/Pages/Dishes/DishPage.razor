@@ -15,10 +15,11 @@
                 <div class="small-images-container">
                     @foreach (var imageLink in dish.PhotoLinks)
                     {
-                        <img src="@imageLink" class="small-image" @onclick="() => SetMainImageLink(imageLink)" />
+                        <img src="@imageLink" class="small-image" @onclick="() => SetMainImageLink(imageLink)"
+                             onerror="this.onerror=null; this.src='/images/emptyDish.jpg';" />
                     }
                 </div>
-                <img src="@mainImageLink" class="main-image" />
+                <img src="@mainImageLink" class="main-image" onerror="this.onerror=null; this.src='/images/emptyDish.jpg';" />
             </div>          
             <div class="data-block">
                 <span class="available-label" style='@($"background-color: {availableLableColor};")'>@availableLable</span>

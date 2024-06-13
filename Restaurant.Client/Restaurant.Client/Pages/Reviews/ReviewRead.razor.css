@@ -7,6 +7,7 @@
     position: relative;
     background: #242121 !important;
     z-index: 2;
+    max-width: 50%;
 }
     .review-card::after, .review-card::before {
         position: absolute;

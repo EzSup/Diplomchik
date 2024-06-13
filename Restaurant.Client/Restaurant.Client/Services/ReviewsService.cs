@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using Blazored.Toast.Services;
+using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json;
 using Restaurant.Client.Contracts.Reviews;
 using Restaurant.Client.Contracts.Tables;
 using Restaurant.Client.Services.Interfaces;
@@ -9,10 +11,14 @@ namespace Restaurant.Client.Services
     public class ReviewsService : IReviewsService
     {
         private readonly HttpClient _httpClient;
+        private readonly NavigationManager _navManager;
+        private readonly IToastService _toastService;
 
-        public ReviewsService(IHttpClientFactory factory)
+        public ReviewsService(IHttpClientFactory factory, NavigationManager navManager, IToastService toastService)
         {
             _httpClient = factory.CreateClient("API");
+            _navManager = navManager;
+            _toastService = toastService;
         }
 
         public async Task<ICollection<ReviewOfDishResponse>> GetByDishId(Guid dishId, int pageIndex, int pageSize)
@@ -24,10 +30,18 @@ namespace Restaurant.Client.Services
             return result;
         }
 
-        public async Task<bool> Post(ReviewCreateRequest request)
+        public async Task Post(ReviewCreateRequest request)
         {
             var response = await _httpClient.PostAsJsonAsync($"api/Reviews/Post", request);
-            return response.IsSuccessStatusCode;
+            if (response.IsSuccessStatusCode)
+            {
+                _toastService.ShowSuccess("Відгук додано!");
+                _navManager.NavigateTo(_navManager.Uri, forceLoad: true);
+            }
+            else
+            {
+                _toastService.ShowError("Помилка при додаванні відгуку!");
+            }
         }
 
         public async Task<(bool ifHas, ReviewOfDishResponse? obj)> HasOwnReview(Guid dishId)

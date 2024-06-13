@@ -24,6 +24,7 @@
     [Parameter]
     public Guid DishId { get; set; }
     ReviewCreateRequest obj = new();
+
     protected override void OnInitialized()
     {
         obj.DishId = DishId;
@@ -31,9 +32,6 @@
 
     private async Task Send()
     {
-        if(await reviewsService.Post(obj))
-        {
-            NavManager.NavigateTo(NavManager.Uri, forceLoad: true);
-        }
+        await reviewsService.Post(obj);
     }
 }

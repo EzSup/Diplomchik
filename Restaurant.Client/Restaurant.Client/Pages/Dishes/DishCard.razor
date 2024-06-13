@@ -1,7 +1,7 @@
 ﻿@using Restaurant.Client.Contracts.Dishes
 <div  class="dish-card Opacity0">  
     <div class="click-button" @onclick="OnClick.Invoke"></div>
-    <img src="@Dish.PhotoLink" alt="Страва 1">
+    <img src="@Dish.PhotoLink" onerror="this.onerror=null; this.src='/images/emptyDish.jpg';">
     <AuthorizeView Roles="User">
         <Authorized>
             <button class="add-to-cart-button" @onclick="OnClickCart.Invoke">
