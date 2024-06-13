@@ -85,7 +85,10 @@
     flex-direction: row;
     justify-content: flex-start;
 }
-
+.form-group {
+    width: max-content;
+    margin: 15px auto 0;
+}
 @media screen and (max-width: 600px) {
     .form-Label {
         font-size: 4vw !important;

@@ -61,14 +61,15 @@
 }
 
 .promotion-label {
-    background-color: #ff0000; /* Червоний колір для фону підказки */
-    color: #fff; /* Білий колір тексту підказки */
-    margin: 10px; /* Внутрішні відступи підказки */
+    background-color: #FFF8E0;
+    color: #1e1e1e;
+    margin: 15px;
+    font-weight: 500;
     padding: 3px 6px;
-    border-radius: 5px; /* Закруглені кути підказки */
-    position: absolute; /* Абсолютне позиціонування відносно карточки */
-    top: 0; /* Розміщення зверху */
-    left: 0; /* Розміщення зліва */
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .dish-card h2 {

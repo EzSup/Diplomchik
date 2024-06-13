@@ -1,8 +1,9 @@
 ﻿.item-row {
     display: flex;
     align-items: center;
-    margin: 0 auto 10px;
+    margin: 0 auto 30px;
     flex-direction: column;
+    position: relative;
 }
 
 .item-image {
@@ -14,8 +15,15 @@
     border-radius: 20px;
 }
 .available-label {
-    margin-top: -10px;
-    color: #FFF8E0;
+    position: absolute;
+    margin: 0px 0px 5px;
+    color: #242121;
+    border-radius: 15px;
+    font-weight: 500;
+    background: #FFF8E0;
+    padding: 1px 5px;
+    left: 10px;
+    top: 10px;
 }
 
 .item-details {
@@ -118,7 +126,11 @@
         width: 100%;
         height: 100%;
     }
-
+    @media screen and (max-width: 1500px){
+        h3 {
+            font-size: 5vw;
+        }
+    }
 @media screen and (max-width: 600px) {
     .item-image {
         width: 80vw;
@@ -126,12 +138,12 @@
         margin-right: 0;
     }
     .item-row h3 {
-        font-size: 5vw !important;
+        font-size: 8vw !important;
     }
     .item-row span {
-        font-size: 3vw !important;
+        font-size: 5vw !important;
     }
     .item-buttons * {
-        font-size: 3vw !important;
+        font-size: 5vw !important;
     }
 }
