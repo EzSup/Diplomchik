@@ -100,18 +100,18 @@
     height: 100%;
 }
 .mid {
-    width: 400px;
+    width: 300px;
     /* margin: auto; */
     margin-left: 35%;
 }
 .wrap-col-content .vertical {
     margin: 0.2em 1em;
 }
-.wrap-col-content .wrap {
-    margin: 0.2em 0.7em;
+::deep .wrap-col-content .wrap {
+    margin: 0.5em 0.5em;
 }
 .wrap-col-content .horizontal {
-    margin: 0em 0.2em;
+    margin: 3em 0.2em 0;
 }
 .vertical, .wrap, .horizontal {
     transition: all 0.5s;
@@ -164,7 +164,7 @@ label svg{
     width: 50%;
     height: 50px;
     color: white !important;
-    margin: 0 25% 10px;
+    margin: 0 25%;
     border: 0;
     transition: all 0.5s;
     z-index: 2;
@@ -172,8 +172,8 @@ label svg{
 }
     .Container button::before {
         position: absolute;
-        top: 1px;
-        bottom: 1px;
+        top: 2px;
+        bottom: 2px;
         width: 100%;
         content: " ";
         background: #1e1e1e;
@@ -201,11 +201,14 @@ label svg{
     }
     ::deep label:not(.horizontal) svg {
         height: auto;
-        width: 10vw;
+        width: 8vw;
     }
     ::deep .horizontal svg {
         height: 10vw;
         width: auto;
+    }
+    ::deep .vertical svg{
+        width: 10vw !important;
     }
 }
 @media screen and (max-width: 1300px){
@@ -213,7 +216,8 @@ label svg{
         padding: 5% 5% 1% 12%;
     }
         .Content-wrap .wrap-col:nth-of-type(2) .wrap-col-content:first-child {
-            margin-left: 20%;
+            /* margin-left: 20%; */
+            flex-wrap: nowrap;
         }
     .Container .RestItems::before {
         width: 250px !important;
@@ -241,10 +245,14 @@ label svg{
     .mid {
         width: 300px;
     }
+    .Content-wrap {
+        padding: 5% 5% 4% 12%;
+    }
 }
 @media screen and (max-width: 900px){
     .mid {
-        width: 250px;
+        width: 200px;
+        padding-bottom: 20%;
     }
     ::deep label:not(.horizontal) svg {
         width: 8vw;
@@ -263,7 +271,10 @@ label svg{
         left: 30%;
     }
     .Content-wrap {
-        padding: 7% 5% 1% 12%;
+        padding: 7% 5% 5% 12%;
+    }
+    .wrap-col-content .horizontal {
+        margin: 0em 0.2em 0;
     }
 }
 @media screen and (max-width: 600px){
@@ -291,18 +302,53 @@ label svg{
         top: 27.5%;
     }
     ::deep label:not(.horizontal) svg {
-        width: 15vw;
+        width: 12vw;
         max-height: 12vw;
     }
     .mid {
-        width: max-content;
+        width: 200px;
         margin-left: 0;
-        height: auto;
+        height: 400px;
+        padding: 0;
     }
     ::deep .horizontal svg {
         height: 15vw;
     }
     .Content-wrap .wrap-col:nth-of-type(2) .wrap-col-content:first-child {
-        margin-left: 0%;
+        margin-left: -20%;
+        margin-top: 10%;
+    }
+
+    .Content-wrap .wrap-col:nth-of-type(2){
+        z-index: 5;
+    }
+    ::deep .vertical svg {
+        width: 15vw !important;
+    }
+    .justify-end {
+        margin-right: 50px;
+        padding: 20px 0 0 !important;
+    }
+    .Content-wrap {
+        padding: 7% 5% 2% 12%;
+    }
+    ::deep .wrap-col-content .wrap {
+        margin: 0.2em 0.5em;
+    }
+}
+@media screen and (max-width: 400px){
+    .mid {
+        width: 150px;
+        margin-left: 0;
+        height: 400px;
+        padding: 0;
+    }
+    ::deep .wrap-col-content .wrap {
+        margin: 0.2em 0.2em;
+    }
+}
+@media screen  and (max-width: 340px){
+    .mid {
+        width: 100px;
     }
 }
