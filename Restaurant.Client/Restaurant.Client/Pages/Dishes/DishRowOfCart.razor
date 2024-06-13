@@ -1,16 +1,18 @@
 ﻿@using Restaurant.Client.Contracts.Carts
 
 <div class="item-row">
-    <img src="@Dish.PhotoLink" alt="Image" class="item-image">
+    <a href="/dishpage/@Dish.Id">
+        <img src="@Dish.PhotoLink" alt="Image" class="item-image">
+    </a>    
     <div class="item-details">
         <h3 class="item-name">@Dish.Name</h3>        
     </div>
     <span class="available-label">Знижка</span>
     <div class="item-buttons">
         <div class="inc-dec-buttons">
-        <button class="increment-button" @onclick="Add">+</button>
+            <button class="increment-button" @onclick="Substract">-</button>
         <input min="1" max="100" type="number" class="item-input" value="@Dish.count" readonly>
-        <button class="decrement-button" @onclick="Substract">-</button>
+            <button class="decrement-button" @onclick="Add">+</button>
         </div>
         <button class="remove-button" @onclick="Remove">Скасувати</button>
     </div>
