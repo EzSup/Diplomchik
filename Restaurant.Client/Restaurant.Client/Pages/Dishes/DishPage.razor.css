@@ -56,6 +56,8 @@
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    margin: 0 auto;
+    width: 90vw;
 }
 
 .images-block {
