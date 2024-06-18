@@ -1,0 +1,95 @@
+﻿@using Restaurant.Client.Shared.Admin
+@using Restaurant.Client.Contracts.Tables
+@using Restaurant.Client.Services.Interfaces
+@using Mapster
+@inject ITablesService tablesService
+@inject ISnackbar snackbar
+@page "/tablesManage"
+@layout AdminLayout
+<MudPaper Elevation="25">
+    <MudToolBar>
+        <MudIconButton Icon="@Icons.Material.Outlined.Refresh" @onclick="Refresh" Color="Color.Inherit" Class="mr-5" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Add" Href="/tableAdd" Color="Color.Inherit" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Edit" @onclick="Update" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Remove" @onclick="Delete" />
+    </MudToolBar>
+</MudPaper>
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="8">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+                <MudTable T="TableResponse" Items="@tables" Hover="true"
+                          @bind-SelectedItem="table" OnRowClick="@OnRowClickHandler">
+                    <HeaderContent>
+                        <MudTh>Num</MudTh>
+                        <MudTh>Persons</MudTh>
+                        <MudTh>Price per hour</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Num">@context.Num</MudTd>
+                        <MudTd DataLabel="Persons">@context.Persons</MudTd>
+                        <MudTd DataLabel="Price">@context.PriceForHour</MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                </MudTable>
+            </MudPaper>
+        </MudItem>
+        @if (_itemToUpdate != null)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+                    <EditForm Model="_itemToUpdate" OnValidSubmit="Update">
+                        <MudTextField Label="Id" @bind-Value="_itemToUpdate.Id" ReadOnly />
+                        <MudNumericField Label="Num" HelperText="Enter a table num" @bind-Value="_itemToUpdate.Num" />
+                        <MudNumericField Label="Persons" HelperText="Enter persons count of the table" @bind-Value="_itemToUpdate.Persons" />
+                        <MudNumericField Label="Price" HelperText="Enter price per hour of the table" @bind-Value="_itemToUpdate.PriceForHour" />
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Update</MudButton>
+                        <MudButton OnClick="Delete" Variant="Variant.Filled" Color="Color.Error" Class="ml-auto">Delete</MudButton>
+                    </EditForm>
+                </MudPaper>
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
+
+
+@code {
+    private TableResponse table;
+    private TableUpdateRequest _itemToUpdate;
+    private List<TableResponse> tables = new();
+
+    private async Task Delete()
+    {
+        if (await tablesService.Delete(_itemToUpdate.Id))
+        {
+            snackbar.Add("ВИДАЛИЛИ!", Severity.Success);
+            await Refresh();
+        }
+    }
+    private async Task Update()
+    {
+        if (await tablesService.Update(_itemToUpdate))
+        {
+            snackbar.Add("ОНОВИЛИ", Severity.Success);
+            await Refresh();
+        }
+    }
+
+    private async Task Refresh()
+    {
+        tables = (await tablesService.GetAll()).ToList();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+    }
+
+    private void OnRowClickHandler(TableRowClickEventArgs<TableResponse> args)
+    {
+        _itemToUpdate = args.Item.Adapt<TableUpdateRequest>();
+    }
+}

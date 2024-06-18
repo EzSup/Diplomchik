@@ -1,0 +1,116 @@
+﻿.shefs-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    width: 1400px;
+    margin-top: 50px;
+    justify-content: center;
+}
+.shef {
+    width: 350px;
+    height: 500px;
+    background: #1e1e1e;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px 15px 10px;
+    border-radius: 15px;
+    box-shadow: inset 0px 0px 15px 2px #131313;
+}
+img{
+    width: 80%;
+    height: auto;
+    border-radius: 15px;
+    transition: all 0.5s;
+}
+h1 {
+    color: #A7A293;
+    font-size: 40px;
+    line-height: 40px;
+    margin-top: 10px;
+}
+p {
+    font-size: 25px;
+    line-height: normal;
+    padding: 0 15px;
+    color: #404040;
+    font-weight: 500;
+}
+.delay0{
+    transition-delay: 0s !important;
+}
+.shef:hover{
+    transform: scale(1.02) !important;
+}
+.shef:hover img{
+    transform: scale(0.98);
+}
+
+@media screen and (max-width: 1300px){
+    .shefs-wrap{
+        width: 95%;
+    }
+    .shef {
+        width: 27vw;
+        height: 38vw;
+    }
+    h1 {
+        font-size: 3vw;
+    }
+    p {
+        font-size: 2vw;
+        line-height: 2.5vw;
+    }
+}
+@media screen and (max-width: 1200px){
+    h1 {
+        font-size: 2.5vw;
+        line-height: 25px;
+    }
+    p {
+        font-size: 1.5vw;
+        line-height: 2vw;
+    }
+}
+@media screen and (max-width: 900px){
+    .shefs-wrap {
+        width: 90%;
+    }
+    .shef {
+        width: 35vw;
+        height: 50vw;
+    }
+    h1 {
+        font-size: 3.5vw;
+        line-height: 25px;
+    }
+    p {
+        font-size: 2.5vw;
+        line-height: 3vw;
+    }
+}
+@media screen and (max-width: 600px){
+    .shef {
+        width: 40vw;
+        height: 65vw;
+    }
+    img {
+        width: 90%;
+    }
+    h1 {
+        font-size: 4.5vw;
+    }
+    p {
+        font-size: 3vw;
+    }
+}
+@media screen and (max-width: 400px){
+    h1 {
+        line-height: 15px;
+    }
+    p {
+        line-height: 3.5vw;
+    }
+}

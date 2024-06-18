@@ -1,0 +1,23 @@
+﻿@page "/blogslist"
+
+@using Restaurant.Client.Services.Interfaces
+@using Restaurant.Client.Contracts.Blogs
+@inject IBlogsService blogsService
+<Title>Блоги</Title>
+    <div class="Content-wrap flex-col">
+@if (blogs != null)
+{
+    @foreach (var blog in blogs)
+    {
+        <BlogListItem blog="blog"></BlogListItem>
+    }
+}
+</div>
+@code {
+    private List<BlogResponse> blogs;    
+
+    protected override async Task OnInitializedAsync()
+    {
+        blogs = (await blogsService.GetBlogsByPage(1,10)).ToList();
+    }
+}

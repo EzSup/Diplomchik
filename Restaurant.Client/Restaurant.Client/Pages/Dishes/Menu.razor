@@ -1,0 +1,250 @@
+﻿@page "/menu"
+@using Restaurant.Client.Services.Interfaces
+@using Restaurant.Client.Contracts.Dishes
+@using Restaurant.Client.Contracts.Cuisines
+@using Restaurant.Client.Contracts.Categories
+@using Restaurant.Client.Contracts.Enums
+@inject IDishesService dishesService
+@inject ICategoriesService categoriesService
+@inject ICuisinesService cuisinesService
+@inject ICartsService cartsService
+@inject AuthenticationStateProvider provider
+
+<Title Min>Меню</Title>
+<div class="form-filters-container closed">
+<EditForm Model="@filter" OnSubmit="Filter" class="filters-container">
+    <div class="filters-container">
+        <div class="filter">
+            <InputText placeholder="Назва" @bind-Value="filter.Name"></InputText>
+            <div class="on-checked"></div>
+        </div>
+            <div class="mobile-filters">
+                <div class="filter">
+                    <label for="minPrice">Ціна від:</label>
+                    <InputNumber id="minPrice" @bind-Value="@filter.MinPrice"></InputNumber>
+                    <div class="on-checked"></div>
+                </div>
+                <div class="filter">
+                    <label for="maxPrice">Ціна до:</label>
+                    <InputNumber id="maxPrice" @bind-Value="@filter.MaxPrice"></InputNumber>
+                    <div class="on-checked"></div>
+                </div>
+                <div class="filter">
+                    <label for="minWeight">Вага від:</label>
+                    <InputNumber id="minWeight" @bind-Value="@filter.MinWeight"></InputNumber>
+                    <div class="on-checked"></div>
+                </div>
+                <div class="filter">
+                    <label for="maxWeight">Вага до:</label>
+                    <InputNumber id="maxWeight" @bind-Value="@filter.MaxWeight"></InputNumber>
+                    <div class="on-checked"></div>
+                </div>
+            </div>
+        <div class="filter notMobile-filter">
+            <label for="minPrice">Ціна від:</label>
+            <InputNumber id="minPrice" @bind-Value="@filter.MinPrice"></InputNumber>
+            <div class="on-checked"></div>
+        </div>
+        <div class="filter notMobile-filter">
+            <label for="maxPrice">Ціна до:</label>
+            <InputNumber id="maxPrice" @bind-Value="@filter.MaxPrice"></InputNumber>
+            <div class="on-checked"></div>
+        </div>
+        <div class="filter notMobile-filter">
+            <label for="minWeight">Вага від:</label>
+            <InputNumber id="minWeight" @bind-Value="@filter.MinWeight"></InputNumber>
+            <div class="on-checked"></div>
+        </div>
+        <div class="filter notMobile-filter">
+            <label for="maxWeight">Вага до:</label>
+            <InputNumber id="maxWeight" @bind-Value="@filter.MaxWeight"></InputNumber>
+            <div class="on-checked"></div>
+        </div>
+            <div class="radio-filters">
+            <div class="scrollbar">
+                <label for="cuisine">Кухня:</label> 
+                <div class="filter radio">          
+                    <InputRadioGroup id="cuisine" @bind-Value="@filter.Cuisine">
+                        <label for="allcuisine">
+                            <InputRadio Value="@string.Empty" id="allcuisine" class="hidden"></InputRadio>
+                            Усі
+                            <div class="on-checked"></div>
+                        </label>
+                        @foreach (var cuisine in cuisines)
+                        {
+                            <label for="@(cuisine.Name +"cuisine")">
+                                <InputRadio Value="@cuisine.Name" id="@(cuisine.Name + "cuisine")" class="hidden"></InputRadio>
+                                @cuisine.Name
+                                <div class="on-checked"></div>
+                            </label>
+
+                        }
+                    </InputRadioGroup>
+                </div>
+            </div>
+            <div class="scrollbar">
+                <label for="category">Категорія:</label>
+                <div class="filter radio">
+                    <InputRadioGroup id="category" @bind-Value="@filter.Category">
+                        <label for="allcategory">
+                            <InputRadio Value="@string.Empty" id="allcategory" class="hidden"></InputRadio>
+                            Усі
+                            <div class="on-checked"></div>
+                        </label>
+                        @foreach (var category in categories)
+                        {
+                            <label for="@(category.Name +"category")">
+                                <InputRadio Value="@category.Name" id="@(category.Name + "category")" class="hidden"></InputRadio>
+                                @category.Name
+                                <div class="on-checked"></div>
+                            </label>
+                        }
+                    </InputRadioGroup>
+                </div>
+            </div>
+            <div class="scrollbar">
+                <label for="order">Сортування:</label>
+                <div class="filter radio">               
+                <InputRadioGroup id="order" @bind-Value="@filter.order">
+                    @foreach (var orderType in (DishSortingOrder[])Enum.GetValues(typeof(DishSortingOrder)))
+                    {
+                        <label for="@(orderType.ToString() +"order")">
+                            <InputRadio Value="@orderType" id="@(orderType.ToString() + "order")" class="hidden"></InputRadio>
+                            @Localizer[$"orderType{@orderType.ToString()}"]
+                            <div class="on-checked"></div>
+                        </label>
+                    }
+                </InputRadioGroup>
+                </div>
+            </div>
+        </div>      
+    </div>
+    <button type="submit" class="apply-btn Opacity0" @onclick="checkdishescount">Застосувати фільтри</button>
+</EditForm>
+</div>
+<div class="show-menu-button">
+    <div id="menu-button" onclick="showmenu()">
+    <svg width="65" height="35" viewBox="0 0 65 35" fill="none" xmlns="http://www.w3.org/2000/svg" class="button-svg">
+        <path d="M63.3081 4.98134L34.1447 34.1447C33.8738 34.4159 33.5522 34.631 33.1981 34.7778C32.8441 34.9245 32.4646 35.0001 32.0814 35.0001C31.6981 35.0001 31.3186 34.9245 30.9646 34.7778C30.6105 34.631 30.2889 34.4159 30.0181 34.1447L0.854651 4.98134C0.307427 4.43411 0 3.69191 0 2.91802C0 2.14413 0.307427 1.40193 0.854651 0.854711C1.40188 0.307487 2.14407 6.10352e-05 2.91796 6.10352e-05C3.69185 6.10352e-05 4.43405 0.307487 4.98127 0.854711L32.0814 27.9585L59.1815 0.854711C59.4524 0.583753 59.7741 0.368818 60.1281 0.222176C60.4821 0.075535 60.8616 6.10352e-05 61.2448 6.10352e-05C61.628 6.10352e-05 62.0074 0.075535 62.3614 0.222176C62.7155 0.368818 63.0371 0.583753 63.3081 0.854711C63.579 1.12567 63.794 1.44734 63.9406 1.80137C64.0873 2.15539 64.1627 2.53483 64.1627 2.91802C64.1627 3.30122 64.0873 3.68066 63.9406 4.03468C63.794 4.3887 63.579 4.71038 63.3081 4.98134Z" fill="#FFF8E0" />
+    </svg>
+    </div>
+    <script>
+        function showmenu() {
+            const buttons = document.querySelectorAll(".form-filters-container, .button-svg");
+            buttons.forEach(function (btn) {
+                btn.classList.toggle("active");
+            });
+                
+        }
+    </script>
+</div>
+<div class="menu-container">
+    @if (dishes != null)
+    {
+        @foreach (var dish in dishes)
+        {
+            <DishCard Dish="dish" OnClick="async () => await GoToDishPage(dish.Id)" OnClickCart="async () => await AddDishAndGoToCart(dish.Id)" />
+        }
+    }
+</div>
+
+<div class="pagination-buttons">
+    @if (currentPageIndex > 1)
+    {
+        <button @onclick="() => GoToPage(currentPageIndex - 1)">Попередні</button>
+    }
+
+    @if (currentPageIndex < totalPages)
+    {
+        <button @onclick="() => GoToPage(currentPageIndex + 1)">Далі</button>
+    }
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const menuContainer = document.querySelector('.menu-container');
+        const dishes = menuContainer.querySelectorAll('.dish');
+
+        if (dishes.length < 6) {
+            menuContainer.classList.add('less-than-six');
+            menuContainer.classList.remove('more-than-six');
+        } else {
+            menuContainer.classList.add('more-than-six');
+            menuContainer.classList.remove('less-than-six');
+        }
+    });
+</script>
+@code {
+    DishPaginationRequest filter;
+    ICollection<DishPaginationResponse> dishes;
+    IEnumerable<CategoryResponse> categories = [];
+    IEnumerable<CuisineResponse> cuisines = [];
+    Guid currentUserId = Guid.Empty;
+    int currentPageIndex = 1;
+    const int pageSize = 12;
+    int totalPages = 1;
+
+    protected async override Task OnInitializedAsync()
+    {
+        filter = new() { pageIndex = currentPageIndex, pageSize = pageSize };
+        await Filter();
+        categories = (await categoriesService.GetAll()).ToArray();
+        cuisines = (await cuisinesService.GetAll()).ToArray();
+        var state = await provider.GetAuthenticationStateAsync();
+        if (Guid.TryParse(state.User.Identity.Name, out Guid userId) && userId != Guid.Empty)
+        {
+            currentUserId = userId;
+        }
+    }
+
+    private async Task GoToPage(int page)
+    {
+        currentPageIndex = page;
+        filter.pageIndex = currentPageIndex;
+        await Filter();
+    }
+
+    private async Task GoToDishPage(Guid dishId)
+    {
+        NavManager.NavigateTo($"/dishPage/{dishId}");
+    }
+
+    private async Task Filter()
+    {
+
+        totalPages = await dishesService.GetPagesCount(filter);
+        dishes = await dishesService.GetByFilter(filter);
+    }
+
+    private async Task AddDishAndGoToCart(Guid dishId)
+    {
+        await cartsService.AddDishToCartOfCustomerByUserId(currentUserId, dishId, 1);
+        NavManager.NavigateTo($"/cart/{currentUserId}");
+    }
+
+    private async Task checkdishescount()
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("checkDishesCount");
+        }catch{}
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        try
+        {
+            await JS.InvokeAsync<object>("AnimateMenuButtons");
+            
+        }catch{}
+        if (firstRender)
+        {
+            try
+            {
+                await JS.InvokeVoidAsync("AddClassInView", "ScaledPlus", "NormalScale", 0.7);
+                await JS.InvokeVoidAsync("AddClassInView", "filters-container", "animated", 0.5);
+                await JS.InvokeVoidAsync("AddClassInView", "menu-container", "animated", 1);
+                await JS.InvokeVoidAsync("AddClassInView", "Opacity0", "Opacity1", 0.5);
+            }
+            catch { }
+        }
+    }
+}

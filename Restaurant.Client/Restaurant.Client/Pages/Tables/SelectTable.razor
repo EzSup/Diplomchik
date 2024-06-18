@@ -1,0 +1,124 @@
+﻿@using Restaurant.Client.Pages.Tables
+@using Restaurant.Client.Contracts.Tables
+@using Restaurant.Client.Contracts.Enums
+@inject ITablesService tablesService
+@inject IBillsService billsService
+@page "/selectTable"
+<Title>Резервація столика</Title>
+<div class="Container">
+    <div class="pillars"></div>
+    <div class="RestItems"></div>
+    <div style="display: flex; z-index: 3">
+        <InputDate @oninput="DatePicked" @bind-Value="date" style="background: #242121; color: #878477; outline: none;"
+            min="@DateTime.Today.ToString("yyyy-MM-dd")"
+            max="@DateTime.Today.AddMonths(3).ToString("yyyy-MM-dd")"></InputDate>
+        <select @onchange="TimePicked">
+            @for (int i = 8; i <= 20; i++)
+            {
+                TimeOnly time = new TimeOnly(i, 0, 0);
+                @if (time.Hour >= date.Hour)
+                {
+                    <option value="@time" disabled="@(date.Date == DateTime.Today.Date && time.Hour <= DateTime.Now.Hour )" selected="@(time.Hour == DateTime.Now.Hour+1)">
+                        @*  *@
+                        @time.Hour:00
+                    </option>
+                }               
+            }
+        </select>
+    </div>
+    <div class="Content-wrap">
+        @if (tables != null && tables.Length >= 12)
+        {
+            <InputRadioGroup @bind-Value="table">
+                <div class="wrap-col" style="width: 40%; z-index:3">
+                    <div class="wrap-col-content content-flex-start">
+                        <TwoSeatsTable Value="@tables[0].Id" Disabled="@(!tables[0].Free)" />
+                        <TwoSeatsTable Value="@tables[1].Id" Disabled="@(!tables[1].Free)" />
+                        @* <TwoSeatsTable Value="@tables[2].Id" Disabled="@(!tables[2].Free)" /> *@
+                    </div>
+                    <div class="wrap-col-content flex-row mid">
+                        <FourSeatsTable Value="@tables[2].Id" Disabled="@(!tables[2].Free)" />
+                        <FourSeatsTable Value="@tables[3].Id" Disabled="@(!tables[3].Free)" />
+                        <FourSeatsTable Value="@tables[4].Id" Disabled="@(!tables[4].Free)" />
+                        <FourSeatsTable Value="@tables[5].Id" Disabled="@(!tables[5].Free)" />
+                    </div>
+                </div>
+                <div class="wrap-col" style="width: 60%">
+                    <div class="wrap-col-content flex-row justify-center">
+                        <EightSeatsTable Value="@tables[6].Id" Disabled="@(!tables[6].Free)" />
+                        <EightSeatsTable Value="@tables[7].Id" Disabled="@(!tables[7].Free)" />
+                        <EightSeatsTable Value="@tables[8].Id" Disabled="@(!tables[8].Free)" />                        
+                    </div>
+                    <div class="wrap-col-content flex-row mid">
+                        <SixSeatsTable Value="@tables[9].Id" Disabled="@(!tables[9].Free)" />
+                        <SixSeatsTable Value="@tables[10].Id" Disabled="@(!tables[10].Free)" />                        
+                    </div>
+                    <div class="wrap-col-content flex-row justify-end content-flex-end" style="padding-bottom: 1em;">
+                        <TwoSeatsTable Value="@tables[11].Id" Disabled="@(!tables[11].Free)" />
+                    </div>
+                </div>
+            </InputRadioGroup>
+        }
+    </div>
+    <AuthorizeView Roles="User">
+        <Authorized>
+            @if (table != Guid.Empty)
+            {
+                <button style="color: black;" @onclick="ReserveTable">Reserve</button>
+            }
+        </Authorized>
+    </AuthorizeView>
+</div>
+@code {
+    DateTime date;
+    TimeOnly time;
+    Guid table = Guid.Empty;
+    TableResponse[] tables;
+
+    protected override async Task OnInitializedAsync()
+    {
+        //await localStorage.AddItem("orderType", ((int)OrderType.InRestaurant).ToString());
+        DateTime dateNow = DateTime.Now;
+        date = new DateTime(dateNow.Year, dateNow.Month, dateNow.Day, dateNow.Hour >= 23 ? 0 : dateNow.Hour + 1, 0, 0);
+        tables = (await tablesService.GetTablesOfTime(date)).ToArray();
+    }
+
+    private async Task TimePicked(ChangeEventArgs e)
+    {
+        string selectedTime = e.Value.ToString();
+        time = TimeOnly.Parse(selectedTime);
+        date = new DateTime(date.Year, date.Month, date.Day,
+            time.Hour, time.Minute, time.Second);
+        tables = (await tablesService.GetTablesOfTime(date)).ToArray();
+    }
+
+    private async Task DatePicked(ChangeEventArgs e)
+    {
+        var now = DateTime.Now;
+        var enteredDate = DateTime.Parse(e.Value.ToString());
+        date = new DateTime(enteredDate.Year, enteredDate.Month, enteredDate.Day,
+            enteredDate > now ? time.Hour : now.Hour, 
+            enteredDate > now ? time.Minute : now.Hour, 
+            enteredDate > now ? time.Second : now.Second);
+        tables = (await tablesService.GetTablesOfTime(date)).ToArray();
+    }
+
+    private async Task ReserveTable()
+    {
+        var request = new ReserveRequest()
+            {
+                tableId = table,
+                start = date
+            };
+        var result = await tablesService.Reserve(request);
+        if (result != Guid.Empty)
+        {
+            await billsService.AddBill(result, OrderType.InRestaurant);
+        }
+    }
+
+    private async Task TableClicked()
+    {
+
+    }
+}

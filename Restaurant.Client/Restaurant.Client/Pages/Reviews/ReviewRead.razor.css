@@ -1,0 +1,104 @@
+﻿.review-card {
+    border: none;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    max-width: 1200px;
+    min-width: 500px;
+    position: relative;
+    background: #242121 !important;
+    z-index: 2;
+    max-width: 50%;
+}
+    .review-card::after, .review-card::before {
+        position: absolute;
+        left: -1px;
+        top: -1px;
+        right: -50px;
+        bottom: -1px;
+        content: " ";
+        background: linear-gradient(90deg, #A7A293 0%, #242121 100%);
+        z-index: -2;
+        border-radius: 5px;
+    }
+    .review-card:before{
+        top: 0 !important;
+        left: 1px !important;
+        background: #242121 !important;
+        width: 120%;
+        height: 100%;
+        z-index: -1 !important;
+    }
+
+.author-date {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.author-date p{
+    margin: 0;
+}
+.author {
+    font-weight: bold;
+}
+
+.rating {
+    margin-bottom: 10px;
+}
+
+.title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.content {
+    line-height: 1.5;
+}
+
+@media screen and (max-width: 1500px){
+    .date, .author {
+        font-size: 2vw;
+    }
+    .content{
+        font-size: 1.5vw;
+    }
+    .review-card {
+        max-width: 80vw;
+        min-width: min-content;
+    }
+}
+@media screen and (max-width: 1200px){
+    .content {
+        font-size: 2vw;
+    }
+}
+@media screen and (max-width: 600px){
+    .date, .author {
+        font-size: 3.4vw;
+    }
+    .title{
+        font-size: 4vw;
+    }
+    .content {
+        font-size: 3vw;
+    }
+    .review-card {
+        min-width: 100%;
+        width: 100%;
+    }
+        .review-card:before {
+            left: 0px !important;
+        }
+}
+@media screen and (max-width: 400px){
+    .date, .author {
+        font-size: 4vw;
+    }
+    .title {
+        font-size: 5vw;
+    }
+    .content {
+        font-size: 4vw;
+    }
+}

@@ -1,0 +1,89 @@
+﻿@page "/dishAdd"
+@using Restaurant.Client.Shared.Admin
+@using Restaurant.Client.Contracts.Dishes
+@using Restaurant.Client.Services.Interfaces
+@using Restaurant.Client.Contracts.Categories
+@using Restaurant.Client.Contracts.Cuisines
+@using Mapster
+@inject IPhotoService photoService
+@inject IDishesService dishesService
+@inject ICuisinesService cuisinesService
+@inject ICategoriesService categoriesService
+@inject ISnackbar snackbar
+@layout AdminLayout
+
+<div style="justify-content: center; display: flex; margin-top: 50px; ">
+    <EditForm Model="@dishEditingObj" OnValidSubmit="OnValidSubmit" style="width: 550px;">
+        <DataAnnotationsValidator />
+        <MudGrid>
+            <MudItem xs="12" sm="7">
+                <MudCard>
+                    <MudCardContent>
+                        <MudText Style="font-weight: bolder"><MudIcon Icon="@Icons.Material.Outlined.CreateNewFolder" />  Creating dish form</MudText>
+                        <MudTextField Label="Name" HelperText="Enter an dish name" @bind-Value="dishEditingObj.Name" />
+                        <MudNumericField Label="Price" @bind-Value="dishEditingObj.Price" />
+                        <MudSwitch Label="Available" @bind-Value="dishEditingObj.Available" Color="Color.Success" UnCheckedColor="Color.Error" />
+                        <MudNumericField Label="Weight" @bind-Value="dishEditingObj.Weight" />
+                        <MudTextField AutoGrow Label="Ingredients" @bind-Value="ingredients" />
+                        <InputFile accept=".png,.jpg,.jpeg,.gif" OnChange="HandleFileChange" class="form-control" multiple />
+                        @if (cuisinesList != null)
+                        {
+                            <MudSelect T="Guid" Label="Cuisine" @bind-Value="@dishEditingObj.CuisineId" AdornmentIcon="@Icons.Material.Filled.FoodBank">
+                                @foreach (var cuisine in cuisinesList)
+                                {
+                                    <MudSelectItem Value="@cuisine.Id">@cuisine.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        }
+                        @if (categoriesList != null)
+                        {
+                            <MudSelect T="Guid" Label="Category" @bind-Value="@dishEditingObj.CategoryId" AdornmentIcon="@Icons.Material.Filled.Fastfood">
+                                @foreach (var category in categoriesList)
+                                {
+                                    <MudSelectItem Value="@category.Id">@category.Name</MudSelectItem>
+                                }
+                            </MudSelect>
+                        }
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Style="margin-left:auto; margin-right:auto;">Confirm</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+</div>
+
+@code {
+    DishCreateRequest dishEditingObj = new();
+    ICollection<IBrowserFile> uploadedPhotos;
+    CategoryResponse[] categoriesList;
+    CuisineResponse[] cuisinesList;
+    string? ingredients = "";
+
+
+    private async void OnValidSubmit(EditContext context)
+    {
+        try
+        {
+            dishEditingObj.IngredientsList = ingredients?.Split(", ") ?? [];
+            await dishesService.Add(uploadedPhotos, dishEditingObj);
+            NavManager.NavigateTo("/dishesManage");
+        }
+        catch(Exception ex)
+        {
+            snackbar.Add(ex.Message, Severity.Error);
+        }
+    }
+
+    private void HandleFileChange(InputFileChangeEventArgs e)
+    {
+        uploadedPhotos = e.GetMultipleFiles().ToList();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        categoriesList = (await categoriesService.GetAll()).ToArray();
+        cuisinesList = (await cuisinesService.GetAll()).ToArray();
+    }
+}

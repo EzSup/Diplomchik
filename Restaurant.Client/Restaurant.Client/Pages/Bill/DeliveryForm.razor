@@ -1,0 +1,50 @@
+﻿@using Restaurant.Client.Contracts.Deliveries
+@using Restaurant.Client.Contracts.Enums
+@inject IDeliveriesService deliveriesService
+@inject IBillsService billsService
+@page "/deliveryForm"
+
+<EditForm Model="@delivery" OnValidSubmit="PostDelivery">
+    <DataAnnotationsValidator/>
+    <div class="form-group">
+        <lable class="form-Label">Область</lable>
+        <InputText @bind-Value="delivery.Region" class="form-control"></InputText>
+        <ValidationMessage For="() => delivery.Region" />
+    </div>
+    <div class="form-group">
+        <lable class="form-Label">Населений пункт</lable>
+        <InputText @bind-Value="delivery.SettlementName" class="form-control"></InputText>
+        <ValidationMessage For="() => delivery.SettlementName" />
+    </div>
+    <div class="form-group">
+        <lable class="form-Label">Назва вулиці</lable>
+        <InputText @bind-Value="delivery.StreetName" class="form-control"></InputText>
+        <ValidationMessage For="() => delivery.StreetName" />
+    </div>
+    <div class="form-group">
+        <lable class="form-Label">Номер вулиці</lable>
+        <InputText @bind-Value="delivery.StreetNum" class="form-control"></InputText>
+        <ValidationMessage For="() => delivery.StreetNum" />
+    </div>    
+    <div class="form-group mt-3">
+        <button class="btn btn-primary" type="submit">Підтвердити</button>
+    </div>
+</EditForm>
+
+@code {
+    private DeliveryAddRequest delivery = new();
+
+    protected override void OnInitialized()
+    {
+        //localStorage.AddItem("orderType", ((int)OrderType.Delivery).ToString());
+    }
+
+    private async Task PostDelivery()
+    {
+        var deliveryId = await deliveriesService.RegisterDelivery(delivery);
+        if(deliveryId != Guid.Empty)
+        {
+            await billsService.AddBill(deliveryId, OrderType.Delivery);
+        }
+    }
+}

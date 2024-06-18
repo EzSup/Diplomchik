@@ -1,0 +1,67 @@
+﻿@page "/test"
+@using TinyMCE.Blazor
+@using Restaurant.Client.Contracts.Blogs
+@using Restaurant.Client.Services.Interfaces
+@using DataJuggler.Blazor.FileUpload
+@inject IBlogsService blogsService
+@inject IPhotoService fileUploadService
+@attribute [Authorize]
+<style>
+    .forms {
+        width: 80%;
+        max-width: 700px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+    }
+</style>
+<div class="forms">
+    <h3>Articles</h3>
+    <EditForm Model="request" OnValidSubmit="Post">
+        <DataAnnotationsValidator />
+        <div class="form-group">
+            <lable class="form-Label">Author Name</lable>
+            <InputText @bind-Value="request.AuthorName" class="form-control"></InputText>
+        </div>
+        <div class="form-group">
+            <lable class="form-Label">Title</lable>
+            <InputText @bind-Value="request.Title" class="form-control"></InputText>
+        </div>
+        <div class="form-group">
+            <lable class="form-Label">Image</lable>
+            <InputFile accept="@AllowedExtenstions" OnChange="HandleFileChange" class="form-control" />
+        </div>
+        <button type="submit">Підтвердити</button>
+        <ValidationSummary />
+    </EditForm>
+    <div class="form-group">
+        <lable class="form-Label">Title</lable>
+        <Editor Conf="editorConf" ApiKey="8zphuyb6qu417r6obeo20vs5guns8lzh7lbie76w1k8g7z19" @bind-Value="request.Content" />
+    </div>
+    <p>@result</p>
+</div>
+@code {
+    BlogsCreateRequest request = new();
+    string AllowedExtenstions = ".png,.jpg,.jpeg,.gif";
+    IBrowserFile file = null!;
+    string result = "";
+
+
+    private void HandleFileChange(InputFileChangeEventArgs e)
+    {
+        file = e.File;
+    }
+
+    private async Task Post()
+    {
+        var id = await blogsService.PostBlogAsync(file, request);
+        result = id.ToString();
+    }
+
+    private Dictionary<string, object> editorConf = new Dictionary<string, object>{
+       {"plugins", "advlist anchor autosave image link linkchecker lists media searchreplace table template visualblocks wordcount"},
+     };
+
+}

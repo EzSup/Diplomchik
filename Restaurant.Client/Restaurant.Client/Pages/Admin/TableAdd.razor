@@ -1,0 +1,37 @@
+﻿@page "/tableAdd"
+@using Restaurant.Client.Shared.Admin
+@using Restaurant.Client.Services.Interfaces
+@using Restaurant.Client.Contracts.Tables
+@using Mapster
+@inject ITablesService tablesService
+@layout AdminLayout
+
+<div style="justify-content: center; display: flex; margin-top: 50px; ">
+    <EditForm Model="@table" OnValidSubmit="OnValidSubmit" style="width: 550px;">
+        <DataAnnotationsValidator />
+        <MudGrid>
+            <MudItem xs="12" sm="7">
+                <MudCard>
+                    <MudCardContent>
+                        <MudText Style="font-weight: bolder"><MudIcon Icon="@Icons.Material.Outlined.CreateNewFolder" />Creating table form</MudText>
+                        <MudNumericField Label="Persons count" HelperText="Enter count of persons of the table" @bind-Value="table.Persons" />
+                        <MudNumericField Label="Price for hour" HelperText="Enter a price for hour of table reservation" @bind-Value="table.PriceForHour" />
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Style="margin-left:auto; margin-right:auto;">Confirm</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+</div>
+
+@code{
+    TableCreateRequest table = new();
+
+    private async void OnValidSubmit(EditContext context)
+    {
+        await tablesService.Add(table);
+        NavManager.NavigateTo("/tablesManage");
+    }
+}

@@ -1,0 +1,112 @@
+﻿@page "/billData/{billId:guid}"
+@using Restaurant.Client.Contracts.Bill
+@inject IBillsService billsService
+<div class="billData">
+<h3>Дані про чек</h3>
+
+@if (bill != null)
+{
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">ID: @bill.Id</h5>
+            <p class="card-text">Тип: @Localizer["orderType" + bill.Type]</p>
+            @if(bill.Type == Contracts.Enums.OrderType.InRestaurant)
+            {
+                <p class="card-text">Номер столика і час резервації: @bill.TableNumOrDeliveryAdress</p>
+            }
+            else if(bill.Type == Contracts.Enums.OrderType.Delivery)
+            {
+                <p class="card-text">Адреса доставки: @bill.TableNumOrDeliveryAdress</p>
+            }
+            <p class="card-text">Дата і час замовлення: @bill.OrderDateAndTime</p>
+            <p class="card-text">Загальна сума: @bill.TotalPrice ₴</p>
+            <p class="card-text">Сплачено: @(bill.IsPaid ? "Так" : "Ні")</p>
+            <hr />
+            <h5 class="card-title">Кошик</h5>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Назва страви</th>
+                        <th>Кількість</th>
+                        <th>Ціна, ₴</th>
+                        <th>Сума, ₴</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var dish in bill.Dishes)
+                    {
+                        <tr>
+                            <td>@dish.Name</td>
+                            <td>@dish.Count</td>
+                            <td>@dish.Price</td>
+                            <td>@dish.SumPrice</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+        @if (!bill.IsPaid)
+        {
+    <div class="PayData">        
+            <div>
+                <label>Сума до сплати: @(bill.TotalPrice + bill.TotalPrice * tipsPercents * 0.01m) ₴</label>
+            </div>
+                <div class="tips">
+                <label>Чайові, у відсотках від суми:</label>
+                <div class="tipsvalue">
+                <InputRadioGroup @bind-Value="@tipsPercents" TValue="int">
+                    <div class="tipcard">
+                        <label>0%</label>
+                                <InputRadio Value="0" class="hidden"></InputRadio>
+                                <div class="on-checked">0%</div>
+                    </div>
+                    <div class="tipcard">
+                        <label>5%</label>
+                                <InputRadio Value="5" class="hidden"></InputRadio>
+                                <div class="on-checked">5%</div>
+                    </div>
+                    <div class="tipcard">
+                        <label>10%</label>
+                                <InputRadio Value="10" class="hidden"></InputRadio>
+                                <div class="on-checked">10%</div>
+                    </div>
+                    <div class="tipcard">
+                        <label>15%</label>
+                                <InputRadio Value="15" class="hidden"></InputRadio>
+                                <div class="on-checked">15%</div>
+                    </div>
+                </InputRadioGroup>
+                </div>
+                @* <InputNumber min="0" max="100" @bind-Value="tipsPercents" ValueChanged=""></InputNumber> *@
+            </div>                      
+    </div>
+        <div>
+            <button class="submit" @onclick="PayForBill">Pay for it</button>
+        </div>
+    }
+}
+else
+{
+    <p>Завантаження...</p>
+}
+</div>
+@code {
+    [Parameter]
+    public Guid billId { get; set; }
+    private BillResponse bill;
+    private decimal paid = 0;
+    private int tipsPercents = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        bill = await billsService.Get(billId);
+    }
+
+
+    private async Task PayForBill()
+    {        
+        var payRequest = new BillPayRequest() { BillId = billId, Amount = bill.TotalPrice + bill.TotalPrice * tipsPercents * 0.01m, TipsPercents = tipsPercents };
+        await billsService.PayBill(payRequest);
+    }
+}

@@ -1,0 +1,59 @@
+﻿@page "/shefs"
+<Title>Наші шеф-повари</Title>
+<div class="shefs-wrap">
+	<div class="shef ScaledPlus">
+		<img src="images/Chef1.jpg"/>
+		<h1>Андрій Гончарук</h1>
+		<p>Майстер суші та сашимі</p>
+	</div>
+	<div class="shef ScaledPlus">
+		<img src="images/Chef2.jpg" />
+		<h1>Павло Топольський</h1>
+		<p>Експерт з французької кухні</p>
+	</div>
+	<div class="shef ScaledPlus">
+		<img src="images/Chef3.jpg" />
+		<h1>Олег Гречаний </h1>
+		<p>Гриль-майстер та BBQ</p>
+	</div>
+	<div class="shef ScaledPlus">
+		<img src="images/Chef4.jpg" />
+		<h1> Володимир Мироненко</h1>
+		<p>Фахівець з середземноморської кухні</p>
+	</div>
+	<div class="shef ScaledPlus">
+		<img src="images/Chef5.jpg" />
+		<h1>Микола Сікач</h1>
+		<p>Майстер традиційної української кухні</p>
+	</div>
+	<div class="shef ScaledPlus">
+		<img src="images/Chef6.jpg" />
+		<h1>Вікторія Журавель</h1>
+		<p>Шеф-кондитер</p>
+	</div>
+	<div class="shef ScaledPlus">
+		<img src="images/Chef7.jpg" />
+		<h1>Дмитро Ковальчук</h1>
+		<p>Спеціаліст з італійської кухні</p>
+	</div>
+	<div class="shef ScaledPlus">
+		<img src="images/Chef8.jpg" />
+		<h1>Роман Піддубний</h1>
+		<p>Шеф з турецької кухні</p>
+	</div>
+</div>
+@code {
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			try
+			{
+				await JS.InvokeVoidAsync("shuffleShefs", "shefs-wrap", "shef");
+				await JS.InvokeVoidAsync("AddClassInView", "ScaledPlus", "NormalScale", 0.4);
+				await JS.InvokeVoidAsync("AddClassInView", "shef", "delay0", 1);
+			}
+            catch { }
+        }
+    }
+}

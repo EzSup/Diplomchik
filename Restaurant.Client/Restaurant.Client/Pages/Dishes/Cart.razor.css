@@ -1,0 +1,102 @@
+﻿.form-Label{
+    position: relative;
+    padding-right: 20px;
+}
+    .form-Label::after {
+        position: absolute;
+        content: " ";
+        right: 0;
+        top: 0;
+        background: url(/images/SelectArrow.png) no-repeat right center;
+        width: 20px;
+        height: 100%;
+        transition: all 0.5s;
+    }
+    .form-Label:hover::after {
+        background: url(/images/SelectArrow_Hover.png) no-repeat right center;
+    }
+.options{
+    position: relative;
+    height: 0;
+    opacity: 0;
+    transition: all 0.5s;
+}
+.options.active{
+    height: 100px;
+    opacity: 1;
+}
+    .options button {
+        margin-top: 10px;
+        font-size: 20px;
+        line-height: normal;
+        cursor: pointer !important;
+        transition: all 0.5s;
+        border: 0;
+        color: #878477;
+    }
+    .options button:hover, .options button.active {
+        color: #FFF8E0;
+        background: none;
+    }
+
+.confirm{
+    width: 100%;
+    height: max-content;
+    border: 0;
+    background: #242121 !important;
+    position: relative;
+    z-index: 2;
+    border-radius: 0;
+    transition: all 0.5s;
+}
+    .confirm:before {
+        position: absolute;
+        content: " ";
+        width: 100%;
+        background: #242121 !important;
+        left: 0;
+        top: 2px;
+        bottom: 2px;
+        z-index: -1;
+    }
+    .confirm::after {
+        position: absolute;
+        content: " ";
+        top: -1px;
+        bottom: -1px;
+        left: 50%;
+        width: 0%;
+        background: linear-gradient(90deg, #242121 0%, #878477 50%, #242121 100%);
+        transition: all 0.5s;
+        z-index: -2;
+    }
+.confirm:hover::after{
+    left: 0;
+    width: 100%;    
+}
+
+    .confirm:hover {
+        color: #A7A293;
+    }
+
+.dishcards {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+.form-group {
+    width: max-content;
+    margin: 15px auto 0;
+}
+@media screen and (max-width: 600px) {
+    .form-Label {
+        font-size: 4vw !important;
+    }
+    .options * {
+        font-size: 3.5vw !important;
+    }
+    .confirm{
+        font-size: 4vw !important;
+    }
+}

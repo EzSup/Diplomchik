@@ -1,0 +1,87 @@
+﻿@page "/cart/{userId:guid}"
+@using Restaurant.Client.Contracts.Carts
+@using Restaurant.Client.Contracts.Customers
+@using Restaurant.Client.Contracts.Enums
+@inject ICartsService cartService
+@inject ICustomersService customersService
+<div>
+@if (cart != null && cart.Dishes.Count > 0)
+{
+    <div class="dishcards">
+    @foreach (var dish in cart.Dishes)
+    {
+        <DishRowOfCart Dish="dish" OnButtonClick="() => Update(dish.Id, dish.count)"></DishRowOfCart>
+    }
+    </div>
+
+    <div class="form-group">
+        <lable class="form-Label" onclick="showoptions()">Тип замовлення</lable>
+        <div class="options">
+            <button @onclick="@(() => orderType = OrderType.InRestaurant)" id="option-button">В ресторані</button>
+                <button @onclick="@(() => orderType = OrderType.Delivery)" id="option-button">Доставка</button>
+        </div>
+    </div>
+    <button @onclick="Continue" class="confirm">
+        Підтвердити і продовжити
+    </button>
+}
+else
+{
+    <h1>Корзина пуста, <a href="/menu">оберіть собі щось смачненьке!</a></h1>
+}
+</div>
+<script>
+    function showoptions() {
+        const options = document.querySelector(".options");
+        options.classList.toggle("active");
+        const buttons = document.querySelectorAll("#option-button");
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Вимкнути стилі для попередньої активної кнопки
+                const activeButton = document.querySelector('#option-button.active');
+                if (activeButton) {
+                    activeButton.classList.remove('active');
+                }
+
+                // Активувати стилі для нової активної кнопки
+                button.classList.add('active');
+            });
+        });
+    }
+
+</script>
+@code {
+
+    [Parameter]
+    public Guid userId { get; set; }
+    private OrderType orderType = OrderType.InRestaurant;
+
+    private Guid customerId;
+
+    CartResponse cart;
+
+    protected override async Task OnInitializedAsync()
+    {
+        customerId = (await customersService.GetByUserId(userId)).Id;
+        localStorage.AddItem("customerId", customerId.ToString());
+        cart = await cartService.GetByCustomer(customerId);
+    }
+    private async Task Update(Guid dishId, int count)
+    {
+        cart = await cartService.AddDishToCartOfCustomerByCustomerId(customerId, dishId, count);
+        
+    }
+
+    private void Continue()
+    {
+        switch (orderType)
+        {
+            case OrderType.InRestaurant:
+                NavManager.NavigateTo("/selectTable");
+                break;
+            case OrderType.Delivery:                
+                NavManager.NavigateTo("/deliveryForm");
+                break;
+        }
+    }    
+}

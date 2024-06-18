@@ -1,0 +1,19 @@
+﻿@using Restaurant.Client.Contracts.Reviews
+
+<div class="review-card">
+    <div class="author-date">
+        <p class="author">@Review.AuthorName</p>
+        <p class="date">@Review.Posted</p>
+    </div>
+    <div class="rating">
+        <MudRating SelectedValue="@((int)Review.Rate)"  Disabled/>
+    </div>
+    <h2 class="title">@Review.Title</h2>
+    <div class="content">@Review.Content</div>
+</div>
+
+
+@code {
+    [Parameter]
+    public ReviewOfDishResponse Review { get; set; }
+}

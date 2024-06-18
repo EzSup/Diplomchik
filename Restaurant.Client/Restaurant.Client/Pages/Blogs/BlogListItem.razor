@@ -1,0 +1,49 @@
+﻿@using Restaurant.Client.Contracts.Blogs
+<div class="wrap-row BotToTop">
+    <div class="wrap-row-content" >
+        @if (!string.IsNullOrEmpty(blog.ImageLink))
+        {
+            <div class="Date TopToBot">
+                <p class="ScaledPlus">@blog.Created.ToString("yyyy")<br />@blog.Created.ToString("MM.dd")</p>
+            </div>
+            <img src="@blog.ImageLink" class="card-img-top ScaledPlus" alt="Blog Image">
+        }
+        <p class="TopToBot">@blog.Created</p>
+        <div class="Blog-Titles">
+            <h2 class="LeftToRight">@blog.Title</h2>
+            <h3 class="card-title RightToLeft">@blog.AuthorName</h3>
+        </div>
+        <a @onclick="() => GoToBlogDetails(blog.Id)" class="details-button">
+            Детальніше...
+        @* <p class="card-subtitle mb-2">@blog.AuthorName</p> *@
+        @* <p class="card-text">@((MarkupString)blog.Content)</p> *@
+        </a>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public BlogResponse blog {get;set;}
+    private void GoToBlogDetails(Guid id)
+    {
+        NavManager.NavigateTo($"/blogDetails/{id}");
+    }
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            try
+            {
+                Thread.Sleep(1000);
+                await JS.InvokeVoidAsync("AddClassInView", "TopToBot", "NormalTranslate", 0.5);
+                await JS.InvokeVoidAsync("AddClassInView", "BotToTop", "NormalTranslate", 0.3);
+                await JS.InvokeVoidAsync("AddClassInView", "LeftToRight", "NormalTranslate", 0.5);
+                await JS.InvokeVoidAsync("AddClassInView", "RightToLeft", "NormalTranslate", 0.5);
+                await JS.InvokeVoidAsync("AddClassInView", "ScaledPlus", "NormalScale", 0.7);
+            }
+            catch { }
+        }
+    }
+}

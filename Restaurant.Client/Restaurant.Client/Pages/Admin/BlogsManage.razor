@@ -1,0 +1,110 @@
+﻿@using Restaurant.Client.Shared.Admin
+@using Restaurant.Client.Contracts.Blogs
+@using Restaurant.Client.Services.Interfaces
+@using TinyMCE.Blazor
+@using Mapster
+@inject IBlogsService blogsService
+@inject IPhotoService photoService
+@inject ISnackbar snackbar
+@page "/blogsManage"
+@layout AdminLayout
+<MudPaper Elevation="25">
+    <MudToolBar>
+        <MudIconButton Icon="@Icons.Material.Outlined.Refresh" @onclick="Delete" Color="Color.Inherit" Class="mr-5" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Add" Href="/blogAdd" Color="Color.Inherit" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Edit" @onclick="Update" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Remove" @onclick="Delete" />
+    </MudToolBar>
+</MudPaper>
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="8">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+                <MudTable T="BlogResponse" Items="@blogs" Hover="true"
+                          @bind-SelectedItem="blog" OnRowClick="@OnRowClickHandler">
+                    <HeaderContent>
+                        <MudTh>Author</MudTh>
+                        <MudTh>Title</MudTh>
+                        <MudTh>Posted</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Name">@context.AuthorName</MudTd>
+                        <MudTd DataLabel="Available">@context.Title</MudTd>
+                        <MudTd DataLabel="Price">@context.Created</MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                </MudTable>
+            </MudPaper>
+        </MudItem>
+        @if (_itemToUpdate != null)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+                    <Editor Conf="editorConf" ApiKey="8zphuyb6qu417r6obeo20vs5guns8lzh7lbie76w1k8g7z19" @bind-Value="_itemToUpdate.Content" />
+                    <EditForm Model="_itemToUpdate" OnValidSubmit="Update">
+                        <MudTextField Label="Id" @bind-Value="_itemToUpdate.Id" ReadOnly />
+                        <MudTextField Label="Author" HelperText="Enter an author name" @bind-Value="_itemToUpdate.AuthorName" />
+                        <MudTextField Label="Title" HelperText="Enter a title" @bind-Value="_itemToUpdate.Title" />
+                        <MudDatePicker Label="Posted" @bind-Date="_itemToUpdate.Created" ReadOnly />
+                        @if (_itemToUpdate.ImageLink != null)
+                        {
+                            <img src="@_itemToUpdate.ImageLink" width="100px" height="80px" />
+                        }
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Update</MudButton>
+                        <MudButton OnClick="Delete" Variant="Variant.Filled" Color="Color.Error" Class="ml-auto">Delete</MudButton>
+                    </EditForm>
+                </MudPaper>
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
+
+
+@code {
+    private BlogResponse blog;
+    private BlogUpdateRequest _itemToUpdate;
+    private List<BlogResponse> blogs = new();
+    private Dictionary<string, object> editorConf = new Dictionary<string, object>{
+       {"plugins", "advlist anchor autosave image link linkchecker lists media searchreplace table template visualblocks wordcount"},
+     };
+
+    private async Task Delete()
+    {
+        if (await blogsService.Delete(_itemToUpdate.Id))
+        {
+            snackbar.Add("ВИДАЛИЛИ!", Severity.Success);
+            await Refresh();
+        }
+    }
+    private async Task Update()
+    {
+        if (await blogsService.Update(_itemToUpdate))
+        {
+            snackbar.Add("ОНОВИЛИ", Severity.Success);
+            await Refresh();
+        }
+    }
+
+    private async Task Refresh()
+    {
+        blogs = (await blogsService.GetBlogsByPage(1, 50)).ToList();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+    }
+
+    // private async Task HandleFileChange(InputFileChangeEventArgs e)
+    // {
+    //     photos = e.GetMultipleFiles().ToList();
+    // }
+
+    private void OnRowClickHandler(TableRowClickEventArgs<BlogResponse> args)
+    {
+        _itemToUpdate = args.Item.Adapt<BlogUpdateRequest>();
+    }
+}

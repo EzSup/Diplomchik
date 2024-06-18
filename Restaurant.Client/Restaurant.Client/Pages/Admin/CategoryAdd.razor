@@ -1,0 +1,36 @@
+﻿@page "/categoryAdd"
+@using Restaurant.Client.Shared.Admin
+@using Restaurant.Client.Services.Interfaces
+@using Restaurant.Client.Contracts.Categories
+@inject ICategoriesService categoriesService
+@layout AdminLayout
+@attribute [Authorize(Roles = "Admin")]
+
+<div style="justify-content: center; display: flex; margin-top: 50px; ">
+    <EditForm Model="@category" OnValidSubmit="OnValidSubmit" style="width: 550px;">
+        <DataAnnotationsValidator />
+        <MudGrid>
+            <MudItem xs="12" sm="7">
+                <MudCard>
+                    <MudCardContent>
+                        <MudText Style="font-weight: bolder"><MudIcon Icon="@Icons.Material.Outlined.CreateNewFolder" />  Creating category form</MudText>
+                        <MudTextField Label="Name" HelperText="Enter an expense type name" @bind-Value="category.Name" />
+                    </MudCardContent>
+                    <MudCardActions>
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Style="margin-left:auto; margin-right:auto;">Confirm</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            </MudItem>
+        </MudGrid>
+    </EditForm>
+</div>
+
+@code {
+    CategoryCreateRequest category = new();
+
+    private async void OnValidSubmit(EditContext context)
+    {
+        await categoriesService.Add(category);
+        NavManager.NavigateTo("/categoriesManage");
+    }
+}

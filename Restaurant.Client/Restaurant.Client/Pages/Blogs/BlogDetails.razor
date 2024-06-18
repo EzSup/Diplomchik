@@ -1,0 +1,34 @@
+﻿@using Restaurant.Client.Services.Interfaces
+@using Restaurant.Client.Contracts.Blogs
+@inject IBlogsService blogsSerivce
+@page "/blogDetails/{blogId:guid}"
+<Title BackButton>Детальніше</Title>
+    @if (blog != null)
+    {
+    <div class="wrap-row">
+        <div class="wrap-row-content">
+            @if (!string.IsNullOrEmpty(blog.ImageLink))
+            {
+                <img src="@blog.ImageLink" alt="Blog Image">
+            }
+            <p>@blog.Created</p>
+            <div class="Blog-Titles">
+                    <h2>@blog.Title</h2>
+                    <h1>@blog.AuthorName</h1>
+                </div>
+                <div class="Container-wrap flex-row">                   
+                    <p class="card-text">@((MarkupString)blog.Content)</p>
+                </div>
+            </div>
+        </div>
+    }
+@code {
+    [Parameter]
+    public Guid blogId { get; set; }
+    BlogResponse blog = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        blog = await blogsSerivce.GetBlogById(blogId);
+    }
+}

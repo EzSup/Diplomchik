@@ -1,0 +1,52 @@
+﻿@page "/userpage/{userId:guid}"
+@using Restaurant.Client.Contracts.Customers
+@using Restaurant.Client.Contracts.Bill
+@using Restaurant.Client.Pages.Bill
+@inject ICustomersService customersService
+@inject IBillsService billsService
+<body>
+    <div class="user-data">
+        @if (_customer != null)
+        {
+            <div class="row">
+
+             </div>
+            <div class="row">
+            <h5>Ваші дані:</h5>
+            <p style="font-size: 24px;"><strong>Ім'я:</strong> @_customer.Name</p>
+            <p style="font-size: 24px;"><strong>Пошта:</strong> @_customer.Email</p>
+            <p style="font-size: 24px;"><strong>Телефон:</strong> @_customer.PhoneNum</p>
+            </div>
+        }
+    </div>
+    <br />
+    <div class="bills">
+        @if (_bills != null && _bills.Count > 0)
+        {
+            <h5>Ваші чеки:</h5>
+            foreach (var bill in _bills)
+            {
+                <BillCard  Bill="@bill"></BillCard>
+            }
+        }
+        else
+        {
+            <p>Завантаження...</p>
+        }
+    </div>
+</body>
+
+
+
+@code {
+    [Parameter]
+    public Guid userId { get; set; }
+    private CustomerResponse _customer;
+    private ICollection<BillResponse> _bills;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _customer = await customersService.GetByUserId(userId);
+        _bills = await billsService.GetBillsOfCustomer(1, 10, _customer.Id);
+    }
+}

@@ -1,0 +1,148 @@
+﻿@using Restaurant.Client.Shared.Admin
+@using Restaurant.Client.Contracts.Cuisines
+@using Restaurant.Client.Services.Interfaces
+@using TinyMCE.Blazor
+@using Mapster
+@inject ICuisinesService cuisinesService
+@inject IPhotoService photoService
+@inject ISnackbar snackbar
+@page "/cuisinesManage"
+@layout AdminLayout
+<MudPaper Elevation="25">
+    <MudToolBar>
+        <MudIconButton Icon="@Icons.Material.Outlined.Refresh" @onclick="Refresh" Color="Color.Inherit" Class="mr-5" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Add" Href="/cuisineAdd" Color="Color.Inherit" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Edit" @onclick="Update" />
+        <MudIconButton Icon="@Icons.Material.Outlined.Remove" @onclick="Delete" />
+    </MudToolBar>
+</MudPaper>
+<MudContainer Class="mt-16 px-8" MaxWidth="MaxWidth.False">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="8">
+            <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+                <MudTable T="CuisineResponse" Items="@cuisines" Hover="true"
+                          @bind-SelectedItem="cuisine" OnRowClick="@OnRowClickHandler">
+                    <HeaderContent>
+                        <MudTh>Name</MudTh>
+                        <MudTh>Discount</MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Name">@context.Name</MudTd>
+                        <MudTd DataLabel="Discount">@context.DiscountPercents</MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                </MudTable>
+            </MudPaper>
+        </MudItem>
+        @if (_itemToUpdate != null)
+        {
+            <MudItem xs="12" sm="6" md="4">
+                <MudPaper Elevation="2" Class="pa-4" Style="height: 100%;">
+                    <EditForm Model="_itemToUpdate" OnValidSubmit="Update">
+                        <MudTextField Label="Id" @bind-Value="_itemToUpdate.Id" ReadOnly />
+                        <MudTextField Label="Name" HelperText="Enter a cuisine name" @bind-Value="_itemToUpdate.Name" />
+                        @if (cuisine.DiscountPercents > 0)
+                        {
+                            <MudButton OnClick="RemoveDiscount" Variant="Variant.Filled" Color="Color.Error" Class="ml-auto">Remove discount</MudButton>
+                        }
+                        else
+                        {
+                            <MudButton OnClick="() => dialogVisible = true" Variant="Variant.Filled" Color="Color.Secondary" Class="ml-auto">Add discount</MudButton>
+                        }
+                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Update</MudButton>
+                        <MudButton OnClick="Delete" Variant="Variant.Filled" Color="Color.Error" Class="ml-auto">Delete</MudButton>
+                    </EditForm>
+                </MudPaper>
+            </MudItem>
+        }
+    </MudGrid>
+</MudContainer>
+
+<MudDialog @bind-IsVisible="dialogVisible" Options="dialogOptions">
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3" /> Edit rating
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <p>Який розмір знижки?</p>
+        <MudNumericField Min="1" Max="100" @bind-Value="percents"></MudNumericField>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="AddDiscount" Class="px-10">Підтвердити</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+
+@code {
+    private double percents = 0;
+    private bool dialogVisible = false;
+    private DialogOptions dialogOptions = new() { FullWidth = true };
+    private CuisineResponse cuisine;
+    private CuisineRequest _itemToUpdate;
+    private List<CuisineResponse> cuisines = new();
+
+    private async Task RemoveDiscount()
+    {
+        if (await cuisinesService.RemoveDiscount(cuisine.Id))
+        {
+            snackbar.Add("Знижку видалено!", Severity.Success);
+            await Refresh();
+        }
+        else
+        {
+            snackbar.Add("Помилка при видаленні знижки!", Severity.Error);
+            await Refresh();
+        }
+    }
+
+    private async Task AddDiscount()
+    {
+        if (await cuisinesService.AddDiscount(cuisine.Id, percents))
+        {
+            snackbar.Add("Знижку додано!", Severity.Success);
+            await Refresh();
+        }
+        else
+        {
+            snackbar.Add("Помилка при додаванні знижки!", Severity.Error);
+            await Refresh();
+        }
+        dialogVisible = false;
+    }
+
+    private async Task Delete()
+    {
+        if (await cuisinesService.Delete(_itemToUpdate.Id))
+        {
+            snackbar.Add("ВИДАЛИЛИ!", Severity.Success);
+            await Refresh();
+        }
+    }
+    private async Task Update()
+    {
+        if (await cuisinesService.Update(_itemToUpdate))
+        {
+            snackbar.Add("ОНОВИЛИ", Severity.Success);
+            await Refresh();
+        }
+    }
+
+    private async Task Refresh()
+    {
+        cuisines = (await cuisinesService.GetAll()).ToList();
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+    }
+
+    private void OnRowClickHandler(TableRowClickEventArgs<CuisineResponse> args)
+    {
+        _itemToUpdate = args.Item.Adapt<CuisineRequest>();
+    }
+}

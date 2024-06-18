@@ -1,0 +1,555 @@
+﻿all: initial; * {
+    all: unset;
+}
+
+.filters-container::before, .filters-container::after {
+    position: absolute;
+    content: " ";
+    top: 0;
+    width: 50%;
+    height: 500px;
+    background: url(images/Menu-Top-Bg.png) no-repeat top left;
+    background-size: contain;
+}
+.filters-container::before {
+    left: 0;
+}
+.filters-container::after {
+    transform: scaleX(-1);
+    right: 0;
+}
+/* Контейнер для вікна зі стравами */
+.menu-container {
+    width: 70%;
+    padding: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.menu-container::before, .menu-container::after{
+    position: absolute;
+    content: " ";
+    top: calc(50% - 400px);
+    width: 50%;
+    height: 800px;
+    background: url(images/Menu-Mid-Bg.png) no-repeat center left;
+    background-size: contain;
+    max-height: 50%;
+}
+
+.menu-container::before{
+    left: -400px;
+}
+.menu-container::after{
+    transform: scaleX(-1);
+    right: -400px;
+}
+
+/* Контейнер для вікна з фільтрами */
+.filters-container {
+    width: 100%;
+    padding: 20px 100px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+}
+
+/* Стилі для карток страв */
+.dish-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Стилі для фільтрів */
+.filter {
+    margin: 0 1% 1em;
+    position: relative;
+}
+
+::deep .filter input {
+    width: 200px;
+    background: #242121;
+    border-radius: 5px;
+    color: white;
+    border: 1px solid #fff8e0;
+    transition: all 1s;
+    position: relative;
+    z-index: 1;
+    font-weight: normal;
+}
+
+    ::deep .filter input:hover {
+        border-color: #878477;
+    }
+
+    ::deep .filter input:focus, ::deep .filter input:focus-visible {
+        border-color: #878477;
+        outline: none;
+        background: none;
+    }
+
+    ::deep .filter input::placeholder {
+        color: #FFF8E0;
+    }
+
+    ::deep .filter input::-webkit-inner-spin-button {
+        transition: all 0.3s;
+    }
+
+    ::deep .filter input::-webkit-outer-spin-button {
+        transition: all 0.3s;
+    }
+
+    .filter > .on-checked {
+        width: 200px;
+        height: 1px;
+        position: absolute;
+        right: 0;
+        background: #423f3b;
+        border-radius: 6px;
+        transition: all 0.3s;
+        bottom: 0;
+        opacity: 0;
+        z-index: 0;
+    }
+
+.filters-container > .filter > input:focus ~ .on-checked,
+.filters-container > .filter > input:focus-visible ~ .on-checked,
+.filters-container > .radio-filters > .scrollbar > .filter > input:focus ~ .on-checked,
+.filters-container > .radio-filters > .scrollbar > .filter > input:focus-visible ~ .on-checked {
+    height: 100%;
+    opacity: 1;
+}
+
+
+
+    .filter.radio {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+    ::deep .filter.radio input{
+        width: auto;
+        outline: none;
+    }
+
+.filter.radio label {
+    margin: 0 0.5em;
+    position: relative;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #FFF8E0;
+    min-width: 150px;
+    width: max-content;
+    padding: 0 5px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
+    z-index: 1;
+}
+
+    .filter.radio label .on-checked::after {
+        content: " ";
+        position: absolute;
+        bottom: 0;
+        border-radius: 3px;
+        left: 0;
+        width: 100%;
+        height: 0px;
+        opacity: 0;
+        background: #878477;
+        transition: all 0.3s;
+        z-index: 0;
+    }
+
+        .filter.radio label[for="cuisine"], .filter.radio label[for="category"], .filter.radio label[for="order"] {
+            width: auto;
+            border: 0;
+        }
+
+    .filter.radio > label > .on-checked {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+    }
+
+    .filter.radio label:hover {
+        border-color: #878477;
+    }
+
+    .filter.radio label:hover .on-checked::after{
+        opacity: 0.5;
+        height: 100%;
+    }
+
+.filters-container > .filter.radio > label > .hidden:checked ~ .on-checked::after,
+.filters-container > .radio-filters > .scrollbar > .filter.radio > label > .hidden:checked ~ .on-checked::after {
+    opacity: 0.3;
+    height: 100%;
+}
+
+.filter label {
+    font-weight: 400;
+}
+
+    .filter select {
+        width: 100%;
+        padding: 5px;
+    }
+
+/* Кнопка для застосування фільтрів */
+.apply-btn {
+    width: 100vw;
+    height: 60px;
+    border-radius: 0px
+}
+
+.pagination-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+    .pagination-buttons button {
+        padding: 5px 30px;
+        font-size: 20px;
+        color: #FFF8E0;
+        background: #242121;
+        box-shadow: 0px 0px 8.1px rgba(0, 0, 0, 0.3);
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.5s ease;
+        border: 1px solid #1E1E1E;
+    }
+
+        .pagination-buttons button:hover {
+            background: #131313;
+            border-color: #131313;
+        }
+
+        .pagination-buttons button:disabled {
+            background: #242121;
+            cursor: not-allowed;
+        }
+
+::deep .filter input, .filter label{
+    opacity: 0;
+    transition: all 0.5s;
+    cursor: pointer;
+}
+
+.radio-filters {
+    width: min-content;
+    max-width: 90%;
+    margin: 0 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.filters-container::before, .filters-container::after{
+    opacity: 0;
+    top: -20px;
+    transition: all 0.5s;
+}
+.animated.filters-container::before, .animated.filters-container::after{
+    opacity: 1;
+    top: 0;
+}
+
+.menu-container::before, .menu-container::after{
+    opacity:0;
+    transition: all 0.5s ease-in-out;
+    transition-delay: 1s;
+    z-index: -1;
+}
+.animated.menu-container::before, .animated.menu-container::after{
+    opacity: 1;
+}
+
+.mobile-filters{
+    display: none;
+}
+.scrollbar {
+    display: flex;
+}
+.scrollbar label{
+    opacity: 0;
+}
+.show-menu-button{
+    display: none;
+}
+@media screen and (max-width: 1500px) {
+    .filter  {
+        font-size: 1.5vw !important;
+    }
+    .pagination-buttons button, button[type="submit"] {
+        font-size: 2vw !important;
+    }
+    .menu-container {
+        width: 85%;
+    }
+    .menu-container::after{
+        right: -200px;
+    }
+    .menu-container::before{
+        left: -200px;
+    }
+}
+@media screen and (max-width: 1300px){
+    .radio-filters {
+        max-width: none;
+        min-width: 80%;
+        flex-direction: row;
+    }
+    .filter.radio {
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+    .filter.radio label {
+        min-width: 200px;
+        margin: 0.1em 0.5em;
+    }
+    .menu-container::after {
+        right: -250px;
+    }
+    .menu-container::before {
+        left: -250px;
+    }
+    .scrollbar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+@media screen and (max-width: 1200px){
+    .filter {
+        font-size: 1.75vw !important;
+    }
+}
+@media screen and (max-width: 1100px){
+    .filters-container::before, .filters-container::after {
+        width: 40%;
+    }
+}
+@media screen and (max-width: 800px){
+    .filter {
+        font-size: 2.25vw !important;
+    }
+}
+@media screen and (max-width: 700px){
+    .filter.radio label {
+        min-width: 160px;
+    }
+    ::deep .filter input {
+        width: 150px;
+        padding: 0 5px;
+    }
+    .filter > .on-checked {
+        width: 100%;
+    }
+    .pagination-buttons button, button[type="submit"] {
+        font-size: 2.5vw !important;
+    }
+    .add-to-cart-button {
+        padding: 5%;
+    }
+        .add-to-cart-button svg {
+            width: 4vw;
+            height: 4vw;
+        }
+    .filters-container::before, .filters-container::after {
+        background: url(images/Menu-Top-Bg-mobile.png) no-repeat top left;
+        top: -50px;
+    }
+    .animated.filters-container::before, .animated.filters-container::after {
+        opacity: 1;
+        top: -20px;
+    }
+}
+@media screen and (max-width: 600px) {
+    .filters-container {
+        padding: 20px 10px;
+    }
+
+    .mobile-filters {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .notMobile-filter {
+        display: none;
+    }
+
+    .radio-filters.mobile {
+        display: flex !important;
+        z-index: 2;
+    }
+
+    .radio-filters {
+        flex-direction: column;
+        flex-wrap: wrap;
+        max-width: 100vw;
+        margin: 0;
+        padding-left: 35px;
+    }
+
+    .filter.radio {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+        padding: 0 !important;
+    }
+
+        .filter.radio::-webkit-scrollbar {
+            width: 0px;
+            display: none;
+        }
+
+    .scrollbar {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    .scrollbar label {
+        margin: 0;
+        position: relative;
+        border: 0;
+        min-width: max-content;
+        padding: 0;
+        display: flex;
+        flex-direction: row;
+        align-content: center;
+        justify-content: center;
+        align-items: flex-start;
+        transition: all 0.3s;
+        z-index: 1;
+        font-size: 3vw;
+    }
+    .filter.radio label {
+        min-width: max-content;
+    }
+    .filter, .radio-filters .scrollbar label {
+        font-size: 3vw !important;
+    }
+    ::deep .filter input {
+        width: 30vw;
+    }
+    .form-filters-container {
+        height: 0;
+        opacity: 0;
+        transition: all 0.5s;
+    }
+    .form-filters-container.active{
+        height: 500px;
+        opacity:1;
+    }
+    #menu-button{
+        cursor: pointer !important;
+    }
+    .show-menu-button {
+        display: flex;
+        width: 100%;
+        padding: 10px 0;
+        justify-content: center;
+        z-index: 2;
+    }
+    .button-svg {
+        width: 52px;
+        height: 52px;
+        transition: all 0.3s;
+        path{
+                transition: all 0.3s;
+            }
+    }
+    .button-svg.active {
+        transform: rotate(180deg);
+    }
+    #menu-button:hover .button-svg path {
+        fill: #878477;
+        transform:scale(0.99);
+    }
+    .pagination-buttons button, button[type="submit"] {
+        font-size: 3.5vw !important;
+    }
+    .menu-container {
+        width: 95%;
+    }
+    .dish-card {
+        width: 45%;
+    }
+.add-to-cart-button {
+    padding: 5%;
+}
+.add-to-cart-button svg {
+    width: 4vw;
+    height: 4vw;
+}
+.dish-card p {
+    font-size: 3.5vw !important;
+}
+ .mud-icon-root {
+    width: 5vw !important;
+    height: 5vw !important;
+}
+.dish-card p {
+    font-size: 3.5vw !important;
+    line-height: normal;
+}
+.dish-card p:last-child, .dish-card span {
+    font-size: 3vw !important;
+}
+}
+.animated.filters-container::before, .animated.filters-container::after {
+    top: -50px;
+}
+@media screen and (max-width: 500px){
+    .filters-container::before, .filters-container::after {
+        display: none;
+    }
+    .menu-container{
+        padding: 0;
+    }
+    .form-filters-container.active {
+        height: 450px;
+    }
+}
+@media screen and (max-width: 400px){
+    .form-filters-container.active {
+        height: 420px;
+    }
+    .button-svg {
+        width: 40px;
+        height: 40px;
+    }
+    .pagination-buttons button, button[type="submit"] {
+        font-size: 4.5vw !important;
+    }
+}

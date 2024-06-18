@@ -1,0 +1,56 @@
+﻿@using Restaurant.Client.Contracts.Bill
+@using Restaurant.Client.Contracts.Enums
+@if (Bill != null)
+{
+    <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-bottom: 20px;">
+        <h4>Чек #@Bill.Id</h4>
+        <hr />
+        <div>
+            @* <p><strong>ID чеку:</strong> @Bill.Id</p> *@
+            <p><strong>Загальна сума:</strong> @Bill.TotalPrice</p>
+            <p><strong>Дата і час замовлення:</strong> @Bill.OrderDateAndTime</p>
+            <p><strong>Чайові:</strong> @Bill.Tips</p>
+            <p><strong>Тип замовлення:</strong> @Bill.Type</p>
+            <p><strong>Чи оплачено:</strong> @Bill.IsPaid</p>
+            @if (Bill.Type == OrderType.InRestaurant)
+            {
+                <p><strong>Номер столика і час резервації:</strong> @Bill.TableNumOrDeliveryAdress</p>
+            }
+            else if (Bill.Type == OrderType.Delivery)
+            {
+                <p><strong>Адреса доставки:</strong> @Bill.TableNumOrDeliveryAdress</p>
+            }
+        </div>
+        <hr />
+        <div>
+            <h5>Dishes:</h5>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Count</th>
+                        <th>Price</th>
+                        <th>Sum Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var dish in Bill.Dishes)
+                    {
+                        <tr>
+                            <td>@dish.Name</td>
+                            <td>@dish.Count</td>
+                            <td>@dish.Price</td>
+                            <td>@dish.SumPrice</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public BillResponse Bill { get; set; }
+}

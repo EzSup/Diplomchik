@@ -1,0 +1,12 @@
+﻿namespace Restaurant.Client.Contracts.Blogs
+{
+    public record BlogResponse
+        (
+        Guid Id,
+        string Title,
+        string AuthorName,
+        string Content,
+        DateTime Created,
+        string? ImageLink
+        );
+}

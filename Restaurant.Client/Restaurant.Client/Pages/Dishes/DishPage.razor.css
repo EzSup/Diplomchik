@@ -1,0 +1,411 @@
+﻿
+
+.small-image {
+    width: 80px;
+    height: 80px;
+    margin: 5px;
+    border-radius: 2px;
+    transition: all 0.3s;
+    border: 2px solid #242121;
+    transform:rotate(-5deg);
+}
+    .small-image:hover {
+        transform: scale(0.98);
+        border: 2px solid #ffc93c;
+    }
+
+.param-row{
+    font-size: 15px;
+    line-height: 17px;
+}
+
+
+.main-image{
+    width: 500px;
+    height: 500px;
+    border-radius: 15px;
+    transition: all 0.5s;
+}
+.main-image:hover{
+    transform:scale(0.995);
+    border-radius: 0;
+}
+
+.small-images-container {
+    border-radius: 5px;
+    width: 150px;
+    min-height: 500px;
+    height: max-content;
+    margin-right: -30px;
+    padding: 5px;
+    transform: rotate(365deg);
+}
+.small-images-container .small-image:nth-of-type(4){
+    margin-left: 20px;
+}
+.small-images-container .small-image:nth-of-type(5){
+    margin-left: 38px;
+}
+
+.half-page-block-container {
+    display: flex;
+    align-items: flex-start;
+}
+
+.half-page-block-container.reviews {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: 0 auto;
+    width: 90vw;
+}
+
+.images-block {
+    margin: 10px;
+    display: flex;
+    align-items: flex-start;
+}
+
+.data-block {
+    margin: 10px;
+    display: block;
+    align-items: center;
+    position: relative;
+    h1
+{
+    text-align: left;
+}
+}
+
+.add-to-cart-selector {
+    display: flex;
+    align-items:center;
+    margin-top: 10px;
+}
+    .add-to-cart-selector button {
+        margin: 0 5px;
+        padding: 0 5px;
+        border-color: #131313;
+        background: none !important;
+        transition: all 0.5s;
+        position: relative;
+        z-index:2;
+    }
+
+        .add-to-cart-selector button::after {
+            position: absolute;
+            height: 120%;
+            width: 0px;
+            transition: all 0.3s;
+            content: " ";
+            left: 0;
+            top: -5px;
+            border-radius: 2px;
+            opacity: 0;
+            background: #131313;
+            z-index: -1;
+        }
+
+        .add-to-cart-selector button:hover{
+            transform: scale(0.98);
+        }
+        .add-to-cart-selector button:hover::after{
+            width: 100%;
+            opacity :1;
+        }
+
+.available-label {
+    color: #fff; /* Білий колір тексту підказки */
+    margin: 10px; /* Внутрішні відступи підказки */
+    padding: 3px 6px;
+    font-size: 15px;
+    /*position: absolute;*/
+    border-radius: 5px; /* Закруглені кути підказки */
+    /*top: 0; Розміщення зверху */
+    /*left: 0; Розміщення зліва */
+}
+
+.reviewsdata-block {
+    display: flex;
+    align-items: center;
+}
+    .reviewsdata-block > * {
+        margin: 0px 10px;
+    }
+
+.ingredients-block {
+    display: flex;
+    width: 40vw;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+    .ingredients-block * {
+        margin: 5px 10px 0 0 !important;
+        padding: 5px 6px !important;
+    }
+
+.ingredient {
+    display: flex; /* зміна display */
+    /*border: 1px solid #FFF8E0;*/
+    align-items: center;
+    line-height: 25px;
+    /*border-radius: 50px;*/
+    font-size: 13px;
+    height: auto; /* автоматична висота */
+    margin: 5px; /* додаткові відступи, які ви можете встановити за необхідності */
+    position: relative;
+    z-index: 2;
+}
+.ingredient::before{
+    position: absolute;
+    z-index: -1;
+    background: #242121;
+    left: 0;
+    right: 0;
+    height: 100%;
+    content: " ";
+}
+    .ingredient::after {
+        position: absolute;
+        z-index: -2;
+        background: linear-gradient(180deg, #242121 10%, #A7A293 50%, #242121 90%);
+        top: 0;
+        left: -1px;
+        right: -1px;
+        bottom: 0;
+        content: " ";
+    }
+
+.item-input {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid #FFF8E0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+@media screen and (max-width:1500px){
+    .small-images-container {
+        min-height: 35vw;
+    }
+    .main-image {
+        width: 35vw;
+        height: 35vw;
+        border-radius: 15px;
+    }
+    h1 {
+        text-align: left;
+        font-size: 4vw;
+    }
+    .reviewsdata-block > * {
+        margin: 5px 10px 0;
+        font-size: 1.5vw;
+    }
+    ::deep .mud-rating-item.mud-disabled * {
+        width: 2.5vw;
+        height: 2.5vw;
+    }
+    .param-row {
+        font-size: 1.25vw;
+    }
+    .ingredients-block * {
+        font-size: 1.5vw !important;
+        line-height: normal;
+    }
+    .half-page-block-container h5{
+        font-size: 3vw;
+    }
+    
+}
+@media screen and (max-width: 1300){
+    .small-image {
+        width: 6vw;
+        height: 6vw;
+    }
+}
+@media screen and (max-width: 1200px){
+    .small-images-container {
+        margin-right: -40px;
+    }
+    .reviewsdata-block > * {
+        margin: 5px 10px 5px;
+        font-size: 2vw;
+        line-height: normal;
+    }
+    .main-image {
+        width: 37vw;
+        height: 37vw;
+    }
+    h1 {
+        font-size: 5vw;
+    }
+    .available-label {
+        padding: 3px 6px;
+        font-size: 1.7vw;
+    }
+    .param-row {
+        font-size: 1.5vw;
+        margin-bottom: 5px;
+    }
+    .ingredients-block * {
+        font-size: 1.7vw !important;
+    }
+}
+@media screen and (max-width: 900px){
+    .param-row {
+        font-size: 1.75vw;
+    }
+    .small-images-container .small-image:nth-of-type(4) {
+        margin-left: 23px;
+    }
+    .small-images-container .small-image:nth-of-type(5) {
+        margin-left: 40px;
+    }
+}
+@media screen and (max-width: 800px){
+    .small-image {
+        width: 10vw;
+        height: 10vw;
+    }
+}
+@media screen and (max-width: 700px){
+    .small-images-container {
+        margin-right: -50px;
+    }
+    .half-page-block-container.reviews {
+        width: 90%;
+    }    
+    .review-card {
+        min-width: 70vw;
+    }
+}
+@media screen and (max-width: 600px){
+    .half-page-block-container.reviews {
+        width: 100%;
+        margin: 0 auto;
+        padding: 0px 2px;
+    }
+    .images-block {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column-reverse;
+        margin: 10px auto -5px;
+    }
+    .half-page-block-container {
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+    }
+    .main-image {
+        width: 60vw;
+        height: 60vw;
+    }
+    .small-images-container {
+        margin-right: 0;
+        margin-left: -2vw;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: flex-start;
+        width: 60vw;
+        min-height: max-content;
+        margin-top: 10px;
+        position: relative;
+        overflow-x: scroll;
+    }
+        .small-images-container::-webkit-scrollbar {
+            display: none;
+        }
+    .small-image   {
+        width: 12vw;
+        height: 12vw;
+    }
+    .available-label   {
+        font-size: 3vw;
+    }
+    .reviewsdata-block   {
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .data-block {
+        margin: 0px;
+        margin-top: 10px;
+        width: 80vw;
+    }
+    .ingredients-block {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    .reviewsdata-block > *   {
+        font-size: 3.5vw;
+    }
+    .add-to-cart-selector button   {
+        font-size: 3vw;
+    }
+    ::deep .mud-rating-item.mud-disabled * {
+        width: 4vw;
+        height: 4vw;
+    }
+    .param-row {
+        font-size: 3vw;
+    }
+    .ingredients-block * {
+        font-size: 3vw !important;
+    }
+    .half-page-block-container h5 {
+        font-size: 4vw;
+        line-height: normal;
+    }   
+}
+@media screen and (max-width: 500px) {
+    .images-block {
+        align-items: center;
+        width: 60vw;
+    }
+}
+@media screen and (max-width: 400px) {
+    .small-images-container {
+        margin-left: -5vw;
+        margin-top: 0px;
+    }
+    .images-block {
+        margin: 10px auto 0;
+    }
+    .available-label  {
+        font-size: 4vw;
+    }
+    .reviewsdata-block > *  {
+        font-size: 4vw;
+    }
+    .param-row  {
+        font-size: 3.5vw;
+    }
+    ::deep .mud-rating-item.mud-disabled * {
+        width: 4.5vw;
+        height: 4.5vw;
+    }
+    .small-image {
+        width: 14vw;
+        height: 14vw;
+    }
+    .add-to-cart-selector {
+        flex-wrap: nowrap;
+        width: min-content;
+        justify-content: center;
+    }
+    .add-to-cart-selector button:nth-of-type(3){
+        margin-top: 5px;
+        width: 30vw;
+    }
+    .ingredients-block * {
+        font-size: 3.5vw !important;
+    }
+    .half-page-block-container h5 {
+        font-size: 5vw;
+    }
+}

@@ -1,0 +1,25 @@
+﻿@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.JSInterop
+@using Restaurant.Client
+@using Restaurant.Client.Shared
+@using Microsoft.Extensions.Localization
+@using Restaurant.Client.Locales
+@using System.Globalization
+@using MudBlazor
+@using Restaurant.Client.Services.Interfaces
+@using Restaurant.Client.Contracts
+@inject AuthenticationStateProvider AuthStateProvider
+@inject NavigationManager NavManager
+@inject IAccountService accountService
+@using Restaurant.Client.Contracts.Users
+@using Blazored.Toast
+@using Blazored.Toast.Services
+@inject IJSRuntime JS
+@inject IStringLocalizer<Resource> Localizer
+@inject ILocalStorageService localStorage

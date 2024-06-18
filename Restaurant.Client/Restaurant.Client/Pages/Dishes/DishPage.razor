@@ -1,0 +1,158 @@
+﻿@page "/dishPage/{id:guid}"
+@inject IDishesService dishesService
+@inject ICartsService cartsService
+@inject IReviewsService reviewsService
+@inject AuthenticationStateProvider provider
+@using Restaurant.Client.Contracts.Dishes
+@using Restaurant.Client.Contracts.Reviews
+@using Restaurant.Client.Pages.Reviews
+<body>
+    @if (dish != null)
+    {
+        <Title BackButton>@dish.Name</Title>
+        <div class="half-page-block-container">
+            <div class="images-block">
+                <div class="small-images-container">
+                    @foreach (var imageLink in dish.PhotoLinks)
+                    {
+                        <img src="@imageLink" class="small-image" @onclick="() => SetMainImageLink(imageLink)"
+                             onerror="this.onerror=null; this.src='/images/emptyDish.jpg';" />
+                    }
+                </div>
+                <img src="@mainImageLink" class="main-image" onerror="this.onerror=null; this.src='/images/emptyDish.jpg';" />
+            </div>          
+            <div class="data-block">
+                <span class="available-label" style='@($"background-color: {availableLableColor};")'>@availableLable</span>
+                @* <h1>@dish.Name</h1> *@
+                <div class="reviewsdata-block">
+                    <h3>@dish.ResultingPrice ₴</h3>
+                    @if (dish.ResultingPrice != dish.OriginalPrice)
+                    {
+                        <h3 style="text-decoration: line-through;">@dish.OriginalPrice ₴</h3>
+                    }
+                </div>
+                <AuthorizeView>
+                    <Authorized>
+                        @if (dish.Available)
+                        {
+                            <div class="add-to-cart-selector">
+                                <button @onclick="Substract">-</button>
+                                <h6 class="item-input">@countToAdd</h6>
+                                <button @onclick="Add">+</button>
+                                <button @onclick="AddDishAndGoToCart"> До кошика</button>
+                            </div>
+                        }
+                    </Authorized>
+                </AuthorizeView>                
+                <hr />
+                <div class="reviewsdata-block">
+                    <MudRating Disabled="true" SelectedValue="@((int)dish.Rating)" />
+                    <p class="param-row">@($"{dish.Rating:F1}") Рейтинг</p>
+                    <p class="param-row">@dish.ReviewsCount Відгуків</p>
+                </div>
+                <hr />
+                <p class="param-row"><strong>Маса:</strong> @dish.Weight г</p>
+                @if (dish.Category != string.Empty)
+                {
+                    <p class="param-row"><strong>Категорія:</strong> @dish.Category</p>
+                }
+                @if (dish.Cuisine != string.Empty)
+                {
+                    <p class="param-row"><strong>Кухня:</strong> @dish.Cuisine</p>
+                }
+                <hr />
+                <div class="ingredients-block">
+                    <strong>Інгредієнти:</strong>
+                    @foreach (var ingredient in dish.IngredientsList)
+                    {
+                        <p class="ingredient">@ingredient</p>
+                    }
+                </div>
+
+            </div>
+        </div>
+        <div class="half-page-block-container reviews">
+            <h5>Відгуки (@dish.ReviewsCount)</h5>
+            <AuthorizeView Roles="User">
+                <Authorized>
+                    @if (!ownReview.Item1)
+                    {
+                        <ReviewPost DishId="id"></ReviewPost>
+                    }
+                    else
+                    {
+                        <ReviewRead Review="ownReview.Item2"></ReviewRead>
+                    }
+                </Authorized>
+            </AuthorizeView>
+            @foreach (var review in reviews)
+            {
+                <ReviewRead Review="review"></ReviewRead>
+            }
+        </div>
+    }
+
+</body>
+
+
+@code {
+    [Parameter]
+    public Guid id { get; set; }
+    private DishDataPageResponse dish { get; set; }
+    private string mainImageLink { get; set; } = "~/wwwroot/images/emptyDish.jpg";
+    private int countToAdd { get; set; } = 1;
+    private string availableLable { get; set; } = string.Empty;
+    private string availableLableColor { get; set; } = string.Empty;
+    private ICollection<ReviewOfDishResponse> reviews;
+    private (bool, ReviewOfDishResponse?) ownReview;
+    Guid currentUserId = Guid.Empty;
+
+    private void SetMainImageLink(string link)
+    {
+        mainImageLink = link;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var state = await provider.GetAuthenticationStateAsync();
+        if (Guid.TryParse(state.User.Identity.Name, out Guid userId) && userId != Guid.Empty)
+        {
+            currentUserId = userId;
+        }
+        dish = await dishesService.GetDishDataPageById(id);
+        if (dish.PhotoLinks.Count > 0)
+        {
+            mainImageLink = dish.PhotoLinks.First();
+        }
+        availableLable = dish.Available ? "У продажі" : "Вичерпано";
+        availableLableColor = dish.Available ? "#97cba9" : "#f95959";
+        reviews = await reviewsService.GetByDishId(id, 1, 5);
+        ownReview = await reviewsService.HasOwnReview(id);
+        //reviews.Any(x => x.AuthorName == ownReview.Item2.AuthorName && x.Title == ownReview.Item2.Title)
+        if (ownReview.Item1 && reviews.Contains(ownReview.Item2))
+        {
+            reviews.Remove(ownReview.Item2);
+        }
+    }
+
+    private async Task AddDishAndGoToCart()
+    {
+        await cartsService.AddDishToCartOfCustomerByUserId(currentUserId, id, countToAdd);
+        NavManager.NavigateTo($"/cart/{currentUserId}");
+    }
+
+    private void Add()
+    {
+        if (countToAdd < 100)
+        {
+            countToAdd++;
+        }
+    }
+    private void Substract()
+    {
+        if (countToAdd > 1)
+        {
+            countToAdd--;
+        }
+    }
+}

@@ -1,0 +1,79 @@
+﻿@inject IJSRuntime JS
+@if (IsMinContent)
+{
+    <div class="Title Anim-Title">
+        <div class="Title content min-content">
+            <h1 class="Anim-Title-text">@ChildContent</h1>
+        </div>
+    </div>
+}
+@if(WithBackButton){
+    <div class="Title Anim-Title">
+        <div class="Title content min-conten">
+            <svg onclick="goBack()" width="65" height="35" viewBox="0 0 65 35" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M63.3081 4.98134L34.1447 34.1447C33.8738 34.4159 33.5522 34.631 33.1981 34.7778C32.8441 34.9245 32.4646 35.0001 32.0814 35.0001C31.6981 35.0001 31.3186 34.9245 30.9646 34.7778C30.6105 34.631 30.2889 34.4159 30.0181 34.1447L0.854651 4.98134C0.307427 4.43411 0 3.69191 0 2.91802C0 2.14413 0.307427 1.40193 0.854651 0.854711C1.40188 0.307487 2.14407 6.10352e-05 2.91796 6.10352e-05C3.69185 6.10352e-05 4.43405 0.307487 4.98127 0.854711L32.0814 27.9585L59.1815 0.854711C59.4524 0.583753 59.7741 0.368818 60.1281 0.222176C60.4821 0.075535 60.8616 6.10352e-05 61.2448 6.10352e-05C61.628 6.10352e-05 62.0074 0.075535 62.3614 0.222176C62.7155 0.368818 63.0371 0.583753 63.3081 0.854711C63.579 1.12567 63.794 1.44734 63.9406 1.80137C64.0873 2.15539 64.1627 2.53483 64.1627 2.91802C64.1627 3.30122 64.0873 3.68066 63.9406 4.03468C63.794 4.3887 63.579 4.71038 63.3081 4.98134Z" fill="#FFF8E0" />
+            </svg>
+            <h1 class="Anim-Title-text">@ChildContent</h1>           
+        </div>
+    </div>
+}
+@if (!IsMinContent && !WithBackButton)
+{
+    <div class="Title Anim-Title">
+        <div class="Title content">
+            <h1 class="Anim-Title-text">@ChildContent</h1>
+        </div>
+    </div>
+}
+<script>
+    function goBack() {
+        window.addEventListener('popstate', function () {
+            setTimeout(function () {
+                window.scrollTo(0, 0);
+            }, 1);
+        });
+        window.history.back();
+    }
+</script>
+
+@code {
+    [Parameter]
+    public bool IsMinContent { get; set; }
+
+    [Parameter]
+    public bool WithBackButton { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public bool Min
+    {
+        get => IsMinContent;
+        set => IsMinContent = value;
+    }
+
+    [Parameter]
+    public bool BackButton
+    {
+        get => WithBackButton;
+        set => WithBackButton = value;
+    }
+
+    // private async Task GoBack()
+    // {
+    //     await JS.InvokeVoidAsync("history.back");
+    // }
+
+
+
+    protected override async void OnAfterRender(bool firstRender)
+    {
+        try
+        {
+            await JS.InvokeVoidAsync("AddClassInView", "Anim-Title", "Animated-Title", 0.5);
+            await JS.InvokeVoidAsync("AddClassInView", "Anim-Title-text", "Animated-Title-Text", 0.5);
+        }catch{}
+    
+    }
+}
