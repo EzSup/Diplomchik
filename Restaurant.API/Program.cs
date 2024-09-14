@@ -82,6 +82,24 @@ namespace Restaurant.API
                 serviceProvider.GetRequiredService<IOptions<JwtOptions>>()
                 );
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins", builder =>
+                {
+                    builder.WithOrigins("https://clientapp.com")
+                           .AllowAnyHeader()
+                           .AllowAnyMethod()
+                           .AllowCredentials();
+                });
+            });
+
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.SameSite = SameSiteMode.None;
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            });
+
             var app = builder.Build();
             
             using (var scope = app.Services.CreateScope())
@@ -100,10 +118,12 @@ namespace Restaurant.API
 
             app.UseCookiePolicy(new CookiePolicyOptions
             {
-                MinimumSameSitePolicy = SameSiteMode.Strict,
+                MinimumSameSitePolicy = SameSiteMode.None, // Дозволяє крос-доменні кукі
                 HttpOnly = HttpOnlyPolicy.Always,
-                Secure = CookieSecurePolicy.Always
+                Secure = CookieSecurePolicy.Always,
             });
+
+            app.UseCors("AllowAllOrigins");
 
             app.UseAuthentication();
             app.UseAuthorization();

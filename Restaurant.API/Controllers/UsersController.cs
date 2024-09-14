@@ -43,7 +43,7 @@ namespace Restaurant.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<LoginUserResponse>> Login([FromBody]LoginUserRequest request)
+        public async Task<ActionResult<LoginUserResponse>> Login([FromBody] LoginUserRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -53,7 +53,15 @@ namespace Restaurant.API.Controllers
             {
                 var token = await _usersService.Login(request.email, request.password);
 
-                _httpContextAccessor.HttpContext.Response.Cookies.Append("tasty-cookies", token);
+                var cookieOptions = new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true, 
+                    SameSite = SameSiteMode.None,
+                    Expires = DateTime.UtcNow.AddDays(7) 
+                };
+
+                _httpContextAccessor.HttpContext.Response.Cookies.Append("tasty-cookies", token, cookieOptions);
 
                 return Ok(new LoginUserResponse(true, null, token));
             }
@@ -62,6 +70,7 @@ namespace Restaurant.API.Controllers
                 return BadRequest(new LoginUserResponse(false, ex.Message));
             }
         }
+
 
         [HttpDelete]
         public ActionResult Logout()
