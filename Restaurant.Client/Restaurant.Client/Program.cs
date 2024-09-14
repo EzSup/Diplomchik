@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Diagnostics;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using Blazored.Toast.Services;
+using System.Net;
 
 namespace Restaurant.Client
 {
@@ -29,7 +30,6 @@ namespace Restaurant.Client
             ConfigureLocalization(builder.Services);
             builder.Services.AddControllers();
 
-            // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor().AddCircuitOptions(options =>
             {
@@ -73,14 +73,20 @@ namespace Restaurant.Client
 
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 
-            //builder.Services.AddScoped<UnauthorizedResponseHandler>();
+            var handler = new HttpClientHandler
+            {
+                UseCookies = true, 
+                CookieContainer = new CookieContainer(), 
+                AllowAutoRedirect = false, 
+                UseDefaultCredentials = true 
+            };
 
             builder.Services.AddHttpClient("API", client =>
             {
-                client.BaseAddress = new Uri("https://tevhni.realhost-free.net/"); //https://localhost:7248/
-            });//.AddHttpMessageHandler<UnauthorizedResponseHandler>();
+                client.BaseAddress = new Uri(configuration.GetConnectionString("API"));
+            })
+            .ConfigurePrimaryHttpMessageHandler(() => handler); 
 
-            //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7248/") });
 
             builder.Services.AddControllers();
            
@@ -88,12 +94,9 @@ namespace Restaurant.Client
 
             app.UseRequestLocalization();
 
-            // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
-                //app.UseCustomExceptionHandler(app.Services.GetRequiredService<IToastService>());
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -120,7 +123,7 @@ namespace Restaurant.Client
         {
             var supportedCultures = new List<CultureInfo>()
             {
-                new CultureInfo("uk-UA")//, new CultureInfo("en-US")
+                new CultureInfo("uk-UA")
             };
 
             services.Configure<RequestLocalizationOptions>(options =>

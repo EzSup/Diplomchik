@@ -56,12 +56,11 @@ namespace Restaurant.Client.Services
 
         public async Task RegisterAsync(RegisterDto model)
         {
-            //RegisterUserRequest request = model.Adapt<RegisterUserRequest>();
             RegisterUserRequest request = new(model.Email, model.Password, model.PhoneNum);
             var response = await _httpClient.PostAsJsonAsync("api/Users/Register", request);
             var result = await response.Content.ReadFromJsonAsync<RegisterUserResponse>();
 
-            var id = result.Id;
+            var id = result?.Id ?? Guid.NewGuid();
             CustomerCreateRequest customerCreateRequest = new CustomerCreateRequest()
             {
                 Name = model.Name,
