@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/d3939eb2-9959-4df3-8bd7-02a203e7b508)
+
 ### Українська версія (English version below)
 
 # Веб-сервіс ресторану
